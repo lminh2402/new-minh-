@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedTriageAI - Tư vấn y tế</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <link rel="stylesheet" href="consultation-styles.css">
+</head>
+<body>
+  
+  <nav class="patient-nav" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="logo" style="gap: 12px; font-size: 20px; letter-spacing: -0.5px; cursor: pointer;">
+      <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5, #0ea5e9); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);">
+        <i data-lucide="heart-pulse" style="color: #fff; width: 22px; height: 22px;"></i>
+      </div>
+      <span style="color: #fff;">MedTriage<span style="color: #0ea5e9;">AI</span></span>
+    </div>
+    <div class="nav-title" style="color: rgba(255,255,255,0.8); font-weight: 500;">Tư vấn triệu chứng thông minh</div>
+    <div class="user-actions" style="display: flex; align-items: center; gap: 16px;">
+      <button class="icon-btn logout-btn" onclick="window.location.href='patient-dashboard.html'" title="Trở về Dashboard" style="color: rgba(255,255,255,0.8);"><i data-lucide="arrow-left"></i></button>
+      <div class="avatar" title="Người cần khám" style="border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #0ea5e9); color: white; cursor: pointer;">NK</div>
+      <button class="icon-btn logout-btn" onclick="window.location.href='login.html'" title="Đăng xuất" style="color: rgba(255,255,255,0.8);"><i data-lucide="log-out"></i></button>
+    </div>
+  </nav>
+
+  <main class="consult-main">
+    
+    <!-- Left Sidebar: Patient Info & Quick Symptoms -->
+    <aside class="consult-sidebar">
+      
+      <div class="side-panel premium-card">
+        <div class="panel-header">
+          <i data-lucide="user"></i>
+          <h3>Thông tin cá nhân</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group row-group">
+            <div class="half-width">
+              <label>Độ tuổi</label>
+              <input type="number" placeholder="VD: 32" class="c-input">
+            </div>
+            <div class="half-width">
+              <label>Giới tính</label>
+              <select class="c-input">
+                <option>Nam</option>
+                <option>Nữ</option>
+                <option>Khác</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tiền sử bệnh lý</label>
+            <input type="text" placeholder="Tiểu đường, Huyết áp..." class="c-input">
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Sinh hiệu (Vitals) -->
+      <div class="side-panel premium-card">
+        <div class="panel-header">
+          <i data-lucide="activity"></i>
+          <h3>Sinh hiệu (Vitals)</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group vitals-group">
+            <div class="vital-input">
+              <i data-lucide="thermometer" class="v-icon red"></i>
+              <input type="number" placeholder="Nhiệt độ (°C)">
+            </div>
+            <div class="vital-input">
+              <i data-lucide="heart" class="v-icon red"></i>
+              <input type="number" placeholder="Nhịp tim (bpm)">
+            </div>
+            <div class="vital-input">
+              <i data-lucide="droplet" class="v-icon blue"></i>
+              <input type="text" placeholder="Huyết áp (VD: 120/80)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-panel premium-card">
+        <div class="panel-header">
+          <i data-lucide="list-checks"></i>
+          <h3>Chọn nhanh triệu chứng</h3>
+        </div>
+        <div class="panel-body symptom-list">
+          <div class="chip-toggles">
+            <button class="t-chip">Sốt cao trên 38.5°C</button>
+            <button class="t-chip">Đau đầu kéo dài</button>
+            <button class="t-chip">Đau bụng dữ dội</button>
+            <button class="t-chip">Khó thở / Tức ngực</button>
+            <button class="t-chip">Buồn nôn / Nôn mửa</button>
+            <button class="t-chip">Mệt mỏi, uể oải</button>
+          </div>
+          <button class="btn-primary add-symptoms-btn"><i data-lucide="send" style="width: 16px;"></i> Cập nhật vào chat</button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Main: AI Chat Interface -->
+    <section class="consult-chat-area">
+      
+      <div class="chat-container">
+        
+        <!-- Chat History -->
+        <div class="chat-messages" id="chatMessages">
+          
+          <div class="c-msg ai">
+            <div class="avatar"><i data-lucide="bot"></i></div>
+            <div class="msg-content">
+              <p>Chào bạn, tôi là trợ lý y tế MedTriageAI. Để tôi có thể tư vấn tốt nhất, bạn vui lòng điền thông tin cá nhân ở cột bên trái, hoặc chia sẻ chi tiết về các triệu chứng bạn đang gặp phải nhé.</p>
+              <p><strong>Bạn cảm thấy khó chịu ở đâu và từ bao giờ?</strong></p>
+            </div>
+          </div>
+          
+          <div class="c-msg user">
+            <div class="msg-content">
+              <p>Tôi bị đau bụng từ sáng nay, đau quặn từng cơn.</p>
+            </div>
+            <div class="avatar">TV</div>
+          </div>
+
+          <div class="c-msg ai">
+            <div class="avatar"><i data-lucide="bot"></i></div>
+            <div class="msg-content">
+              <p>Cơn đau tập trung ở vùng nào của bụng vậy bạn? Bạn có cảm thấy buồn nôn hay đi ngoài phân lỏng không?</p>
+              <!-- Quick Replies -->
+              <div class="quick-replies">
+                <button class="qr-btn">Đau vùng quanh rốn</button>
+                <button class="qr-btn">Đau bụng dưới bên phải</button>
+                <button class="qr-btn">Đau thượng vị (trên rốn)</button>
+                <button class="qr-btn">Có buồn nôn</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="c-msg user">
+            <div class="msg-content">
+              <p>Đau bụng dưới bên phải và tôi có buồn nôn.</p>
+            </div>
+            <div class="avatar">TV</div>
+          </div>
+
+          <!-- Triage Result Panel (Simulated) -->
+          <div class="c-msg ai">
+            <div class="avatar"><i data-lucide="bot"></i></div>
+            <div class="msg-content triage-widget danger-level">
+              <div class="triage-header">
+                <div class="t-icon"><i data-lucide="alert-triangle"></i></div>
+                <div>
+                  <h4>Cảnh báo khẩn cấp</h4>
+                  <span class="t-badge">Cần khám ngay</span>
+                </div>
+              </div>
+              <div class="triage-body">
+                <p>Dựa trên triệu chứng <strong>đau bụng dưới bên phải</strong> kèm <strong>buồn nôn</strong>, AI nhận định có nguy cơ cao bạn đang mắc <strong>Viêm ruột thừa cấp</strong>.</p>
+                <div class="triage-advice">
+                  <p><strong><i data-lucide="info"></i> Lời khuyên Y tế:</strong></p>
+                  <ul>
+                    <li>Tuyệt đối KHÔNG ăn hoặc uống thêm bất kỳ thứ gì.</li>
+                    <li>KHÔNG tự ý dùng thuốc giảm đau vì có thể che lấp triệu chứng.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="triage-actions">
+                <button class="btn-danger" onclick="window.location.href='patient-dashboard.html'"><i data-lucide="map-pin"></i> Phòng khám gần nhất (2.5km)</button>
+                <button class="btn-outline-danger"><i data-lucide="phone"></i> Gọi cấp cứu (115)</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-wrapper">
+          <div class="upload-preview" style="display: none;"></div>
+          <div class="chat-input-box floating-input">
+            <button class="icon-btn tool-btn" title="Tải lên kết quả xét nghiệm / hình ảnh"><i data-lucide="paperclip"></i></button>
+            <button class="icon-btn tool-btn" title="Chụp ảnh"><i data-lucide="camera"></i></button>
+            <input type="text" placeholder="Nhập mô tả triệu chứng của bạn vào đây..." id="chatInput">
+            <button class="icon-btn voice-btn-chat" title="Nhập bằng giọng nói"><i data-lucide="mic"></i></button>
+            <button class="send-btn" id="sendBtn"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+    
+    // Simple script to auto-scroll chat to bottom
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Simulate sending message
+    document.getElementById('sendBtn').addEventListener('click', () => {
+      const input = document.getElementById('chatInput');
+      if(input.value.trim() !== "") {
+        chatMessages.innerHTML += `
+          <div class="c-msg user">
+            <div class="msg-content"><p>${input.value}</p></div>
+            <div class="avatar">TV</div>
+          </div>
+        `;
+        input.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        lucide.createIcons();
+      }
+    });
+
+    document.querySelectorAll('.qr-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        chatMessages.innerHTML += `
+          <div class="c-msg user">
+            <div class="msg-content"><p>${this.innerText}</p></div>
+            <div class="avatar">TV</div>
+          </div>
+        `;
+        this.parentElement.style.display = 'none';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    });
+  </script>
+</body>
+</html>

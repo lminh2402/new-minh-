@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Đăng nhập</title>
+  <meta name="description" content="Đăng nhập vào hệ thống AI Medical Triage Dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="login-styles.css" />
+</head>
+<body>
+
+  <div class="login-page">
+
+    <!-- Left — Branding Panel -->
+    <div class="brand-panel" id="brand-panel">
+      <div class="brand-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+      <div class="brand-content">
+        <div class="brand-logo">
+          <div class="brand-logo-icon"><i data-lucide="heart-pulse"></i></div>
+          <span class="brand-logo-text">MedTriage<span class="bl-accent">AI</span></span>
+        </div>
+        <h1 class="brand-headline">Hệ thống phân loại<br/>bệnh nhân thông minh</h1>
+        <p class="brand-desc">Ứng dụng AI hỗ trợ triage, đánh giá triệu chứng và phân loại mức độ khẩn cấp — giúp bệnh nhân tiếp cận chăm sóc y tế nhanh hơn.</p>
+        <div class="brand-stats">
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Hỗ trợ liên tục</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">98.5%</span>
+            <span class="stat-label">Độ chính xác AI</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">&lt;30s</span>
+            <span class="stat-label">Phản hồi trung bình</span>
+          </div>
+        </div>
+      </div>
+      <div class="brand-footer">
+        <p>&copy; 2026 MedTriageAI. Bảo mật theo tiêu chuẩn HIPAA.</p>
+      </div>
+    </div>
+
+    <!-- Right — Login Form -->
+    <div class="login-panel" id="login-panel">
+      <div class="login-container">
+
+        <!-- Mobile logo -->
+        <div class="mobile-logo">
+          <div class="brand-logo-icon"><i data-lucide="heart-pulse"></i></div>
+          <span class="brand-logo-text">MedTriage<span class="bl-accent">AI</span></span>
+        </div>
+
+        <div class="login-header" style="text-align: center; margin-bottom: 32px;">
+          <h2>Đăng nhập hệ thống</h2>
+          <p>Bấm vào vai trò của bạn để truy cập ngay</p>
+        </div>
+
+        <!-- Role Selection (Click to Login) -->
+        <div class="role-selection" id="role-selection">
+          <div class="role-cards" style="display: flex; flex-direction: column; gap: 16px;">
+            <button class="role-card" data-role="patient" id="role-patient" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
+              <div class="role-icon patient-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="user" style="width: 28px; height: 28px;"></i></div>
+              <div style="text-align: left;">
+                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Người bệnh</span>
+                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Khám bệnh & Tư vấn bằng AI</span>
+              </div>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+            </button>
+            <button class="role-card" data-role="doctor" id="role-doctor" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
+              <div class="role-icon doctor-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="stethoscope" style="width: 28px; height: 28px;"></i></div>
+              <div style="text-align: left;">
+                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Bác sĩ</span>
+                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Quản lý lịch khám và hồ sơ bệnh nhân</span>
+              </div>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+            </button>
+            <button class="role-card" data-role="clinic" id="role-clinic" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
+              <div class="role-icon clinic-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="building-2" style="width: 28px; height: 28px;"></i></div>
+              <div style="text-align: left;">
+                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Quản lý phòng khám</span>
+                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Vận hành hệ thống phòng khám</span>
+              </div>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="login-app.js"></script>
+</body>
+</html>
+
+

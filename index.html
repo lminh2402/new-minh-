@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Quản lý Phản hồi (Feedback)</title>
+  <meta name="description" content="AI Medical Triage Dashboard for managing clinical feedback and retraining AI triage models in real-time." />
+
+  <!-- Google Fonts (Outfit & Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- Core Design System -->
+  <link rel="stylesheet" href="shared.css" />
+  <!-- Page Specific Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TOP HEADER                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <header id="top-header" class="top-header">
+    <!-- Logo -->
+    <div class="header-logo" id="header-logo">
+      <div class="logo-icon">
+        <i data-lucide="heart-pulse" class="logo-lucide"></i>
+      </div>
+      <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="header-search" id="header-search">
+      <i data-lucide="search" class="search-icon"></i>
+      <input type="text" placeholder="Search cases, patients, reports…" id="search-input" />
+    </div>
+
+    <!-- Right Actions -->
+    <div class="header-actions" id="header-actions">
+      <button class="icon-btn notification-btn" id="notification-btn" aria-label="Notifications">
+        <i data-lucide="bell"></i>
+        <span class="notification-badge">3</span>
+      </button>
+      <div class="user-avatar" id="user-avatar">
+        <span class="avatar-initials">DR</span>
+      </div>
+      <button class="icon-btn logout-btn" id="logout-btn" aria-label="Đăng xuất" onclick="window.location.href='login.html'">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- BODY: SIDEBAR + MAIN                                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="app-body">
+
+    <!-- LEFT SIDEBAR -->
+    <aside id="left-sidebar" class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="manager.html" class="nav-item" id="nav-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Tổng quan</span>
+        </a>
+        <a href="retraining.html" class="nav-item" id="nav-retraining">
+          <i data-lucide="brain"></i>
+          <span>AI Retraining</span>
+        </a>
+        <a href="#" class="nav-item active" id="nav-feedback">
+          <i data-lucide="message-square-warning"></i>
+          <span>Feedback</span>
+        </a>
+        <a href="statistics.html" class="nav-item" id="nav-statistics">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Thống kê</span>
+        </a>
+        <a href="settings.html" class="nav-item" id="nav-profile">
+          <i data-lucide="user-cog"></i>
+          <span>Cài đặt</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-version">v2.4.1</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="main-content">
+
+      <!-- ═══════════════════════════════════════════════════════ -->
+      <!-- SECTION A — PENDING FEEDBACKS LIST (30%)                -->
+      <!-- ═══════════════════════════════════════════════════════ -->
+      <section id="section-a" class="section-list">
+
+        <div class="section-header">
+          <h1 id="pending-title">Pending Feedbacks</h1>
+          <span class="badge-count">12</span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters" id="filters-bar">
+          <div class="filter-dates">
+            <div class="date-input-group">
+              <label for="date-from">From</label>
+              <input type="date" id="date-from" value="2026-05-01" />
+            </div>
+            <div class="date-input-group">
+              <label for="date-to">To</label>
+              <input type="date" id="date-to" value="2026-05-13" />
+            </div>
+          </div>
+          <div class="filter-role">
+            <label for="role-filter">Source</label>
+            <select id="role-filter">
+              <option value="all">All Sources</option>
+              <option value="doctor" selected>Doctor</option>
+              <option value="patient">Patient</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="feedback-cards" id="feedback-list-container">
+          <div style="padding: 20px; text-align: center; color: var(--gray-500); font-size: 13px;">
+            <i data-lucide="loader-2" class="spin"></i> Đang tải dữ liệu từ MongoDB...
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════ -->
+      <!-- SECTION B — DETAIL & RETRAINING WORKSPACE (70%)         -->
+      <!-- ═══════════════════════════════════════════════════════ -->
+      <section id="section-b" class="section-detail">
+
+        <!-- Section B header bar -->
+        <div class="detail-header-bar">
+          <div class="detail-case-info">
+            <h2 id="detail-case-id">Đang tải...</h2>
+            <span class="detail-status-badge" id="detail-case-status">...</span>
+          </div>
+          <span class="detail-date" id="detail-case-date">--/--/----</span>
+        </div>
+
+        <div class="detail-split">
+
+          <!-- ═════════════════════════════════════════════════ -->
+          <!-- HALF B1 — REVIEW ERROR                           -->
+          <!-- ═════════════════════════════════════════════════ -->
+          <div id="half-b1" class="half-review">
+
+            <div class="panel-title-bar">
+              <i data-lucide="message-circle"></i>
+              <h3>Conversation History</h3>
+            </div>
+
+            <!-- Chat bubbles -->
+            <div class="chat-history" id="chat-history-container">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Doctor's Report -->
+            <div class="doctor-report" id="doctor-report-container">
+              <!-- Rendered via JS -->
+            </div>
+
+          </div>
+
+          <!-- Vertical Divider -->
+          <div class="vertical-divider"></div>
+
+          <!-- ═════════════════════════════════════════════════ -->
+          <!-- HALF B2 — UPDATE AI                              -->
+          <!-- ═════════════════════════════════════════════════ -->
+          <div id="half-b2" class="half-update">
+
+            <div class="panel-title-bar">
+              <i data-lucide="mail-check"></i>
+              <h3>Xử lý Phản hồi</h3>
+            </div>
+
+            <div class="update-form" id="update-form">
+
+              <!-- Radio: AI Correct / Incorrect -->
+              <div class="form-group">
+                <label class="form-label">AI Assessment Result</label>
+                <div class="radio-group" id="ai-assessment-radio">
+                  <label class="radio-option" for="ai-correct">
+                    <input type="radio" id="ai-correct" name="ai-assessment" value="correct" />
+                    <span class="radio-custom"></span>
+                    <span class="radio-text">AI Correct</span>
+                  </label>
+                  <label class="radio-option selected" for="ai-incorrect">
+                    <input type="radio" id="ai-incorrect" name="ai-assessment" value="incorrect" checked />
+                    <span class="radio-custom"></span>
+                    <span class="radio-text">AI Incorrect</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Textarea: Reply to Reporter -->
+              <div class="form-group">
+                <label class="form-label" for="reply-reporter">Nội dung phản hồi lại cho người báo cáo</label>
+                <textarea id="reply-reporter" rows="4" placeholder="Nhập lý do AI đúng hoặc xác nhận đã nhận lỗi...">Cảm ơn Bác sĩ Minh đã báo cáo. Chúng tôi đã ghi nhận lỗi này và sẽ cập nhật kịch bản phân loại viêm ruột thừa cho AI.</textarea>
+              </div>
+
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-secondary">
+                <i data-lucide="x"></i> Bỏ qua
+              </button>
+              <button class="btn-primary" id="btn-save-update">
+                <i data-lucide="send"></i> GỬI PHẢN HỒI
+              </button>
+            </div>
+
+          </div>
+
+        </div><!-- /detail-split -->
+      </section>
+
+    </main>
+  </div><!-- /app-body -->
+
+  <script src="app.js"></script>
+  <script>
+    if (!sessionStorage.getItem('userRole')) {
+      window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      
+      let currentFeedbackId = null;
+
+      async function loadFeedbacks() {
+        try {
+          const res = await fetch('http://localhost:5000/api/feedbacks');
+          if(!res.ok) throw new Error('Failed to fetch');
+          const feedbacks = await res.json();
+          
+          const container = document.getElementById('feedback-list-container');
+          container.innerHTML = '';
+
+          feedbacks.forEach((fb, index) => {
+            const iconType = fb.reporterType === 'Doctor' ? 'stethoscope' : fb.reporterType === 'Patient' ? 'user' : 'shield-check';
+            const iconClass = fb.reporterType.toLowerCase();
+            const timeStr = new Date(fb.createdAt).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+
+            const div = document.createElement('div');
+            div.className = `feedback-card ${index === 0 ? 'active' : ''}`;
+            div.innerHTML = `
+              <div class="card-icon ${iconClass}">
+                <i data-lucide="${iconType}"></i>
+              </div>
+              <div class="card-body">
+                <div class="card-top-row">
+                  <span class="case-id">${fb.caseId}</span>
+                  <span class="card-time">${timeStr}</span>
+                </div>
+                <p class="card-subject">${fb.subject}</p>
+                <span class="card-source-label">${fb.reporter}</span>
+              </div>
+              <div class="card-severity ${fb.severity}">
+                <i data-lucide="${fb.severity === 'high' ? 'alert-triangle' : 'alert-circle'}"></i>
+              </div>
+            `;
+
+            div.addEventListener('click', () => {
+              document.querySelectorAll('.feedback-card').forEach(i => i.classList.remove('active'));
+              div.classList.add('active');
+              renderFeedbackDetail(fb);
+            });
+
+            container.appendChild(div);
+
+            // Render details for the first one by default
+            if(index === 0) renderFeedbackDetail(fb);
+          });
+          lucide.createIcons();
+        } catch (error) {
+          console.error(error);
+          document.getElementById('feedback-list-container').innerHTML = '<div style="padding:20px; color:red; text-align:center;">Lỗi kết nối tới MongoDB. Vui lòng bật Server.</div>';
+        }
+      }
+
+      function renderFeedbackDetail(fb) {
+        currentFeedbackId = fb._id;
+        
+        // Header info
+        document.getElementById('detail-case-id').innerText = `Case ${fb.caseId}`;
+        const statusBadge = document.getElementById('detail-case-status');
+        statusBadge.innerText = fb.status === 'pending' ? 'Chưa xử lý' : 'Đã xử lý';
+        statusBadge.style.color = fb.status === 'pending' ? 'var(--warning)' : 'var(--primary)';
+        statusBadge.style.background = fb.status === 'pending' ? 'var(--warning-light)' : 'var(--primary-light)';
+        
+        const d = new Date(fb.createdAt);
+        document.getElementById('detail-case-date').innerText = `${d.toLocaleDateString('vi-VN')} · ${d.toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'})}`;
+
+        // Chat History
+        document.getElementById('chat-history-container').innerHTML = `
+          <div class="chat-bubble patient-bubble">
+            <div class="bubble-meta">
+              <span class="bubble-sender">${fb.reporterType === 'Patient' ? 'Bệnh nhân' : 'Người dùng'}</span>
+            </div>
+            <p>${fb.patientMessage || '(Không có nội dung)'}</p>
+          </div>
+          <div class="chat-bubble ai-bubble ai-error">
+            <div class="bubble-meta">
+              <span class="bubble-sender">AI Triage Bot</span>
+              <span class="error-flag"><i data-lucide="flag"></i> Bị báo cáo lỗi</span>
+            </div>
+            <p>${fb.aiMessage || '(Không có nội dung)'}</p>
+          </div>
+        `;
+
+        // Doctor Report
+        document.getElementById('doctor-report-container').innerHTML = `
+          <div class="report-label">
+            <i data-lucide="file-warning"></i>
+            <span>Nội dung Báo cáo Lỗi</span>
+          </div>
+          <div class="report-content">
+            <p><strong>Người báo cáo:</strong> ${fb.reporter}</p>
+            <p class="report-highlight"><i data-lucide="alert-triangle"></i> ${fb.reportedIssue}</p>
+          </div>
+        `;
+
+        // Action Form Data
+        if(fb.aiResultEvaluation === 'correct') {
+          document.getElementById('ai-correct').checked = true;
+        } else if (fb.aiResultEvaluation === 'incorrect') {
+          document.getElementById('ai-incorrect').checked = true;
+        } else {
+          document.getElementById('ai-incorrect').checked = true; // default
+        }
+        
+        document.getElementById('reply-reporter').value = fb.expertReply || '';
+
+        lucide.createIcons();
+      }
+
+      // Submit feedback processing
+      const btnSave = document.getElementById('btn-save-update');
+      if(btnSave) {
+        btnSave.addEventListener('click', async () => {
+          if(!currentFeedbackId) return;
+          
+          const orig = btnSave.innerHTML;
+          btnSave.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Đang gửi...';
+          
+          const evalResult = document.querySelector('input[name="ai-assessment"]:checked').value;
+          const replyText = document.getElementById('reply-reporter').value;
+
+          try {
+            const res = await fetch(`http://localhost:5000/api/feedbacks/${currentFeedbackId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                status: 'reviewed',
+                aiResultEvaluation: evalResult,
+                expertReply: replyText
+              })
+            });
+
+            if(res.ok) {
+              btnSave.innerHTML = '<i data-lucide="check-circle-2"></i> Đã gửi phản hồi!';
+              btnSave.style.background = '#10b981';
+              // Update status badge immediately
+              const statusBadge = document.getElementById('detail-case-status');
+              statusBadge.innerText = 'Đã xử lý';
+              statusBadge.style.color = 'var(--primary)';
+              statusBadge.style.background = 'var(--primary-light)';
+            }
+          } catch(err) {
+            alert('Lỗi kết nối tới Server!');
+            btnSave.innerHTML = orig;
+            return;
+          }
+
+          setTimeout(() => {
+            btnSave.innerHTML = orig;
+            btnSave.style.background = '';
+            lucide.createIcons();
+          }, 3000);
+        });
+      }
+
+      loadFeedbacks();
+    });
+  </script>
+</body>
+</html>

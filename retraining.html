@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Thư viện Kịch bản & Huấn luyện AI</title>
+  <meta name="description" content="Tạo và huấn luyện các kịch bản phân loại bệnh cho mô hình AI." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="retraining-styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="top-header" class="top-header">
+    <div class="header-logo">
+      <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
+      <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
+    </div>
+    <div class="header-search">
+      <i data-lucide="search" class="search-icon"></i>
+      <input type="text" placeholder="Tìm kiếm kịch bản, quy tắc y khoa..." />
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn notification-btn"><i data-lucide="bell"></i><span class="notification-badge">5</span></button>
+      <div class="user-avatar"><span class="avatar-initials">CG</span></div>
+      <button class="icon-btn logout-btn" onclick="window.location.href='login.html'"><i data-lucide="log-out"></i></button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <aside id="left-sidebar" class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="manager.html" class="nav-item" id="nav-dashboard">
+          <i data-lucide="layout-dashboard"></i><span>Tổng quan</span>
+        </a>
+        <a href="retraining.html" class="nav-item active" id="nav-retraining">
+          <i data-lucide="brain"></i><span>AI Retraining</span>
+        </a>
+        <a href="index.html" class="nav-item" id="nav-feedback">
+          <i data-lucide="message-square-warning"></i><span>Feedback</span>
+        </a>
+        <a href="statistics.html" class="nav-item" id="nav-statistics">
+          <i data-lucide="bar-chart-3"></i><span>Thống kê</span>
+        </a>
+        <a href="settings.html" class="nav-item" id="nav-profile">
+          <i data-lucide="user-cog"></i><span>Cài đặt</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-version">v2.4.1</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content flex-row" style="display: flex; height: calc(100vh - 60px); overflow: hidden;">
+      
+      <!-- LEFT: SCENARIO LIBRARY (35%) -->
+      <section class="scenario-library">
+        <div class="library-header">
+          <h2>Thư viện Kịch bản (<span id="scenario-count">0</span>)</h2>
+          <button class="btn-icon-primary" id="btn-add-new"><i data-lucide="plus"></i> Thêm mới</button>
+        </div>
+        
+        <div class="library-filters">
+          <select class="filter-select">
+            <option>Tất cả chuyên khoa</option>
+            <option>Tiêu hóa</option>
+            <option>Tim mạch</option>
+            <option>Hô hấp</option>
+          </select>
+        </div>
+
+        <div class="scenario-list" id="scenario-list-container">
+          <div style="padding: 20px; text-align: center; color: var(--gray-500); font-size: 13px;">
+            <i data-lucide="loader-2" class="spin"></i> Đang tải dữ liệu từ MongoDB...
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: AI RETRAINING WORKSPACE (65%) -->
+      <section class="retraining-workspace">
+        <div class="workspace-header">
+          <div class="header-titles">
+            <h2>Chỉnh sửa kịch bản huấn luyện</h2>
+            <p id="header-scenario-name">Đang tải kịch bản...</p>
+          </div>
+          <span class="status-badge"><i data-lucide="check-circle-2"></i> Đã đồng bộ</span>
+        </div>
+
+        <div class="workspace-form">
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>Tên kịch bản (Triệu chứng chính)</label>
+              <input id="title-input" type="text" value="Viêm ruột thừa cấp" placeholder="VD: Sốt xuất huyết Dengue" />
+            </div>
+            <div class="form-group flex-1">
+              <label>Chuyên khoa</label>
+              <select id="dept-input">
+                <option selected>Tiêu hóa</option>
+                <option>Tim mạch</option>
+                <option>Thần kinh</option>
+                <option>Hô hấp</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Phân loại mức độ ưu tiên (Triage Urgency)</label>
+            <div class="urgency-selector">
+              <label class="urg-option emergency active"><input type="radio" name="urgency" value="emergency" checked /> Khẩn cấp (Emergency)</label>
+              <label class="urg-option high"><input type="radio" name="urgency" value="high" /> Mức Cao (High)</label>
+              <label class="urg-option medium"><input type="radio" name="urgency" value="medium" /> Mức TB (Medium)</label>
+              <label class="urg-option low"><input type="radio" name="urgency" value="low" /> Mức Thấp (Low)</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Quy tắc nhận diện cờ đỏ (Red Flags & Rules)</label>
+            <textarea id="rule-input" rows="3" placeholder="Nhập quy tắc logic (vd: IF pain > 7 AND fever > 38 THEN...)">IF (abdominal_pain_location = 'lower_right' OR 'hố chậu phải') AND (fever = true) AND (nausea = true) AND (pain_score >= 7) -> TRIGGER(Appendicitis_Alert)</textarea>
+          </div>
+
+          <div class="form-group flex-1">
+            <label>Kịch bản AI hỏi bệnh (Hướng dẫn hội thoại)</label>
+            <div class="script-editor">
+              <div class="script-toolbar">
+                <button><i data-lucide="bold"></i></button>
+                <button><i data-lucide="italic"></i></button>
+                <button><i data-lucide="list"></i></button>
+                <span class="toolbar-divider"></span>
+                <button class="ai-gen-btn"><i data-lucide="wand-2"></i> Tạo bằng AI</button>
+              </div>
+              <textarea id="script-input" rows="6" placeholder="Viết kịch bản để AI hỏi bệnh nhân...">1. Khi bệnh nhân báo đau bụng: Hỏi ngay vị trí đau chính xác (trên rốn, quanh rốn, hay hố chậu phải).
+2. Nếu đau ở hố chậu phải: Hỏi thêm về các triệu chứng đi kèm (sốt, buồn nôn, tiêu chảy).
+3. Hỏi thang điểm đau từ 1-10.
+4. Nếu điểm đau >= 7 và có sốt: Yêu cầu bệnh nhân KHÔNG tự ý uống thuốc giảm đau và khuyên đến ngay phòng cấp cứu gần nhất.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="workspace-footer">
+          <button class="btn-delete" id="btn-delete-scenario"><i data-lucide="trash-2"></i> Xóa kịch bản</button>
+          <div class="footer-actions">
+            <button class="btn-secondary">Lưu nháp</button>
+            <button class="btn-primary" id="btn-retrain">
+              <i data-lucide="cpu"></i> LƯU & RETRAIN MODEL
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    if (!sessionStorage.getItem('userRole')) window.location.href = 'login.html';
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      let currentScenarioId = null;
+
+      // Urgency selector toggle mapping (UI click only)
+      const urgOptions = document.querySelectorAll('.urg-option');
+      urgOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          urgOptions.forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          opt.querySelector('input').checked = true;
+        });
+      });
+
+      // Load Scenarios from MongoDB
+      async function loadScenarios() {
+        try {
+          const res = await fetch('http://localhost:5000/api/scenarios');
+          if(!res.ok) throw new Error('Failed to fetch');
+          const scenarios = await res.json();
+          
+          document.getElementById('scenario-count').innerText = scenarios.length;
+          const container = document.getElementById('scenario-list-container');
+          container.innerHTML = ''; 
+
+          scenarios.forEach((scn, index) => {
+            const badgeClass = scn.urgency;
+            const urgencyText = scn.urgency === 'emergency' ? 'Khẩn cấp' : scn.urgency === 'high' ? 'Mức Cao' : scn.urgency === 'medium' ? 'Mức TB' : 'Mức Thấp';
+            const icon = scn.department === 'Tim mạch' ? 'activity' : scn.department === 'Hô hấp' ? 'wind' : scn.department === 'Truyền nhiễm' ? 'shield-alert' : 'stethoscope';
+
+            const div = document.createElement('div');
+            div.className = `scenario-item ${index === 0 && currentScenarioId === null ? 'active' : (scn._id === currentScenarioId ? 'active' : '')}`;
+            div.innerHTML = `
+              <div class="s-item-header">
+                <span class="s-title">${scn.title}</span>
+                <span class="s-badge ${badgeClass}">${urgencyText}</span>
+              </div>
+              <p class="s-desc">${scn.description}</p>
+              <div class="s-meta">
+                <span class="s-dept"><i data-lucide="${icon}"></i> ${scn.department}</span>
+                <span class="s-date">Update: ${new Date(scn.updatedAt).toLocaleDateString('vi-VN')}</span>
+              </div>
+            `;
+            
+            div.addEventListener('click', () => {
+              document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
+              div.classList.add('active');
+              populateForm(scn);
+            });
+
+            container.appendChild(div);
+
+            // Populate initial form for first item or currently selected item
+            if((currentScenarioId === null && index === 0) || scn._id === currentScenarioId) {
+              populateForm(scn);
+              div.classList.add('active');
+            }
+          });
+          
+          if(scenarios.length === 0) {
+            setupCreateNew();
+          }
+
+          lucide.createIcons();
+        } catch (error) {
+          console.error('Lỗi khi fetch kịch bản:', error);
+          document.getElementById('scenario-list-container').innerHTML = '<div style="padding:20px; color:red; text-align:center;">Lỗi tải dữ liệu. Vui lòng bật Backend Server.</div>';
+        }
+      }
+
+      function populateForm(scn) {
+        currentScenarioId = scn._id;
+        document.getElementById('title-input').value = scn.title || '';
+        
+        let deptSelect = document.getElementById('dept-input');
+        let optionExists = Array.from(deptSelect.options).some(opt => opt.value === scn.department || opt.text === scn.department);
+        if(!optionExists && scn.department) {
+          const newOpt = new Option(scn.department, scn.department);
+          deptSelect.add(newOpt);
+        }
+        deptSelect.value = scn.department || 'Tiêu hóa';
+        
+        const radio = document.querySelector(`input[name="urgency"][value="${scn.urgency}"]`);
+        if(radio) {
+          radio.checked = true;
+          urgOptions.forEach(o => o.classList.remove('active'));
+          radio.closest('.urg-option').classList.add('active');
+        }
+        
+        document.getElementById('rule-input').value = scn.redFlagsRules || '';
+        document.getElementById('script-input').value = scn.aiScript || '';
+        document.getElementById('header-scenario-name').innerText = `ID: #${scn.scenarioId} — ${scn.title}`;
+        document.getElementById('btn-delete-scenario').style.display = 'inline-flex';
+      }
+
+      function setupCreateNew() {
+        currentScenarioId = null;
+        document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
+        
+        document.getElementById('title-input').value = '';
+        document.getElementById('dept-input').value = 'Tiêu hóa';
+        
+        const radio = document.querySelector(`input[name="urgency"][value="low"]`);
+        if(radio) {
+          radio.checked = true;
+          urgOptions.forEach(o => o.classList.remove('active'));
+          radio.closest('.urg-option').classList.add('active');
+        }
+        
+        document.getElementById('rule-input').value = '';
+        document.getElementById('script-input').value = '';
+        document.getElementById('header-scenario-name').innerText = `Tạo Kịch bản mới`;
+        
+        // Hide delete button when creating new
+        document.getElementById('btn-delete-scenario').style.display = 'none';
+      }
+
+      // Add New Button
+      document.getElementById('btn-add-new').addEventListener('click', setupCreateNew);
+
+      // Delete Scenario Button
+      const deleteBtn = document.getElementById('btn-delete-scenario');
+      if(deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+          if(!currentScenarioId) return;
+          if(!confirm('Bạn có chắc chắn muốn xóa kịch bản này không?')) return;
+
+          try {
+            const response = await fetch(`http://localhost:5000/api/scenarios/${currentScenarioId}`, {
+              method: 'DELETE'
+            });
+            if(response.ok) {
+              currentScenarioId = null;
+              loadScenarios();
+            } else {
+              alert('Lỗi xóa kịch bản');
+            }
+          } catch(err) {
+            console.error(err);
+            alert('Lỗi kết nối server');
+          }
+        });
+      }
+
+      // Retrain (Save/Update) button API Call
+      const retrainBtn = document.getElementById('btn-retrain');
+      if(retrainBtn) {
+        retrainBtn.addEventListener('click', async () => {
+          const orig = retrainBtn.innerHTML;
+          retrainBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Đang huấn luyện...';
+          lucide.createIcons();
+          
+          const title = document.getElementById('title-input').value;
+          const dept = document.getElementById('dept-input').value;
+          const urgency = document.querySelector('input[name="urgency"]:checked').value;
+          const rule = document.getElementById('rule-input').value;
+          const script = document.getElementById('script-input').value;
+
+          const method = currentScenarioId ? 'PATCH' : 'POST';
+          const url = currentScenarioId ? `http://localhost:5000/api/scenarios/${currentScenarioId}` : 'http://localhost:5000/api/scenarios';
+
+          try {
+            const response = await fetch(url, {
+              method: method,
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: title,
+                department: dept,
+                urgency: urgency,
+                description: title,
+                redFlagsRules: rule,
+                aiScript: script
+              })
+            });
+
+            if(response.ok) {
+              retrainBtn.innerHTML = '<i data-lucide="check-circle-2"></i> Hoàn tất Retrain!';
+              retrainBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+              lucide.createIcons();
+              
+              const savedItem = await response.json();
+              currentScenarioId = savedItem._id;
+              loadScenarios(); // reload list to show updates
+            } else {
+              throw new Error('API Error');
+            }
+          } catch (err) {
+            alert('Lỗi kết nối tới Server MongoDB!');
+            retrainBtn.innerHTML = orig;
+            lucide.createIcons();
+            return;
+          }
+
+          setTimeout(() => {
+            retrainBtn.innerHTML = orig;
+            retrainBtn.style.background = '';
+            lucide.createIcons();
+          }, 3000);
+        });
+      }
+
+      loadScenarios();
+    });
+  </script>
+</body>
+</html>

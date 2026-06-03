@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Chuyên gia & Phân tích</title>
+  <meta name="description" content="Dashboard chuyên gia phân tích và đánh giá hệ thống AI Medical Triage." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="manager-styles.css" />
+</head>
+<body>
+
+  <!-- ═══ SHARED HEADER ═══ -->
+  <header id="top-header" class="top-header">
+    <div class="header-logo" id="header-logo">
+      <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
+      <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
+    </div>
+    <div class="header-search" id="header-search">
+      <i data-lucide="search" class="search-icon"></i>
+      <input type="text" placeholder="Tìm kiếm báo cáo, bác sĩ, case…" id="search-input" />
+    </div>
+    <div class="header-actions" id="header-actions">
+      <button class="icon-btn notification-btn" id="notification-btn" aria-label="Thông báo">
+        <i data-lucide="bell"></i><span class="notification-badge">5</span>
+      </button>
+      <div class="user-avatar" id="user-avatar"><span class="avatar-initials">CG</span></div>
+      <button class="icon-btn logout-btn" id="logout-btn" aria-label="Đăng xuất" onclick="window.location.href='login.html'">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- ═══ SHARED SIDEBAR ═══ -->
+    <aside id="left-sidebar" class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="manager.html" class="nav-item active" id="nav-dashboard">
+          <i data-lucide="layout-dashboard"></i><span>Tổng quan & AI</span>
+        </a>
+        <a href="#" class="nav-item">
+          <i data-lucide="users"></i><span>Lịch hẹn & Bác sĩ</span>
+        </a>
+        <a href="#" class="nav-item">
+          <i data-lucide="dollar-sign"></i><span>Tài chính & Doanh thu</span>
+        </a>
+        <a href="#" class="nav-item">
+          <i data-lucide="list"></i><span>Danh mục Dịch vụ</span>
+        </a>
+        <a href="index.html" class="nav-item" id="nav-feedback">
+          <i data-lucide="message-square-warning"></i><span>Tương tác & Khiếu nại</span>
+        </a>
+        <a href="settings.html" class="nav-item" id="nav-profile">
+          <i data-lucide="settings"></i><span>Cài đặt & Phân quyền</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-version">v2.4.1</div></div>
+    </aside>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main id="main-content" class="main-content manager-main">
+
+      <!-- Alert Banner -->
+      <div style="background: #FEF2F2; border-left: 4px solid #EF4444; padding: 12px 24px; display: flex; align-items: center; gap: 12px; margin-bottom: 24px; border-radius: 8px;">
+        <i data-lucide="alert-circle" style="color: #EF4444; flex-shrink: 0;"></i>
+        <span style="color: #991B1B; font-weight: 500; font-size: 14px;">Cảnh báo: Lượng thuốc Amoxicillin trong kho sắp hết (Còn dưới 50 viên). Yêu cầu nhập thêm gấp.</span>
+      </div>
+
+      <!-- Page Title -->
+      <div class="page-title-bar" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--gray-900); margin: 0;">Tổng quan & Giám sát hiệu suất</h1>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px;">
+        <div class="info-card" style="padding: 24px; border-radius: 16px; border: 1px solid var(--gray-200); box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: white;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #ECFDF5; color: #10B981; display: flex; justify-content: center; align-items: center;"><i data-lucide="dollar-sign"></i></div>
+            <div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--gray-900);">12.5M</div>
+              <div style="font-size: 13px; color: var(--gray-500);">Doanh thu hôm nay (VNĐ)</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 13px; color: #10B981; font-weight: 500; display: flex; align-items: center; gap: 4px;"><i data-lucide="trending-up" style="width: 14px;"></i> +5% so với hôm qua</div>
+        </div>
+
+        <div class="info-card" style="padding: 24px; border-radius: 16px; border: 1px solid var(--gray-200); box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: white;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #F5F3FF; color: #8B5CF6; display: flex; justify-content: center; align-items: center;"><i data-lucide="users"></i></div>
+            <div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--gray-900);">45 <span style="font-size: 14px; font-weight: 500; color: var(--gray-500);">ca</span></div>
+              <div style="font-size: 13px; color: var(--gray-500);">Lượt tư vấn bệnh nhân</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 13px; color: #8B5CF6; font-weight: 500; display: flex; align-items: center; gap: 4px;"><i data-lucide="trending-up" style="width: 14px;"></i> +12% so với tuần trước</div>
+        </div>
+
+        <div class="info-card" style="padding: 24px; border-radius: 16px; border: 1px solid var(--gray-200); box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: white;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #EFF6FF; color: #3B82F6; display: flex; justify-content: center; align-items: center;"><i data-lucide="bot"></i></div>
+            <div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--gray-900);">98.5%</div>
+              <div style="font-size: 13px; color: var(--gray-500);">Sàng lọc AI thành công</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 13px; color: #F59E0B; font-weight: 500; display: flex; align-items: center; gap: 4px;"><i data-lucide="trending-down" style="width: 14px;"></i> -1% so với tuần trước</div>
+        </div>
+
+        <div class="info-card" style="padding: 24px; border-radius: 16px; border: 1px solid var(--gray-200); box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: white;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #FEF2F2; color: #EF4444; display: flex; justify-content: center; align-items: center;"><i data-lucide="clock"></i></div>
+            <div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--gray-900);">15 <span style="font-size: 14px; font-weight: 500; color: var(--gray-500);">phút</span></div>
+              <div style="font-size: 13px; color: var(--gray-500);">Thời gian chờ trung bình</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 13px; color: #10B981; font-weight: 500; display: flex; align-items: center; gap: 4px;"><i data-lucide="check-circle" style="width: 14px;"></i> Ổn định</div>
+        </div>
+      </div>
+
+      <!-- 70-30 Layout -->
+      <div style="display: grid; grid-template-columns: 7fr 3fr; gap: 24px;">
+        
+        <!-- Left Column: Combo Chart -->
+        <div class="info-card" style="padding: 24px; border-radius: 16px; display: flex; flex-direction: column; background: white; border: 1px solid var(--gray-200);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 8px;"><i data-lucide="bar-chart-2" style="color: var(--primary);"></i> Doanh thu & Lưu lượng bệnh nhân</h3>
+            <select style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--gray-200); font-size: 13px; outline: none; background: white;">
+              <option>Tuần này</option>
+              <option>Tháng này</option>
+            </select>
+          </div>
+          
+          <!-- Mock Chart -->
+          <div style="flex: 1; position: relative; min-height: 300px; border-left: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-left: 30px; margin-bottom: 20px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px;">
+            <!-- Gridlines -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+            <div style="position: absolute; top: 25%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+            <div style="position: absolute; top: 75%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+
+            <!-- SVG Line for Patient Count -->
+            <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; overflow: visible;" preserveAspectRatio="none" viewBox="0 0 100 100">
+              <path d="M7.1,70 L21.4,50 L35.7,65 L50,30 L64.3,40 L78.6,10 L92.9,60" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="7.1" cy="70" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="21.4" cy="50" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="35.7" cy="65" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="50" cy="30" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="64.3" cy="40" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="78.6" cy="10" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <circle cx="92.9" cy="60" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+            </svg>
+
+            <!-- Bars -->
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 40%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T2</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 60%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T3</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 45%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T4</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 80%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T5</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 65%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T6</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, #10B981, #6EE7B7); height: 95%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-900); font-weight: 700;">T7</span>
+            </div>
+            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 35%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">CN</span>
+            </div>
+          </div>
+          
+          <div style="display: flex; justify-content: center; gap: 24px; margin-top: 8px; font-size: 13px; font-weight: 500;">
+            <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; background: var(--primary); border-radius: 2px;"></div> Doanh thu (Bar)</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 2px; background: #F59E0B;"></div> Lưu lượng bệnh nhân (Line)</div>
+          </div>
+        </div>
+
+        <!-- Right Column: Actions & Feed -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          
+          <!-- Actions Block -->
+          <div class="info-card" style="padding: 24px; border-radius: 16px; background: white; border: 1px solid var(--gray-200);">
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;"><i data-lucide="check-square" style="color: var(--primary);"></i> Tác vụ cần xử lý</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--gray-200); border-radius: 8px; background: #FAFAFA;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--gray-800);">
+                  <i data-lucide="alert-triangle" style="width: 16px; color: #EF4444;"></i> 1 khiếu nại dịch vụ (1 sao)
+                </div>
+                <button style="border: none; background: transparent; color: #EF4444; font-weight: 600; font-size: 13px; cursor: pointer; padding: 0;">Xử lý</button>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--gray-200); border-radius: 8px; background: #FAFAFA;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--gray-800);">
+                  <i data-lucide="calendar" style="width: 16px; color: #6D28D9;"></i> 5 lịch hẹn trống bác sĩ
+                </div>
+                <button style="border: none; background: transparent; color: #6D28D9; font-weight: 600; font-size: 13px; cursor: pointer; padding: 0;">Điều phối</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="info-card" style="padding: 24px; border-radius: 16px; flex: 1; background: white; border: 1px solid var(--gray-200);">
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 24px; display: flex; align-items: center; gap: 8px;"><i data-lucide="activity" style="color: var(--primary);"></i> Hoạt động gần đây</h3>
+            <div style="position: relative; padding-left: 24px;">
+              <!-- Timeline Line -->
+              <div style="position: absolute; left: 5px; top: 8px; bottom: 8px; width: 1px; border-left: 2px dotted var(--gray-300);"></div>
+              
+              <!-- Feed Items -->
+              <!-- Item 1: 10 phút trước -->
+              <div style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #EF4444; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">10 phút trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #EF4444;">🤖 AI MedTriage</strong> vừa phát cảnh báo khẩn cấp (Nguy cơ viêm ruột thừa) cho ca khám BN-1042.</div>
+              </div>
+              
+              <!-- Item 2: 30 phút trước -->
+              <div style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #F59E0B; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">30 phút trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #F59E0B;">⚠️ Hệ thống</strong> ghi nhận 1 khiếu nại chất lượng dịch vụ (1 sao) từ bệnh nhân Trần Thị Đau.</div>
+              </div>
+              
+              <!-- Item 3: 1 giờ trước -->
+              <div style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">1 giờ trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> hoàn tất thanh toán hóa đơn 4.500.000đ (Gói khám tổng quát).</div>
+              </div>
+              
+              <!-- Item 4: 1.5 giờ trước -->
+              <div style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #3B82F6; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">1.5 giờ trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #3B82F6;">👨‍⚕️ BS. Nguyễn Văn B</strong> vừa hoàn thành ca khám và kê đơn cho BN-1030.</div>
+              </div>
+
+              <!-- Item 5: 2 giờ trước -->
+              <div style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">2 giờ trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> tiếp nhận thành công 5 bệnh nhân mới đặt lịch qua App.</div>
+              </div>
+
+              <!-- Item 6: 3 giờ trước -->
+              <div style="position: relative;">
+                <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #8B5CF6; border-radius: 50%; box-sizing: border-box;"></div>
+                <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">3 giờ trước</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #8B5CF6;">👨‍⚕️ BS. Lê Văn C</strong> bắt đầu ca làm việc (Khoa Nội Tiêu Hóa).</div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    if (!sessionStorage.getItem('userRole')) window.location.href = 'login.html';
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // Sidebar active toggle
+      document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+        item.addEventListener('click', e => {
+          if (item.getAttribute('href') === '#') {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // Export button feedback
+      const exportBtn = document.getElementById('btn-export');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          const original = exportBtn.innerHTML;
+          exportBtn.innerHTML = '<i data-lucide="check"></i> Đã xuất!';
+          exportBtn.style.borderColor = '#10b981';
+          exportBtn.style.color = '#10b981';
+          lucide.createIcons();
+          setTimeout(() => {
+            exportBtn.innerHTML = original;
+            exportBtn.style.borderColor = '';
+            exportBtn.style.color = '';
+            lucide.createIcons();
+          }, 2000);
+        });
+      }
+
+      // Period select
+      const periodSelect = document.getElementById('period-select');
+      if (periodSelect) {
+        periodSelect.addEventListener('change', () => {
+          // Visual feedback on filter change (mock)
+          document.querySelectorAll('.kpi-card').forEach(card => {
+            card.style.opacity = '0.5';
+            setTimeout(() => { card.style.opacity = '1'; }, 400);
+          });
+        });
+      }
+
+      // Table row click
+      document.querySelectorAll('.data-table tbody tr').forEach(row => {
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => {
+          window.location.href = 'index.html';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

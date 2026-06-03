@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Trò chuyện với AI Bác sĩ</title>
+  <meta name="description" content="Chat với AI Triage để được tư vấn sức khỏe ban đầu và phân loại mức độ khẩn cấp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="chat-styles.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TOP HEADER                                 -->
+  <!-- ══════════════════════════════════════════ -->
+  <header class="chat-header" id="chat-header">
+    <div class="header-left">
+      <div class="logo-mark">
+        <i data-lucide="heart-pulse" class="logo-icon"></i>
+      </div>
+      <div class="header-title-group">
+        <span class="header-brand">MedTriage<span class="brand-accent">AI</span></span>
+        <span class="header-subtitle">Trợ lý sức khỏe AI</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="header-icon-btn" id="btn-history" aria-label="Lịch sử chat">
+        <i data-lucide="clock"></i>
+      </button>
+      <button class="header-icon-btn" id="btn-emergency" aria-label="Gọi cấp cứu">
+        <i data-lucide="phone-call"></i>
+        <span class="emergency-label">115</span>
+      </button>
+      <div class="user-pill" id="user-pill">
+        <div class="user-avatar-sm">
+          <span>NV</span>
+        </div>
+        <span class="user-name">Nguyễn Văn A</span>
+        <i data-lucide="chevron-down" class="chevron-sm"></i>
+      </div>
+      <button class="header-icon-btn" id="logout-btn" aria-label="Đăng xuất" onclick="window.location.href='login.html'">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- MAIN CHAT LAYOUT                           -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="chat-layout">
+
+    <!-- LEFT SIDEBAR — Quick Topics -->
+    <aside class="chat-sidebar" id="chat-sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Phiên trò chuyện</h3>
+        <button class="new-chat-btn" id="btn-new-chat">
+          <i data-lucide="plus"></i>
+          <span>Cuộc trò chuyện mới</span>
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Gần đây</h3>
+        <div class="history-list" id="history-list">
+          <a href="#" class="history-item active" id="history-1">
+            <i data-lucide="message-circle"></i>
+            <div class="history-text">
+              <span class="history-title">Đau bụng dưới bên phải</span>
+              <span class="history-time">Hôm nay, 09:31</span>
+            </div>
+          </a>
+          <a href="#" class="history-item" id="history-2">
+            <i data-lucide="message-circle"></i>
+            <div class="history-text">
+              <span class="history-title">Đau đầu kéo dài 3 ngày</span>
+              <span class="history-time">Hôm qua, 14:20</span>
+            </div>
+          </a>
+          <a href="#" class="history-item" id="history-3">
+            <i data-lucide="message-circle"></i>
+            <div class="history-text">
+              <span class="history-title">Tư vấn kết quả xét nghiệm</span>
+              <span class="history-time">10/05/2026</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Chủ đề nhanh</h3>
+        <div class="quick-topics">
+          <button class="topic-chip" data-topic="Tôi đang bị sốt và đau họng">
+            <i data-lucide="thermometer"></i> Sốt & Cảm cúm
+          </button>
+          <button class="topic-chip" data-topic="Tôi bị đau đầu thường xuyên">
+            <i data-lucide="brain"></i> Đau đầu
+          </button>
+          <button class="topic-chip" data-topic="Tôi bị đau bụng và buồn nôn">
+            <i data-lucide="heart"></i> Tiêu hóa
+          </button>
+          <button class="topic-chip" data-topic="Tôi cần tư vấn về kết quả xét nghiệm máu">
+            <i data-lucide="file-text"></i> Xét nghiệm
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer-chat">
+        <div class="disclaimer-box">
+          <i data-lucide="info"></i>
+          <p>AI chỉ hỗ trợ tư vấn ban đầu. Vui lòng gặp bác sĩ để được khám và điều trị.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT AREA -->
+    <main class="chat-main" id="chat-main">
+
+      <!-- Chat messages container -->
+      <div class="chat-messages" id="chat-messages">
+
+        <!-- Welcome / AI intro -->
+        <div class="message-group ai-group">
+          <div class="msg-avatar ai-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="msg-content">
+            <div class="msg-sender">AI Triage Bot <span class="msg-time">09:30</span></div>
+            <div class="msg-bubble ai-msg">
+              <p>Xin chào <strong>Nguyễn Văn A</strong>! 👋</p>
+              <p>Tôi là trợ lý AI của <strong>MedTriageAI</strong>. Tôi có thể giúp bạn đánh giá sơ bộ các triệu chứng và hướng dẫn bạn đến đúng chuyên khoa.</p>
+              <p>Hãy mô tả triệu chứng hoặc vấn đề sức khỏe bạn đang gặp phải nhé!</p>
+            </div>
+            <div class="quick-reply-chips">
+              <button class="quick-reply" data-reply="Tôi đang bị đau bụng">🤒 Đau bụng</button>
+              <button class="quick-reply" data-reply="Tôi đang bị sốt cao">🌡️ Sốt cao</button>
+              <button class="quick-reply" data-reply="Tôi bị đau ngực và khó thở">💓 Đau ngực</button>
+              <button class="quick-reply" data-reply="Tôi muốn hỏi về thuốc đang dùng">💊 Hỏi về thuốc</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Patient message 1 -->
+        <div class="message-group user-group">
+          <div class="msg-content">
+            <div class="msg-sender">Bạn <span class="msg-time">09:31</span></div>
+            <div class="msg-bubble user-msg">
+              <p>Tôi bị đau bụng dưới bên phải rất dữ dội từ tối qua. Đau tăng lên khi di chuyển.</p>
+            </div>
+          </div>
+          <div class="msg-avatar user-avatar-bubble">
+            <span>NV</span>
+          </div>
+        </div>
+
+        <!-- AI response 1 — symptom assessment -->
+        <div class="message-group ai-group">
+          <div class="msg-avatar ai-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="msg-content">
+            <div class="msg-sender">AI Triage Bot <span class="msg-time">09:31</span></div>
+            <div class="msg-bubble ai-msg">
+              <p>Cảm ơn bạn đã chia sẻ. Tôi cần hỏi thêm một vài câu hỏi để đánh giá chính xác hơn:</p>
+              <div class="assessment-questions">
+                <div class="q-item">
+                  <span class="q-number">1</span>
+                  <span>Mức độ đau từ 1-10 là bao nhiêu?</span>
+                </div>
+                <div class="q-item">
+                  <span class="q-number">2</span>
+                  <span>Bạn có bị sốt hoặc buồn nôn không?</span>
+                </div>
+                <div class="q-item">
+                  <span class="q-number">3</span>
+                  <span>Bạn có đang dùng thuốc gì không?</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Patient message 2 -->
+        <div class="message-group user-group">
+          <div class="msg-content">
+            <div class="msg-sender">Bạn <span class="msg-time">09:32</span></div>
+            <div class="msg-bubble user-msg">
+              <p>Mức đau khoảng 8/10. Có, tôi bị sốt nhẹ và sáng nay buồn nôn. Không dùng thuốc gì.</p>
+            </div>
+          </div>
+          <div class="msg-avatar user-avatar-bubble">
+            <span>NV</span>
+          </div>
+        </div>
+
+        <!-- AI response 2 — triage result -->
+        <div class="message-group ai-group">
+          <div class="msg-avatar ai-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="msg-content">
+            <div class="msg-sender">AI Triage Bot <span class="msg-time">09:33</span></div>
+            <div class="msg-bubble ai-msg">
+              <!-- Triage Result Card -->
+              <div class="triage-card emergency">
+                <div class="triage-header">
+                  <div class="triage-icon-wrap">
+                    <i data-lucide="alert-triangle"></i>
+                  </div>
+                  <div>
+                    <span class="triage-level">MỨC ĐỘ: KHẨN CẤP</span>
+                    <span class="triage-condition">Nghi ngờ Viêm ruột thừa cấp</span>
+                  </div>
+                </div>
+                <div class="triage-body">
+                  <p>Dựa trên các triệu chứng của bạn (đau bụng dưới phải dữ dội, sốt, buồn nôn, mức đau 8/10), tôi đánh giá đây có thể là dấu hiệu của <strong>viêm ruột thừa cấp</strong>.</p>
+                  <div class="triage-actions-list">
+                    <div class="action-item urgent">
+                      <i data-lucide="alert-circle"></i>
+                      <span>Đến phòng cấp cứu ngay lập tức</span>
+                    </div>
+                    <div class="action-item">
+                      <i data-lucide="x-circle"></i>
+                      <span>Không ăn uống cho đến khi gặp bác sĩ</span>
+                    </div>
+                    <div class="action-item">
+                      <i data-lucide="pill"></i>
+                      <span>Không tự ý uống thuốc giảm đau</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="triage-footer">
+                  <button class="triage-action-btn" id="btn-book-emergency">
+                    <i data-lucide="ambulance"></i>
+                    Gọi cấp cứu 115
+                  </button>
+                  <button class="triage-action-btn secondary" id="btn-find-hospital">
+                    <i data-lucide="map-pin"></i>
+                    Tìm bệnh viện gần nhất
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="msg-bubble ai-msg ai-note">
+              <p>⚠️ <strong>Lưu ý:</strong> Đây là đánh giá sơ bộ của AI. Kết quả này đã được gửi đến bác sĩ trực để xem xét. Vui lòng đến cơ sở y tế gần nhất ngay.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing indicator (hidden by default, shown via JS) -->
+        <div class="message-group ai-group typing-indicator" id="typing-indicator" style="display: none;">
+          <div class="msg-avatar ai-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="msg-content">
+            <div class="msg-bubble ai-msg typing-bubble">
+              <div class="typing-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chat Input Bar -->
+      <div class="chat-input-bar" id="chat-input-bar">
+        <div class="input-wrapper">
+          <button class="input-action-btn" id="btn-attach" aria-label="Đính kèm file">
+            <i data-lucide="paperclip"></i>
+          </button>
+          <textarea id="chat-input" rows="1" placeholder="Mô tả triệu chứng của bạn..." aria-label="Nhập tin nhắn"></textarea>
+          <button class="input-action-btn mic-btn" id="btn-mic" aria-label="Ghi âm giọng nói">
+            <i data-lucide="mic"></i>
+          </button>
+          <button class="send-btn" id="btn-send" aria-label="Gửi tin nhắn">
+            <i data-lucide="send-horizontal"></i>
+          </button>
+        </div>
+        <div class="input-footer">
+          <span class="input-hint"><i data-lucide="shield-check"></i> Thông tin của bạn được bảo mật và mã hóa end-to-end</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    if (!sessionStorage.getItem('userRole')) window.location.href = 'login.html';
+  </script>
+  <script src="chat-app.js"></script>
+</body>
+</html>
+
+

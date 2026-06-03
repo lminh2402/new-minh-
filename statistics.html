@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTriageAI — Thống kê chi tiết</title>
+  <meta name="description" content="Phân tích thống kê chi tiết hệ thống AI Medical Triage." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="manager-styles.css" />
+  <link rel="stylesheet" href="statistics-styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="top-header" class="top-header">
+    <div class="header-logo"><div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div><span class="logo-text">MedTriage<span class="logo-accent">AI</span></span></div>
+    <div class="header-search"><i data-lucide="search" class="search-icon"></i><input type="text" placeholder="Tìm kiếm báo cáo, bác sĩ, case…" /></div>
+    <div class="header-actions">
+      <button class="icon-btn notification-btn"><i data-lucide="bell"></i><span class="notification-badge">5</span></button>
+      <div class="user-avatar"><span class="avatar-initials">CG</span></div>
+      <button class="icon-btn logout-btn" onclick="window.location.href='login.html'"><i data-lucide="log-out"></i></button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="manager.html" class="nav-item"><i data-lucide="layout-dashboard"></i><span>Tổng quan</span></a>
+        <a href="retraining.html" class="nav-item"><i data-lucide="brain"></i><span>AI Retraining</span></a>
+        <a href="index.html" class="nav-item"><i data-lucide="message-square-warning"></i><span>Feedback</span></a>
+        <a href="#" class="nav-item active"><i data-lucide="bar-chart-3"></i><span>Thống kê</span></a>
+        <a href="settings.html" class="nav-item"><i data-lucide="user-cog"></i><span>Cài đặt</span></a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-version">v2.4.1</div></div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content manager-main">
+
+      <div class="page-title-bar">
+        <div>
+          <h1>Thống kê chi tiết</h1>
+          <p class="page-subtitle">Phân tích hiệu suất AI và dữ liệu triage</p>
+        </div>
+        <div class="title-actions">
+          <select class="period-select" id="period-select">
+            <option value="week">7 ngày qua</option>
+            <option value="month" selected>30 ngày qua</option>
+            <option value="quarter">Quý này</option>
+            <option value="year">Năm 2026</option>
+          </select>
+          <button class="export-btn" id="btn-export"><i data-lucide="download"></i> Xuất PDF</button>
+        </div>
+      </div>
+
+      <!-- Row 1: Mini KPIs -->
+      <div class="stats-mini-row">
+        <div class="mini-kpi">
+          <div class="mini-icon blue"><i data-lucide="users"></i></div>
+          <div><span class="mini-val">3,842</span><span class="mini-label">Bệnh nhân</span></div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-icon green"><i data-lucide="message-circle"></i></div>
+          <div><span class="mini-val">12,456</span><span class="mini-label">Tin nhắn</span></div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-icon purple"><i data-lucide="brain"></i></div>
+          <div><span class="mini-val">47</span><span class="mini-label">Lần retrain</span></div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-icon orange"><i data-lucide="shield-alert"></i></div>
+          <div><span class="mini-val">156</span><span class="mini-label">Cờ đỏ phát hiện</span></div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-icon teal"><i data-lucide="timer"></i></div>
+          <div><span class="mini-val">2.1 phút</span><span class="mini-label">TB phiên chat</span></div>
+        </div>
+      </div>
+
+      <!-- Row 2: Charts -->
+      <div class="charts-row">
+        <!-- Line chart: Sessions over time -->
+        <div class="chart-card wide">
+          <div class="chart-header">
+            <h3>Lượt triage theo ngày</h3>
+            <div class="chart-tabs">
+              <button class="tab active">Ngày</button>
+              <button class="tab">Tuần</button>
+              <button class="tab">Tháng</button>
+            </div>
+          </div>
+          <div class="chart-body">
+            <div class="line-chart" id="sessions-chart">
+              <div class="line-chart-grid">
+                <span class="grid-label">200</span>
+                <span class="grid-label">150</span>
+                <span class="grid-label">100</span>
+                <span class="grid-label">50</span>
+                <span class="grid-label">0</span>
+              </div>
+              <div class="line-chart-bars">
+                <div class="lc-bar" style="--h:65%"><div class="lc-tip">98</div><span>01</span></div>
+                <div class="lc-bar" style="--h:72%"><div class="lc-tip">108</div><span>02</span></div>
+                <div class="lc-bar" style="--h:58%"><div class="lc-tip">87</div><span>03</span></div>
+                <div class="lc-bar" style="--h:80%"><div class="lc-tip">120</div><span>04</span></div>
+                <div class="lc-bar" style="--h:90%"><div class="lc-tip">135</div><span>05</span></div>
+                <div class="lc-bar" style="--h:75%"><div class="lc-tip">113</div><span>06</span></div>
+                <div class="lc-bar" style="--h:95%"><div class="lc-tip">143</div><span>07</span></div>
+                <div class="lc-bar" style="--h:85%"><div class="lc-tip">128</div><span>08</span></div>
+                <div class="lc-bar" style="--h:70%"><div class="lc-tip">105</div><span>09</span></div>
+                <div class="lc-bar highlight" style="--h:100%"><div class="lc-tip">150</div><span>10</span></div>
+                <div class="lc-bar" style="--h:88%"><div class="lc-tip">132</div><span>11</span></div>
+                <div class="lc-bar" style="--h:78%"><div class="lc-tip">117</div><span>12</span></div>
+                <div class="lc-bar accent" style="--h:92%"><div class="lc-tip">138</div><span>13</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Severity breakdown -->
+        <div class="chart-card">
+          <div class="chart-header"><h3>Phân bố mức độ</h3></div>
+          <div class="chart-body">
+            <div class="severity-bars">
+              <div class="sev-row">
+                <span class="sev-label">Khẩn cấp</span>
+                <div class="sev-track"><div class="sev-fill danger" style="width:15%"></div></div>
+                <span class="sev-pct">15%</span>
+              </div>
+              <div class="sev-row">
+                <span class="sev-label">Cao</span>
+                <div class="sev-track"><div class="sev-fill warning" style="width:22%"></div></div>
+                <span class="sev-pct">22%</span>
+              </div>
+              <div class="sev-row">
+                <span class="sev-label">Trung bình</span>
+                <div class="sev-track"><div class="sev-fill blue" style="width:38%"></div></div>
+                <span class="sev-pct">38%</span>
+              </div>
+              <div class="sev-row">
+                <span class="sev-label">Thấp</span>
+                <div class="sev-track"><div class="sev-fill success" style="width:25%"></div></div>
+                <span class="sev-pct">25%</span>
+              </div>
+            </div>
+            <div class="sev-summary">
+              <div class="sev-sum-item"><i data-lucide="trending-up"></i><span>Khẩn cấp tăng <strong>+3%</strong> so với tháng trước</span></div>
+              <div class="sev-sum-item"><i data-lucide="trending-down"></i><span>Mức thấp giảm <strong>-5%</strong></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Tables -->
+      <div class="charts-row">
+        <!-- Top symptoms -->
+        <div class="chart-card">
+          <div class="chart-header"><h3>Triệu chứng phổ biến</h3></div>
+          <div class="chart-body">
+            <div class="rank-list">
+              <div class="rank-item"><span class="rank-num">1</span><span class="rank-name">Đau bụng</span><div class="rank-bar"><div class="rank-fill" style="width:85%"></div></div><span class="rank-count">423</span></div>
+              <div class="rank-item"><span class="rank-num">2</span><span class="rank-name">Đau đầu</span><div class="rank-bar"><div class="rank-fill" style="width:68%"></div></div><span class="rank-count">338</span></div>
+              <div class="rank-item"><span class="rank-num">3</span><span class="rank-name">Sốt cao</span><div class="rank-bar"><div class="rank-fill" style="width:55%"></div></div><span class="rank-count">274</span></div>
+              <div class="rank-item"><span class="rank-num">4</span><span class="rank-name">Đau ngực</span><div class="rank-bar"><div class="rank-fill" style="width:42%"></div></div><span class="rank-count">209</span></div>
+              <div class="rank-item"><span class="rank-num">5</span><span class="rank-name">Khó thở</span><div class="rank-bar"><div class="rank-fill" style="width:30%"></div></div><span class="rank-count">149</span></div>
+              <div class="rank-item"><span class="rank-num">6</span><span class="rank-name">Chóng mặt</span><div class="rank-bar"><div class="rank-fill" style="width:22%"></div></div><span class="rank-count">109</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Performance -->
+        <div class="chart-card wide">
+          <div class="chart-header"><h3>Hiệu suất AI theo chuyên khoa</h3></div>
+          <div class="chart-body">
+            <table class="data-table compact">
+              <thead>
+                <tr><th>Chuyên khoa</th><th>Tổng case</th><th>Chính xác</th><th>Sai lệch</th><th>Tỷ lệ</th><th>Xu hướng</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="cell-id">Nội tổng hợp</td><td>542</td><td>531</td><td>11</td><td><span class="pct-badge good">97.9%</span></td><td><span class="trend-up">↑ 1.2%</span></td></tr>
+                <tr><td class="cell-id">Tim mạch</td><td>318</td><td>312</td><td>6</td><td><span class="pct-badge good">98.1%</span></td><td><span class="trend-up">↑ 0.5%</span></td></tr>
+                <tr><td class="cell-id">Tiêu hóa</td><td>287</td><td>276</td><td>11</td><td><span class="pct-badge mid">96.2%</span></td><td><span class="trend-down">↓ 0.8%</span></td></tr>
+                <tr><td class="cell-id">Thần kinh</td><td>215</td><td>209</td><td>6</td><td><span class="pct-badge good">97.2%</span></td><td><span class="trend-up">↑ 2.1%</span></td></tr>
+                <tr><td class="cell-id">Hô hấp</td><td>198</td><td>194</td><td>4</td><td><span class="pct-badge good">97.9%</span></td><td><span class="trend-up">↑ 0.3%</span></td></tr>
+                <tr><td class="cell-id">Cơ xương khớp</td><td>156</td><td>148</td><td>8</td><td><span class="pct-badge mid">94.8%</span></td><td><span class="trend-down">↓ 1.5%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    if (!sessionStorage.getItem('userRole')) window.location.href = 'login.html';
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      // Sidebar
+      document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+        item.addEventListener('click', e => {
+          if (item.getAttribute('href') === '#') {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+          }
+        });
+      });
+      // Chart tabs
+      document.querySelectorAll('.chart-tabs .tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.chart-tabs .tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+      // Export
+      const btn = document.getElementById('btn-export');
+      if (btn) btn.addEventListener('click', () => {
+        const o = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="check"></i> Đã xuất!';
+        btn.style.borderColor = '#10b981'; btn.style.color = '#10b981';
+        lucide.createIcons();
+        setTimeout(() => { btn.innerHTML = o; btn.style.borderColor = ''; btn.style.color = ''; lucide.createIcons(); }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
+

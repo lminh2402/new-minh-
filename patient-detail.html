@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết Bệnh nhân - MedTriageAI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="doctor-styles.css">
+  <style>
+    @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes slideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fadeOut { to { opacity: 0; } }
+    @keyframes timelinePop { 0% { opacity: 0; transform: translateY(-12px); } 100% { opacity: 1; transform: translateY(0); } }
+    #drawer-add-record .drawer-panel.closing { animation: slideOutRight 0.3s ease forwards !important; }
+    .drawer-panel { animation: slideInRight 0.3s ease; }
+    .section-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 20px; }
+    .section-title { font-size: 14px; font-weight: 700; color: var(--gray-900); margin: 0 0 16px; display: flex; align-items: center; gap: 8px; }
+    .drop-zone { border: 2px dashed var(--gray-300); border-radius: 8px; padding: 28px; text-align: center; cursor: pointer; transition: 0.2s; }
+    .drop-zone.dragover { border-color: #2563EB; background: #EFF6FF; }
+    .drop-zone:hover { border-color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <header class="top-header">
+    <div class="header-logo" style="cursor:pointer;" onclick="window.location.href='doctor-dashboard.html'">
+      <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
+      <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
+    </div>
+    <div class="header-actions">
+      <div class="user-avatar" title="BS. Trần A"><span class="avatar-initials">BS</span></div>
+      <button class="icon-btn logout-btn" onclick="window.location.href='login.html'"><i data-lucide="log-out"></i></button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="doctor-dashboard.html" class="nav-item active"><i data-lucide="arrow-left"></i> <span>Quay lại Danh sách</span></a>
+      </nav>
+    </aside>
+
+    <main class="main-content" style="padding: 24px; overflow-y: auto;">
+      <div class="page-title-bar" style="margin-bottom: 24px;">
+        <h1 style="font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--gray-900);">Hồ sơ Bệnh nhân</h1>
+        <p style="color: var(--gray-500); margin-top: 4px; font-size: 14px;">Quản lý thông tin và lịch sử khám bệnh</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 3fr 7fr; gap: 24px; max-width: 1400px; margin: 0 auto; align-items: start;">
+
+        <!-- CỘT TRÁI 30% -->
+        <div class="card" style="padding: 24px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--gray-200);">
+          <div id="pat-avatar" style="width: 80px; height: 80px; border-radius: 50%; background: #DBEAFE; color: #1E40AF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 28px; margin-bottom: 12px;">NB</div>
+          <h3 id="pat-name" style="font-size: 18px; font-weight: 800; color: var(--gray-900); margin: 0;">Nguyễn Văn Bệnh</h3>
+          <div id="pat-id" style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">#BN-1002</div>
+          <div style="width: 100%; border-top: 1px solid var(--gray-200); margin: 16px 0;"></div>
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Giới tính & Tuổi:</span> <strong id="pat-gender-age" style="color: var(--gray-900);">Nam, 32 tuổi</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Số điện thoại:</span> <strong id="pat-phone" style="color: var(--gray-900);">0901.234.567</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Địa chỉ:</span> <strong id="pat-address" style="color: var(--gray-900); text-align: right;">Quận 1, TP.HCM</strong></div>
+          </div>
+          <div style="width: 100%; margin-top: 24px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 16px;">
+            <h4 style="font-size: 14px; font-weight: 700; color: #991B1B; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;"><i data-lucide="alert-triangle" style="width: 16px;"></i> CẢNH BÁO Y KHOA</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;"><span style="color: #991B1B;">Nhóm máu:</span> <strong id="pat-blood" style="color: #7F1D1D;">O+</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: #991B1B;">Tiền sử dị ứng:</span> <strong id="pat-allergy" style="color: #7F1D1D;">Penicillin</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CỘT PHẢI 70% -->
+        <div class="card" style="padding: 24px; border: 1px solid var(--gray-200);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 16px; margin-bottom: 24px;">
+            <h3 style="font-size: 18px; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 8px; margin: 0;">
+              <i data-lucide="history" style="color: var(--primary);"></i> Lịch sử Khám bệnh (EMR)
+            </h3>
+            <button class="btn-primary" onclick="openMedicalRecordDrawer()" style="background: #2563EB; box-shadow: 0 4px 12px rgba(37,99,235,0.2); padding: 8px 16px; border-radius: 8px; white-space: nowrap;">
+              <i data-lucide="plus-circle" style="width: 18px;"></i> Thêm hồ sơ/bệnh án mới
+            </button>
+          </div>
+
+          <div id="timeline-container" style="display: flex; flex-direction: column; gap: 24px; position: relative;">
+            <div id="timeline-line" style="position: absolute; left: 15px; top: 10px; bottom: 0; width: 2px; background: #E2E8F0; z-index: 0;"></div>
+            <div class="timeline-node" style="position: relative; z-index: 1; padding-left: 40px;">
+              <div style="position: absolute; left: 8px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #94A3B8; border: 4px solid white; box-shadow: 0 0 0 1px #94A3B8;"></div>
+              <div style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                  <div style="font-weight: 700; font-size: 15px; color: var(--gray-700);">Khám Tổng quát</div>
+                  <div style="font-size: 12px; color: var(--gray-500); font-weight: 600;">20/05/2026</div>
+                </div>
+                <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 8px;"><strong>Bác sĩ:</strong> BS. Trần A</div>
+                <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px;"><strong>Chẩn đoán:</strong> Suy nhược cơ thể, cần nghỉ ngơi.</div>
+                <button style="padding: 6px 12px; background: white; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px; cursor: pointer; color: #059669; font-weight: 600;"><i data-lucide="pill" style="width: 14px; display: inline; margin-right: 4px;"></i> Xem Đơn thuốc</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DRAWER: Kịch bản 2 -->
+  <div id="drawer-add-record" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1200; justify-content: flex-end;" onclick="if(event.target===this) closeMedicalRecordDrawer()">
+    <div class="drawer-panel" style="background: white; width: 50%; max-width: 768px; min-width: 400px; height: 100%; box-shadow: -10px 0 25px rgba(0,0,0,0.1); display: flex; flex-direction: column;" onclick="event.stopPropagation()">
+      <div style="padding: 20px 24px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--gray-900); margin: 0; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="file-plus" style="color: #2563EB;"></i> Khám & Kê đơn
+        </h3>
+        <button onclick="closeMedicalRecordDrawer()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 20px; height: 20px;"></i></button>
+      </div>
+
+      <div style="padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Section 1: Sinh hiệu & Khám lâm sàng -->
+        <div class="section-card">
+          <h4 class="section-title"><i data-lucide="stethoscope" style="width: 16px; color: #2563EB;"></i> Sinh hiệu & Khám lâm sàng</h4>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Lý do khám <span style="color: #EF4444;">*</span></label>
+              <textarea id="record-reason" rows="2" placeholder="Kêu đau bụng, buồn nôn sau ăn..." style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; resize: vertical; box-sizing: border-box;"></textarea>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gray-600); margin-bottom: 4px;">Mạch (bpm)</label>
+                <input type="number" id="record-pulse" placeholder="72" style="width: 100%; padding: 8px 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gray-600); margin-bottom: 4px;">Nhiệt độ (°C)</label>
+                <input type="number" id="record-temp" step="0.1" placeholder="36.5" style="width: 100%; padding: 8px 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gray-600); margin-bottom: 4px;">Huyết áp (mmHg)</label>
+                <input type="text" id="record-bp" placeholder="120/80" style="width: 100%; padding: 8px 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box;">
+              </div>
+            </div>
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Chẩn đoán <span style="color: #EF4444;">*</span></label>
+              <input type="text" id="record-diagnosis" placeholder="Viêm dạ dày cấp..." style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Cận lâm sàng -->
+        <div class="section-card">
+          <h4 class="section-title"><i data-lucide="microscope" style="width: 16px; color: #2563EB;"></i> Cận lâm sàng (Tùy chọn)</h4>
+          <div id="drop-zone" class="drop-zone" onclick="document.getElementById('file-upload').click()">
+            <i data-lucide="upload-cloud" style="width: 32px; height: 32px; color: var(--gray-400); margin-bottom: 8px;"></i>
+            <div style="font-size: 13px; color: var(--gray-600);">Kéo & Thả ảnh nội soi, X-Quang vào đây</div>
+            <div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">hoặc <span style="color: #2563EB; font-weight: 600;">bấm để chọn file</span></div>
+            <div id="upload-preview" style="margin-top: 12px; font-size: 12px; color: #059669; font-weight: 600;"></div>
+          </div>
+          <input type="file" id="file-upload" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this)">
+        </div>
+
+        <!-- Section 3: Kê đơn thuốc -->
+        <div class="section-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h4 class="section-title" style="margin: 0;"><i data-lucide="pill" style="width: 16px; color: #2563EB;"></i> Kê đơn thuốc</h4>
+            <button onclick="addPrescriptionRow()" style="background: #EEF2FF; color: #4F46E5; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              <i data-lucide="plus" style="width: 14px;"></i> Thêm thuốc
+            </button>
+          </div>
+          <datalist id="drug-inventory">
+            <option value="Paracetamol 500mg"></option>
+            <option value="Amoxicillin 500mg"></option>
+            <option value="Omeprazole 20mg"></option>
+            <option value="Metoclopramide 10mg"></option>
+            <option value="Ibuprofen 400mg"></option>
+          </datalist>
+          <div style="border: 1px solid var(--gray-200); border-radius: 8px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+              <thead style="background: white;">
+                <tr>
+                  <th style="padding: 10px 12px; border-bottom: 1px solid var(--gray-200); font-weight: 600; color: var(--gray-700); text-align: left;">Tên thuốc</th>
+                  <th style="padding: 10px 12px; border-bottom: 1px solid var(--gray-200); font-weight: 600; color: var(--gray-700); width: 70px;">SL</th>
+                  <th style="padding: 10px 12px; border-bottom: 1px solid var(--gray-200); font-weight: 600; color: var(--gray-700);">Liều dùng</th>
+                  <th style="padding: 10px 12px; border-bottom: 1px solid var(--gray-200); width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="prescription-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 16px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;">
+        <button onclick="closeMedicalRecordDrawer()" style="padding: 10px 20px; border: 1px solid var(--gray-300); background: white; border-radius: 8px; font-weight: 600; color: var(--gray-700); font-size: 14px; cursor: pointer;">Hủy</button>
+        <button id="btn-save-record" onclick="submitMedicalRecord()" style="padding: 10px 24px; border: none; background: #2563EB; color: white; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 180px; justify-content: center;">
+          Hoàn thành khám
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    var isOpenAddRecord = false;
+    var uploadedFiles = [];
+
+    var PATIENTS = {
+      'BN-1002': { name: 'Nguyễn Văn Bệnh', initials: 'NB', gender: 'Nam', age: 32, phone: '0901.234.567', address: 'Quận 1, TP.HCM', blood: 'O+', allergy: 'Penicillin' },
+      'BN-0984': { name: 'Trần Thị Đau', initials: 'TD', gender: 'Nữ', age: 28, phone: '0988.765.432', address: 'Quận 3, TP.HCM', blood: 'A+', allergy: 'Không' }
+    };
+
+    (function initPatient() {
+      var params = new URLSearchParams(window.location.search);
+      var id = (params.get('id') || 'BN-1002').replace('#', '');
+      var p = PATIENTS[id] || PATIENTS['BN-1002'];
+      document.getElementById('pat-name').textContent = p.name;
+      document.getElementById('pat-id').textContent = '#' + id;
+      document.getElementById('pat-avatar').textContent = p.initials;
+      document.getElementById('pat-gender-age').textContent = p.gender + ', ' + p.age + ' tuổi';
+      document.getElementById('pat-phone').textContent = p.phone;
+      document.getElementById('pat-address').textContent = p.address;
+      document.getElementById('pat-blood').textContent = p.blood;
+      document.getElementById('pat-allergy').textContent = p.allergy;
+      document.title = p.name + ' - MedTriageAI';
+    })();
+
+    function openMedicalRecordDrawer() {
+      isOpenAddRecord = true;
+      document.getElementById('drawer-add-record').style.display = 'flex';
+      document.getElementById('record-reason').value = '';
+      document.getElementById('record-pulse').value = '';
+      document.getElementById('record-temp').value = '';
+      document.getElementById('record-bp').value = '';
+      document.getElementById('record-diagnosis').value = '';
+      uploadedFiles = [];
+      document.getElementById('upload-preview').textContent = '';
+      document.getElementById('prescription-tbody').innerHTML = '';
+      addPrescriptionRow();
+      lucide.createIcons();
+    }
+
+    function closeMedicalRecordDrawer() {
+      isOpenAddRecord = false;
+      var panel = document.querySelector('#drawer-add-record .drawer-panel');
+      panel.classList.add('closing');
+      setTimeout(function() {
+        document.getElementById('drawer-add-record').style.display = 'none';
+        panel.classList.remove('closing');
+      }, 280);
+    }
+
+    function addPrescriptionRow() {
+      var tbody = document.getElementById('prescription-tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);"><input type="text" list="drug-inventory" placeholder="Tìm thuốc trong kho..." class="rx-drug" style="width:100%;padding:8px;border:1px solid var(--gray-300);border-radius:4px;font-size:13px;outline:none;box-sizing:border-box;"></td>'
+        + '<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);"><input type="number" min="1" placeholder="0" class="rx-qty" style="width:100%;padding:8px;border:1px solid var(--gray-300);border-radius:4px;font-size:13px;outline:none;box-sizing:border-box;"></td>'
+        + '<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);"><input type="text" placeholder="Sáng 1 - Tối 1" class="rx-dose" style="width:100%;padding:8px;border:1px solid var(--gray-300);border-radius:4px;font-size:13px;outline:none;box-sizing:border-box;"></td>'
+        + '<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);text-align:center;"><button type="button" style="background:transparent;border:none;padding:4px;cursor:pointer;" onclick="this.closest(\'tr\').remove()"><i data-lucide="x" style="width:16px;color:#EF4444;"></i></button></td>';
+      tbody.appendChild(tr);
+      lucide.createIcons();
+    }
+
+    function handleFileUpload(input) {
+      uploadedFiles = Array.from(input.files).map(function(f) { return f.name; });
+      document.getElementById('upload-preview').textContent = uploadedFiles.length ? 'Đã tải: ' + uploadedFiles.join(', ') : '';
+    }
+
+    (function setupDropZone() {
+      var zone = document.getElementById('drop-zone');
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        uploadedFiles = Array.from(e.dataTransfer.files).map(function(f) { return f.name; });
+        document.getElementById('upload-preview').textContent = 'Đã tải: ' + uploadedFiles.join(', ');
+      });
+    })();
+
+    function getPrescriptionSummary() {
+      var rows = document.querySelectorAll('#prescription-tbody tr');
+      var items = [];
+      rows.forEach(function(row) {
+        var drug = row.querySelector('.rx-drug').value.trim();
+        var qty = row.querySelector('.rx-qty').value.trim();
+        var dose = row.querySelector('.rx-dose').value.trim();
+        if (drug) items.push(drug + (qty ? ' x' + qty : '') + (dose ? ' (' + dose + ')' : ''));
+      });
+      return items.length ? items.join('; ') : 'Không kê đơn';
+    }
+
+    function submitMedicalRecord() {
+      var reason = document.getElementById('record-reason').value.trim();
+      var diagnosis = document.getElementById('record-diagnosis').value.trim();
+      if (!reason || !diagnosis) {
+        alert('Vui lòng nhập Lý do khám và Chẩn đoán.');
+        return;
+      }
+      var btn = document.getElementById('btn-save-record');
+      btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Đang lưu...';
+      btn.disabled = true;
+      lucide.createIcons();
+
+      setTimeout(function() {
+        var container = document.getElementById('timeline-container');
+        var line = document.getElementById('timeline-line');
+        var rxSummary = getPrescriptionSummary();
+        var now = new Date();
+        var dateStr = now.toLocaleDateString('vi-VN');
+        var timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+        var node = document.createElement('div');
+        node.className = 'timeline-node';
+        node.style.cssText = 'position:relative;z-index:1;padding-left:40px;animation:timelinePop 0.5s ease;';
+        node.innerHTML = '<div style="position:absolute;left:8px;top:0;width:16px;height:16px;border-radius:50%;background:#2563EB;border:4px solid white;box-shadow:0 0 0 1px #2563EB;"></div>'
+          + '<div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:16px;">'
+          + '<div style="display:flex;justify-content:space-between;margin-bottom:12px;">'
+          + '<div style="font-weight:700;font-size:15px;color:#1E3A8A;">Khám mới</div>'
+          + '<div style="font-size:12px;color:#2563EB;font-weight:600;">Hôm nay, ' + timeStr + '</div></div>'
+          + '<div style="font-size:13px;color:var(--gray-700);margin-bottom:6px;"><strong>Lý do:</strong> ' + reason + '</div>'
+          + '<div style="font-size:13px;color:var(--gray-700);margin-bottom:6px;"><strong>Chẩn đoán:</strong> ' + diagnosis + '</div>'
+          + '<div style="font-size:13px;color:var(--gray-700);margin-bottom:12px;"><strong>Đơn thuốc:</strong> ' + rxSummary + '</div>'
+          + '<button style="padding:6px 12px;background:white;border:1px solid #93C5FD;border-radius:6px;font-size:12px;cursor:pointer;color:#1D4ED8;font-weight:600;"><i data-lucide="pill" style="width:14px;display:inline;margin-right:4px;"></i> Xem Đơn thuốc</button>'
+          + '</div>';
+
+        container.insertBefore(node, line.nextSibling);
+        lucide.createIcons();
+        closeMedicalRecordDrawer();
+        btn.innerHTML = 'Hoàn thành khám';
+        btn.disabled = false;
+        showToast('Hoàn thành khám — bệnh án mới đã được thêm vào Timeline');
+      }, 800);
+    }
+
+    function showToast(message) {
+      var container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;';
+        document.body.appendChild(container);
+      }
+      var toast = document.createElement('div');
+      toast.style.cssText = 'background:#10B981;color:white;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);animation:toastIn 0.3s ease,fadeOut 0.3s ease 3s forwards;';
+      toast.innerHTML = '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> ' + message;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(function() { if (toast.parentElement) toast.remove(); }, 3500);
+    }
+  </script>
+</body>
+</html>
