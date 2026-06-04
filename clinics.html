@@ -731,11 +731,32 @@
           }
 
           function saveNewBooking() {
+            const nameInput = document.getElementById('patient-name-input').value.trim();
+            const genderInput = document.getElementById('patient-gender-input').value;
+            const ageInput = document.getElementById('patient-age-input').value.trim();
+            const symptomsInput = document.getElementById('patient-symptoms').value.trim();
+            
+            // 1. Kiểm tra validation
+            let missingFields = [];
+            if (!nameInput) missingFields.push("Họ & Tên");
+            if (!genderInput) missingFields.push("Giới tính");
+            if (!ageInput) missingFields.push("Tuổi");
+            if (!symptomsInput) missingFields.push("Triệu chứng");
+
+            if (missingFields.length > 0) {
+              // Thất bại: Báo thiếu gì
+              alert("Tạo lịch hẹn thất bại! Vui lòng điền đầy đủ thông tin còn thiếu:\n- " + missingFields.join("\n- "));
+              return; // Dừng lại, không đóng modal
+            }
+
+            // 2. Thành công
+            alert("Tạo lịch hẹn thành công!");
             setIsOpenNewBooking(false);
+
             const inboxQueue = document.getElementById('inbox-queue');
             if(inboxQueue) {
-              const name = document.getElementById('patient-name-input').value || 'Bệnh nhân mới';
-              const symptoms = document.getElementById('patient-symptoms').value || 'Không rõ';
+              const name = nameInput;
+              const symptoms = symptomsInput;
               const isUrgent = symptoms.toLowerCase().includes('đau') || symptoms.toLowerCase().includes('nôn');
               
               const newCard = document.createElement('div');

@@ -1272,8 +1272,69 @@
         btnNext.innerHTML = '<i data-lucide="loader-2" style="animation: spin 1s linear infinite;"></i> Đang xử lý...';
         lucide.createIcons();
         setTimeout(() => {
+          // Lấy thông tin từ các bước trước
+          const specialtyEl = document.querySelector('.specialty-item.active');
+          const specialty = specialtyEl ? specialtyEl.innerText : 'Nội tổng quát';
+          
+          const doctorEl = document.querySelector('.doctor-card-wizard.active h4');
+          const doctorName = doctorEl ? doctorEl.innerText : 'Không chỉ định';
+          
+          const dateEl = document.querySelector('.cal-day.active');
+          const dateText = dateEl ? dateEl.innerText : '15';
+          const fullDate = dateText.padStart(2, '0') + '/04/2026';
+          
+          const timeEl = document.querySelector('#w-step-2 .time-chip.active');
+          const time = timeEl ? timeEl.innerText.split(' ')[0] : '08:00';
+          
+          // Cập nhật ticket ở bước 4
+          const tSpec = document.getElementById('t-specialty');
+          const tDoc = document.getElementById('t-doctor');
+          const tTime = document.getElementById('t-time');
+          if(tSpec) tSpec.innerText = 'Khoa ' + specialty;
+          if(tDoc) tDoc.innerText = doctorName;
+          if(tTime) tTime.innerText = time + ' - ' + fullDate;
+
+          // Thêm thẻ lịch hẹn mới vào tab Lịch hẹn
+          const appointmentList = document.querySelector('.appointment-list');
+          if(appointmentList) {
+            const newAppt = document.createElement('div');
+            newAppt.className = 'appointment-row';
+            newAppt.style.cssText = 'display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; padding: 20px; border-radius: 12px; border: 1px solid #10B981; box-shadow: 0px 4px 12px rgba(16, 185, 129, 0.15); margin-bottom: 16px; animation: modalFadeIn 0.5s ease;';
+            newAppt.innerHTML = `
+              <div class="appt-col-time" style="flex: 0 0 200px; border-right: 1px solid var(--border-color); padding-right: 20px;">
+                <span class="status-badge pending" style="display: inline-block; margin-bottom: 8px; background: #D1FAE5; color: #059669;">Mới đặt</span>
+                <strong style="display: block; font-size: 16px; color: var(--text-dark);">${fullDate}</strong>
+                <span style="color: var(--text-muted); font-size: 14px;">${time}</span>
+              </div>
+              <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
+                <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa ${specialty}</h3>
+                <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">${doctorName}</p>
+                <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
+                  <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                  <span>Lý do: Khám theo yêu cầu</span>
+                </div>
+              </div>
+              <div class="appt-col-actions" style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center;">
+                <button class="btn-outline text-danger"><i data-lucide="x-circle"></i> Hủy lịch</button>
+                <button class="btn-primary"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
+              </div>
+            `;
+            appointmentList.prepend(newAppt);
+            // Ẩn empty state nếu có
+            const emptyState = document.querySelector('.appointments-container .empty-state');
+            if(emptyState) emptyState.style.display = 'none';
+          }
+
           currentWizardStep++;
           updateWizardUI();
+          
+          // Tự động chuyển về trang lịch hẹn sau 1.5s
+          setTimeout(() => {
+            if (document.getElementById('wizardBookingModal').classList.contains('active')) {
+              closeWizardModal();
+              switchTab('view-appointments', document.querySelectorAll('.sidebar-nav .nav-item')[2]);
+            }
+          }, 1500);
         }, 1000);
         return;
       }

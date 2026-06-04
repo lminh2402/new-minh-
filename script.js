@@ -150,7 +150,7 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
       let showBooking = false;
       let specialty = "Nội tổng quát"; // Mặc định
 
-      const triggerRegex = /\[SHOW_BOOKING_WIDGET\]\s*(?:\((.*?)\))?/i;
+      const triggerRegex = /\[?SHOW_BOOKING_WIDGET\]?\s*(?:\((.*?)\))?/i;
       const match = aiReplyRaw.match(triggerRegex);
 
       if (match) {
