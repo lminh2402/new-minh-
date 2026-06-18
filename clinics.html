@@ -1140,6 +1140,31 @@
             ev.currentTarget.style.opacity = "0.5";
           }
 
+          function updateDoctorLaneLoad(lane) {
+            if (!lane) return;
+            const loadPill = lane.querySelector('.load-pill');
+            const zoneContent = lane.querySelector('.zone-content');
+            if (!loadPill || !zoneContent) return;
+
+            const match = loadPill.textContent.match(/\/\s*(\d+)/);
+            const max = match ? Number(match[1]) : 8;
+            const count = zoneContent.querySelectorAll('.dispatch-card, .patient-card, .queue-item').length;
+            const ratio = count / max;
+
+            loadPill.textContent = `${count}/${max} ca`;
+            loadPill.classList.remove('load-low', 'load-mid', 'load-high');
+            loadPill.classList.add(ratio >= 0.75 ? 'load-high' : ratio >= 0.45 ? 'load-mid' : 'load-low');
+          }
+
+          function markDispatchCardInProgress(card) {
+            const statusChip = card.querySelector('.status-chip');
+            if (!statusChip) return;
+
+            statusChip.classList.remove('st-wait', 'st-risk', 'st-done');
+            statusChip.classList.add('st-progress');
+            statusChip.textContent = 'Đang khám';
+          }
+
           function drop(ev) {
             ev.preventDefault();
             ev.currentTarget.style.borderColor = "#E2E8F0";
@@ -1149,6 +1174,8 @@
             var draggedElement = document.getElementById(data);
             if(!draggedElement) return;
             draggedElement.style.opacity = "1";
+            var sourceLane = draggedElement.closest('.doctor-lane');
+            var targetLane = ev.currentTarget.closest('.doctor-lane') || ev.currentTarget;
             
             // Tìm zone-content bên trong kanban-zone để thả vào
             var zoneContent = ev.currentTarget.querySelector('.zone-content');
@@ -1161,6 +1188,7 @@
               draggedElement.style.cursor = "pointer";
               var gripIcon = draggedElement.querySelector('i[data-lucide="grip-vertical"]');
               if(gripIcon) gripIcon.style.display = "none"; // Ẩn icon kéo thả
+              markDispatchCardInProgress(draggedElement);
               
               draggedElement.onclick = function() {
                 var nameEl = draggedElement.querySelector('.dispatch-patient') || draggedElement.querySelector('div[style*="font-weight: 700;"]');
@@ -1169,6 +1197,10 @@
               };
               
               zoneContent.appendChild(draggedElement);
+              updateDoctorLaneLoad(targetLane);
+              if (sourceLane && sourceLane !== targetLane) {
+                updateDoctorLaneLoad(sourceLane);
+              }
               
               // Re-render lucide icons in case they were lost during DOM move
               if (window.lucide) {

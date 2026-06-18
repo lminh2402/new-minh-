@@ -712,6 +712,220 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .rating-btn { color: var(--warning) !important; border-color: #FDE68A !important; background: #FFFBEB !important; }
 .rating-btn:hover { background: #FEF3C7 !important; border-color: var(--warning) !important; }
 
+.patient-review-panel {
+  margin-top: 40px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFF 100%);
+  border: 1px solid #E0E7FF;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+.review-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #EEF2FF;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.section-kicker i { width: 14px; height: 14px; }
+.review-panel-heading h2 {
+  margin: 0 0 6px;
+  color: var(--text-dark);
+  font-size: 24px;
+  font-weight: 800;
+}
+.review-panel-heading p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 620px;
+}
+.review-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #ECFDF5;
+  color: #047857;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.review-summary-pill i { width: 17px; height: 17px; }
+.review-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.review-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.review-card:hover,
+.review-card.highlight-review {
+  transform: translateY(-3px);
+  border-color: #C7D2FE;
+  box-shadow: 0 18px 34px rgba(79, 70, 229, 0.12);
+}
+.review-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.review-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-weight: 800;
+}
+.doctor-avatar {
+  background: #EEF2FF;
+  color: var(--primary);
+}
+.ai-avatar {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+}
+.ai-avatar i { width: 24px; height: 24px; }
+.review-type {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.review-card h3 {
+  margin: 0 0 4px;
+  color: var(--text-dark);
+  font-size: 18px;
+}
+.review-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.review-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.review-stars button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #FDE68A;
+  background: #FFFBEB;
+  color: #CBD5E1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.review-stars button i { width: 18px; height: 18px; }
+.review-stars button.active {
+  color: var(--warning);
+  background: #FEF3C7;
+  transform: translateY(-1px);
+}
+.review-stars button.active i { fill: var(--warning); }
+.review-stars strong {
+  margin-left: 6px;
+  color: var(--text-dark);
+  font-size: 14px;
+}
+.review-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.review-chip-row span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #F1F5F9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+}
+.review-textarea {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 104px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-dark);
+  background: #F8FAFC;
+  outline: none;
+  margin-bottom: 14px;
+}
+.review-textarea:focus {
+  border-color: var(--primary);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.10);
+}
+.review-submit-btn {
+  width: 100%;
+}
+.review-submit-btn.ai-submit {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+.review-submit-status {
+  min-height: 18px;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  font-weight: 700;
+  color: #047857 !important;
+}
+
+@media (max-width: 900px) {
+  .review-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-panel-heading {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .patient-review-panel {
+    padding: 20px;
+  }
+
+  .review-stars {
+    flex-wrap: wrap;
+  }
+}
+
 /* -------------------------------------------
    NEW: FLOATING AI CHAT
 ------------------------------------------- */

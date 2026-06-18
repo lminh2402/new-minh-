@@ -1545,8 +1545,8 @@
         name: "Nguyễn Văn Bệnh",
         time: "09:00",
         duration: "30p",
-        status: "waiting", // "waiting", "completed", "cancelled", "confirmed", "noshow"
-        statusText: "Đang chờ",
+        status: "in_progress", // "waiting", "in_progress", "completed", "cancelled", "confirmed", "noshow"
+        statusText: "Đang khám",
         gender: "Nam",
         age: 32,
         blood: "O+",
@@ -1790,6 +1790,20 @@
         .sort((a, b) => a.time.localeCompare(b.time));
     }
 
+    function markAppointmentInProgress(apt) {
+      if (!apt || apt.status === 'completed' || apt.status === 'cancelled' || apt.status === 'noshow') return;
+
+      appointments.forEach(item => {
+        if (item.id !== apt.id && item.status === 'in_progress') {
+          item.status = 'confirmed';
+          item.statusText = 'Đã xác nhận';
+        }
+      });
+
+      apt.status = 'in_progress';
+      apt.statusText = 'Đang khám';
+    }
+
     function selectAppointment(id) {
       // Save previous data first
       saveCurrentPatientData();
@@ -1972,6 +1986,8 @@
         let statusBadgeHtml = '';
         if (a.status === 'waiting') {
           statusBadgeHtml = `<span class="status-badge waiting"><i data-lucide="clock" style="width: 12px;"></i> Đang chờ</span>`;
+        } else if (a.status === 'in_progress') {
+          statusBadgeHtml = `<span class="status-badge" style="background: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="play-circle" style="width: 12px; height: 12px;"></i> Đang khám</span>`;
         } else if (a.status === 'confirmed') {
           statusBadgeHtml = `<span class="status-badge pending"><i data-lucide="calendar-check" style="width: 12px;"></i> Đã xác nhận</span>`;
         } else if (a.status === 'noshow') {
@@ -2049,7 +2065,8 @@
       if (tabWaiting) tabWaiting.classList.add('active');
       if (tabCompleted) tabCompleted.classList.remove('active');
 
-      const nextPatient = getWaitingAppointments()[0] || null;
+      const nextPatient = getWaitingAppointments().find(a => a.status !== 'noshow') || null;
+      if (nextPatient) markAppointmentInProgress(nextPatient);
       renderAppointments();
       selectAppointment(nextPatient ? nextPatient.id : null);
     }

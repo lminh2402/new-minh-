@@ -343,7 +343,7 @@
 
             <div class="appt-col-actions" style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center;">
               <button class="btn-outline"><i data-lucide="file-text"></i> Xem kết quả</button>
-              <button class="btn-outline rating-btn" style="color: var(--warning); border-color: var(--warning);"><i data-lucide="star"></i> Đánh giá</button>
+              <button class="btn-outline rating-btn" style="color: var(--warning); border-color: var(--warning);" onclick="focusPatientReview('doctor')"><i data-lucide="star"></i> Đánh giá</button>
             </div>
             
           </div>
@@ -378,6 +378,82 @@
             
           </div>
         </div>
+
+        <section class="patient-review-panel" id="patient-review-panel">
+          <div class="review-panel-heading">
+            <div>
+              <span class="section-kicker"><i data-lucide="sparkles"></i> Phản hồi sau khám</span>
+              <h2>Đánh giá bác sĩ & AI</h2>
+              <p>Chia sẻ trải nghiệm của bạn để phòng khám cải thiện chất lượng tư vấn, khám bệnh và hỗ trợ AI.</p>
+            </div>
+            <div class="review-summary-pill">
+              <i data-lucide="shield-check"></i>
+              <span>Ẩn danh với cộng đồng</span>
+            </div>
+          </div>
+
+          <div class="review-card-grid">
+            <article class="review-card" data-review-card="doctor" data-selected-rating="5">
+              <div class="review-card-top">
+                <div class="review-avatar doctor-avatar">BS</div>
+                <div>
+                  <span class="review-type">Đánh giá bác sĩ</span>
+                  <h3>BS. Trần Thị B</h3>
+                  <p>Khoa Nội Tổng Quát • Lượt khám 15/04/2026</p>
+                </div>
+              </div>
+
+              <div class="review-stars" data-rating-group="doctor" aria-label="Đánh giá bác sĩ">
+                <button type="button" class="active" onclick="setPatientReviewRating('doctor', 1)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('doctor', 2)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('doctor', 3)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('doctor', 4)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('doctor', 5)"><i data-lucide="star"></i></button>
+                <strong id="doctor-review-score">5.0/5</strong>
+              </div>
+
+              <div class="review-chip-row">
+                <span>Tận tình</span>
+                <span>Giải thích dễ hiểu</span>
+                <span>Đúng giờ</span>
+              </div>
+
+              <textarea id="doctor-review-note" class="review-textarea" rows="4" placeholder="Bạn hài lòng điều gì về bác sĩ? Có điểm nào cần cải thiện không?"></textarea>
+              <button class="btn-primary review-submit-btn" onclick="submitPatientReview('doctor')"><i data-lucide="send"></i> Gửi đánh giá bác sĩ</button>
+              <p class="review-submit-status" id="doctor-review-status"></p>
+            </article>
+
+            <article class="review-card ai-review-card" data-review-card="ai" data-selected-rating="4">
+              <div class="review-card-top">
+                <div class="review-avatar ai-avatar"><i data-lucide="bot"></i></div>
+                <div>
+                  <span class="review-type">Đánh giá AI</span>
+                  <h3>MedTriage AI</h3>
+                  <p>Tư vấn triệu chứng đau bụng • Phân luồng trước khám</p>
+                </div>
+              </div>
+
+              <div class="review-stars" data-rating-group="ai" aria-label="Đánh giá AI">
+                <button type="button" class="active" onclick="setPatientReviewRating('ai', 1)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('ai', 2)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('ai', 3)"><i data-lucide="star"></i></button>
+                <button type="button" class="active" onclick="setPatientReviewRating('ai', 4)"><i data-lucide="star"></i></button>
+                <button type="button" onclick="setPatientReviewRating('ai', 5)"><i data-lucide="star"></i></button>
+                <strong id="ai-review-score">4.0/5</strong>
+              </div>
+
+              <div class="review-chip-row">
+                <span>Gợi ý nhanh</span>
+                <span>Dễ hiểu</span>
+                <span>Cần chính xác hơn</span>
+              </div>
+
+              <textarea id="ai-review-note" class="review-textarea" rows="4" placeholder="AI tư vấn có dễ hiểu, đúng trọng tâm và hữu ích trước khi khám không?"></textarea>
+              <button class="btn-primary review-submit-btn ai-submit" onclick="submitPatientReview('ai')"><i data-lucide="send"></i> Gửi đánh giá AI</button>
+              <p class="review-submit-status" id="ai-review-status"></p>
+            </article>
+          </div>
+        </section>
       </div>
     </div> <!-- End view-appointments -->
 
@@ -591,7 +667,10 @@
               <i data-lucide="star" class="star-icon" style="color: #CBD5E1; width: 16px; cursor: pointer;"></i>
             </div>
           </div>
-          <button class="btn-outline"><i data-lucide="message-square"></i> Xem đoạn chat</button>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
+            <button class="btn-outline"><i data-lucide="message-square"></i> Xem đoạn chat</button>
+            <button class="btn-outline rating-btn" onclick="focusPatientReview('ai')"><i data-lucide="star"></i> Đánh giá AI</button>
+          </div>
         </div>
         
         <div class="history-item" style="cursor: pointer; transition: all 0.2s; background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0px 4px 12px rgba(0, 0, 0, 0.05)';" onclick="openRecordDetail('general')">
@@ -1996,6 +2075,66 @@
       if(el.classList.contains('disabled')) return;
       document.querySelectorAll('#w-step-2 .time-chip').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
+    }
+
+    function setPatientReviewRating(type, rating) {
+      const card = document.querySelector(`[data-review-card="${type}"]`);
+      if (!card) return;
+
+      card.dataset.selectedRating = rating;
+      card.querySelectorAll('.review-stars button').forEach((button, index) => {
+        button.classList.toggle('active', index < rating);
+      });
+
+      const score = document.getElementById(`${type}-review-score`);
+      if (score) score.textContent = `${rating}.0/5`;
+    }
+
+    function focusPatientReview(type = 'doctor') {
+      const appointmentNav = document.querySelectorAll('.sidebar-nav .nav-item')[2];
+      switchTab('view-appointments', appointmentNav);
+
+      setTimeout(() => {
+        const panel = document.getElementById('patient-review-panel');
+        const card = document.querySelector(`[data-review-card="${type}"]`);
+        const textarea = document.getElementById(`${type}-review-note`);
+
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (card) {
+          card.classList.add('highlight-review');
+          setTimeout(() => card.classList.remove('highlight-review'), 1200);
+        }
+        setTimeout(() => textarea?.focus(), 450);
+      }, 80);
+    }
+
+    function submitPatientReview(type) {
+      const card = document.querySelector(`[data-review-card="${type}"]`);
+      const status = document.getElementById(`${type}-review-status`);
+      const button = card?.querySelector('.review-submit-btn');
+      if (!card || !button) return;
+
+      const rating = card.dataset.selectedRating || '5';
+      const originalHtml = button.innerHTML;
+      button.disabled = true;
+      button.innerHTML = '<i data-lucide="loader-2" style="animation: spin 1s linear infinite;"></i> Đang gửi...';
+      if (window.lucide) window.lucide.createIcons({ root: button });
+
+      setTimeout(() => {
+        button.innerHTML = '<i data-lucide="check-circle"></i> Đã gửi đánh giá';
+        if (status) {
+          status.textContent = type === 'doctor'
+            ? `Cảm ơn bạn đã đánh giá bác sĩ ${rating}/5.`
+            : `Cảm ơn bạn đã đánh giá AI ${rating}/5.`;
+        }
+        if (window.lucide) window.lucide.createIcons({ root: button });
+
+        setTimeout(() => {
+          button.disabled = false;
+          button.innerHTML = originalHtml;
+          if (window.lucide) window.lucide.createIcons({ root: button });
+        }, 1800);
+      }, 600);
     }
 
     function switchTab(viewId, element) {
