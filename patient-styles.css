@@ -1768,6 +1768,28 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   border-color: var(--primary); background: linear-gradient(to bottom right, var(--primary-light), #ffffff); 
   transform: translateY(-4px); box-shadow: 0 12px 24px rgba(16, 185, 129, 0.15);
 }
+.wizard-doctor-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.wizard-doctor-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #F8FAFC;
+  color: var(--gray-600);
+  font-size: 11px;
+  font-weight: 700;
+}
+.wizard-doctor-meta i {
+  width: 12px;
+  height: 12px;
+  color: var(--primary);
+}
 .doc-check { position: absolute; top: -10px; right: -10px; color: white; background: var(--primary); border-radius: 50%; padding: 4px; border: 2px solid white; display: none; width: 24px; height: 24px; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4); }
 .doctor-card-wizard.active .doc-check { display: flex; animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }

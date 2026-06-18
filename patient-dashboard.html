@@ -53,7 +53,6 @@
         <a href="#" class="nav-item" onclick="switchTab('view-reports', this)"><i data-lucide="file-text"></i> Báo cáo sức khỏe</a>
         <a href="#" class="nav-item" onclick="switchTab('view-profile', this)"><i data-lucide="user"></i> Hồ sơ cá nhân</a>
       </nav>
-      <div class="sidebar-footer"><div class="sidebar-version">v2.4.1</div></div>
     </aside>
 
     <!-- ═══ MAIN CONTENT ═══ -->
@@ -1502,6 +1501,26 @@
 
     const defaultDoctors = [
       {
+        name: "BS. Trần Văn An",
+        specialty: "Nội tổng quát",
+        schedule: "08:00 - 12:00 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 180,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "BS. Lê Minh Châu",
+        specialty: "Nội tổng quát",
+        schedule: "13:30 - 17:30 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 132,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
         name: "BS. Nguyễn Văn A",
         specialty: "Tiêu hóa",
         schedule: "14:00 - 18:00 Hôm nay",
@@ -1509,6 +1528,16 @@
         reviewsCount: 150,
         status: "Đang trực",
         image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "BS. Phạm Quốc Việt",
+        specialty: "Tiêu hóa",
+        schedule: "09:00 - 16:00 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 104,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?auto=format&fit=crop&w=400&q=80",
         isActive: true
       },
       {
@@ -1522,6 +1551,16 @@
         isActive: true
       },
       {
+        name: "BS. Nguyễn Hoàng Minh",
+        specialty: "Tim mạch",
+        schedule: "14:00 - 18:00 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 88,
+        status: "Có lịch hẹn",
+        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
         name: "BS. Lê Hoàng C",
         specialty: "Nhi khoa",
         schedule: "08:30 - 17:00 Hôm nay",
@@ -1529,6 +1568,16 @@
         reviewsCount: 95,
         status: "Có lịch hẹn",
         image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "BS. Mai Thu Hương",
+        specialty: "Nhi khoa",
+        schedule: "13:00 - 17:00 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 117,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=400&q=80",
         isActive: true
       },
       {
@@ -1542,6 +1591,16 @@
         isActive: true
       },
       {
+        name: "BS. Đặng Quốc Huy",
+        specialty: "Xương khớp",
+        schedule: "10:00 - 16:30 Hôm nay",
+        rating: "4.7",
+        reviewsCount: 76,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
         name: "BS. Đỗ Thùy Linh",
         specialty: "Phụ sản",
         schedule: "13:30 - 17:30 Hôm nay",
@@ -1549,6 +1608,16 @@
         reviewsCount: 110,
         status: "Đang trực",
         image: "https://images.unsplash.com/photo-1591604021695-0c69b7c05981?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "BS. Nguyễn Bảo Ngọc",
+        specialty: "Phụ sản",
+        schedule: "08:30 - 12:00 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 93,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80",
         isActive: true
       },
       {
@@ -1560,6 +1629,16 @@
         status: "Đang trực",
         image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=400&q=80",
         isActive: true
+      },
+      {
+        name: "BS. Trương Khánh My",
+        specialty: "Da liễu",
+        schedule: "13:30 - 17:00 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 69,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=400&q=80",
+        isActive: true
       }
     ];
 
@@ -1569,6 +1648,16 @@
     if (!localStorage.getItem('hospitalDoctors')) {
       localStorage.setItem('hospitalDoctors', JSON.stringify(defaultDoctors));
     }
+
+    (function syncDefaultDoctors() {
+      const savedDoctors = JSON.parse(localStorage.getItem('hospitalDoctors') || '[]');
+      const savedNames = new Set(savedDoctors.map(doc => doc.name));
+      const missingDoctors = defaultDoctors.filter(doc => !savedNames.has(doc.name));
+
+      if (missingDoctors.length > 0) {
+        localStorage.setItem('hospitalDoctors', JSON.stringify([...savedDoctors, ...missingDoctors]));
+      }
+    })();
 
     // === LOCALSTORAGE MIGRATION FOR BROKEN IMAGES ===
     (function() {
@@ -1756,13 +1845,17 @@
         // Filter doctors that belong to the active specialty
         const filteredDocs = doctors.filter(doc => doc.isActive && doc.specialty.toLowerCase().includes(selectedWizardSpecialty.toLowerCase().replace(" khoa", "")));
         
-        filteredDocs.forEach(doc => {
+        filteredDocs.forEach((doc, index) => {
           docGrid.insertAdjacentHTML('beforeend', `
-            <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
+            <div class="doctor-card-wizard ${index === 0 ? 'active' : ''}" onclick="selectWizardDoctor(this)">
               <img src="${doc.image}" style="object-fit: cover; width: 48px; height: 48px; border-radius: 50%;">
               <div>
                 <h4>${doc.name}</h4>
                 <p>Khoa ${doc.specialty}</p>
+                <div class="wizard-doctor-meta">
+                  <span><i data-lucide="clock"></i>${doc.schedule}</span>
+                  <span><i data-lucide="star"></i>${doc.rating}</span>
+                </div>
               </div>
               <i data-lucide="check-circle-2" class="doc-check"></i>
             </div>
@@ -1771,7 +1864,7 @@
 
         // Always add "Không chỉ định" card at the end
         docGrid.insertAdjacentHTML('beforeend', `
-          <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
+          <div class="doctor-card-wizard ${filteredDocs.length === 0 ? 'active' : ''}" onclick="selectWizardDoctor(this)">
             <div style="width:48px;height:48px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;color:var(--gray-500)"><i data-lucide="calendar-clock"></i></div>
             <div>
               <h4>Không chỉ định</h4>

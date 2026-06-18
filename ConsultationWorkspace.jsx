@@ -105,7 +105,6 @@ const App = () => {
               </button>
             ))}
           </nav>
-          <div className="px-4 text-xs font-semibold text-gray-400">v2.4.1</div>
         </aside>
 
         {/* 3. Main Content (85%) */}
