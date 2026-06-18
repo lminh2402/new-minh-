@@ -146,26 +146,44 @@
 
     <!-- View 2: Drug Lookup -->
     <div id="view-medicine" class="tab-view" style="display: none;">
-      <!-- Premium Hero Search -->
-      <section class="premium-hero" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%); border-color: rgba(16, 185, 129, 0.1);">
-        <div class="hero-content">
-          <h1>Tra cứu thông tin thuốc an toàn</h1>
-          <p>Tìm hiểu liều dùng, tác dụng phụ và quét toa thuốc bằng AI để kiểm tra ngay lập tức.</p>
-          
-          <div class="search-container premium-search">
-            <div class="search-box" style="border-color: rgba(16, 185, 129, 0.2);">
-              <i data-lucide="search" class="search-icon"></i>
-              <input type="text" placeholder="Nhập tên thuốc (Ví dụ: Paracetamol, Amoxicillin...)">
-              <div class="search-actions">
-                <button class="voice-btn" style="color: #10B981; background: #D1FAE5; border-color: #A7F3D0;" title="Chụp/Quét toa thuốc"><i data-lucide="scan"></i></button>
-                <button class="btn-primary search-submit" style="background: #10B981;">Tra cứu</button>
-              </div>
-            </div>
+      <section class="medicine-hero">
+        <div class="medicine-hero-copy">
+          <span class="medicine-kicker"><i data-lucide="shield-check"></i> Tra cứu an toàn</span>
+          <h1>Tra cứu thuốc & kiểm tra tương tác</h1>
+          <p>Tìm liều dùng, lưu thuốc đang sử dụng và quét toa bằng AI để phát hiện cảnh báo trước khi dùng.</p>
+        </div>
+        <div class="medicine-search-card">
+          <div class="medicine-search-box">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="Nhập tên thuốc, hoạt chất hoặc mã toa...">
+            <button class="scan-btn" title="Chụp/Quét toa thuốc"><i data-lucide="scan-line"></i></button>
+            <button class="btn-primary">Tra cứu</button>
+          </div>
+          <div class="medicine-quick-tags">
+            <span>Paracetamol</span>
+            <span>Amoxicillin</span>
+            <span>Omeprazole</span>
+            <span>Vitamin D3</span>
           </div>
         </div>
       </section>
 
-      <div class="dashboard-layout">
+      <div class="medicine-stats">
+        <div class="medicine-stat">
+          <i data-lucide="pill"></i>
+          <div><strong>1.250+</strong><span>thuốc phổ biến</span></div>
+        </div>
+        <div class="medicine-stat">
+          <i data-lucide="alert-triangle"></i>
+          <div><strong>320</strong><span>cảnh báo tương tác</span></div>
+        </div>
+        <div class="medicine-stat">
+          <i data-lucide="file-scan"></i>
+          <div><strong>AI OCR</strong><span>quét toa nhanh</span></div>
+        </div>
+      </div>
+
+      <div class="medicine-layout">
         <!-- Left: Drug Search Results & Categories -->
         <div class="clinics-list">
           
@@ -174,32 +192,50 @@
             <div class="interaction-header">
               <div class="icon-wrap"><i data-lucide="shield-alert"></i></div>
               <div>
-                <h2>Kiểm tra Tương tác Thuốc</h2>
-                <p>Nhập từ 2 loại thuốc trở lên để xem chúng có kỵ nhau không.</p>
+                <h2>Kiểm tra tương tác thuốc</h2>
+                <p>Nhập ít nhất 2 thuốc để AI cảnh báo nguy cơ dùng chung.</p>
               </div>
             </div>
             <div class="interaction-inputs">
               <div class="input-box"><i data-lucide="pill"></i> <input type="text" placeholder="Thuốc 1 (VD: Aspirin)"></div>
               <div class="plus-icon"><i data-lucide="plus"></i></div>
               <div class="input-box"><i data-lucide="pill"></i> <input type="text" placeholder="Thuốc 2 (VD: Ibuprofen)"></div>
-              <button class="btn-primary" style="background: var(--warning); color: #000;">Kiểm tra ngay</button>
+              <button class="btn-primary interaction-btn">Kiểm tra ngay</button>
+            </div>
+            <div class="interaction-note">
+              <i data-lucide="info"></i>
+              <span>Ví dụ: Aspirin + Ibuprofen có thể tăng nguy cơ kích ứng dạ dày và chảy máu.</span>
             </div>
           </div>
 
           <!-- Popular Drugs Categories (NEW) -->
-          <h2 style="margin-bottom: 20px;">Danh mục thuốc phổ biến</h2>
+          <div class="section-title-row">
+            <div>
+              <h2>Danh mục thuốc phổ biến</h2>
+              <p>Chọn nhóm thuốc để xem hướng dẫn và lưu ý thường gặp.</p>
+            </div>
+            <button class="btn-outline">Xem tất cả</button>
+          </div>
           <div class="drug-categories">
-            <div class="drug-cat-card"><i data-lucide="thermometer"></i> <span>Cảm cúm & Hạ sốt</span></div>
-            <div class="drug-cat-card"><i data-lucide="activity"></i> <span>Tim mạch</span></div>
-            <div class="drug-cat-card"><i data-lucide="coffee"></i> <span>Dạ dày & Tiêu hóa</span></div>
-            <div class="drug-cat-card"><i data-lucide="leaf"></i> <span>Thực phẩm chức năng</span></div>
+            <div class="drug-cat-card"><i data-lucide="thermometer"></i> <span>Cảm cúm & Hạ sốt</span><small>42 thuốc</small></div>
+            <div class="drug-cat-card"><i data-lucide="heart-pulse"></i> <span>Tim mạch</span><small>36 thuốc</small></div>
+            <div class="drug-cat-card"><i data-lucide="coffee"></i> <span>Dạ dày & Tiêu hóa</span><small>58 thuốc</small></div>
+            <div class="drug-cat-card"><i data-lucide="leaf"></i> <span>Vitamin & bổ sung</span><small>64 thuốc</small></div>
           </div>
 
-          <h2 style="margin: 32px 0 20px;">Gợi ý cho bạn</h2>
-          <div class="cards-grid">
+          <div class="section-title-row">
+            <div>
+              <h2>Gợi ý tra cứu hôm nay</h2>
+              <p>Các thuốc thường dùng, có lưu ý rõ ràng cho người bệnh.</p>
+            </div>
+          </div>
+          <div class="medicine-card-grid">
             
             <div class="drug-card">
-              <div class="drug-icon"><i data-lucide="pill"></i></div>
+              <div class="drug-card-head">
+                <div class="drug-icon"><i data-lucide="pill"></i></div>
+                <span class="drug-risk low">An toàn</span>
+              </div>
               <div class="drug-info">
                 <h3>Paracetamol 500mg</h3>
                 <p class="drug-type">Giảm đau, hạ sốt</p>
@@ -208,11 +244,21 @@
                   <span class="d-tag warning">Hại gan khi dùng nhiều</span>
                 </div>
               </div>
-              <button class="btn-outline">Đọc HDSD</button>
+              <div class="drug-guide is-open">
+                <div class="guide-row"><i data-lucide="clock-3"></i><span><strong>Cách uống:</strong> Uống sau ăn hoặc khi sốt/đau, cách nhau tối thiểu 4-6 giờ.</span></div>
+                <div class="guide-row"><i data-lucide="badge-info"></i><span><strong>Liều tham khảo:</strong> Người lớn 1 viên/lần, không quá 8 viên 500mg trong 24 giờ.</span></div>
+                <div class="guide-row warning"><i data-lucide="triangle-alert"></i><span>Tránh dùng chung với rượu/bia hoặc thuốc khác cũng chứa Paracetamol.</span></div>
+              </div>
+              <button class="btn-outline drug-guide-btn active" onclick="toggleDrugGuide(this)">
+                <i data-lucide="chevron-up"></i> Thu gọn hướng dẫn
+              </button>
             </div>
   
             <div class="drug-card">
-              <div class="drug-icon"><i data-lucide="pill"></i></div>
+              <div class="drug-card-head">
+                <div class="drug-icon warning-icon"><i data-lucide="pill"></i></div>
+                <span class="drug-risk medium">Thận trọng</span>
+              </div>
               <div class="drug-info">
                 <h3>Ibuprofen 400mg</h3>
                 <p class="drug-type">Kháng viêm không steroid (NSAID)</p>
@@ -221,11 +267,21 @@
                   <span class="d-tag warning">Thận trọng đau dạ dày</span>
                 </div>
               </div>
-              <button class="btn-outline">Đọc HDSD</button>
+              <div class="drug-guide">
+                <div class="guide-row"><i data-lucide="utensils"></i><span><strong>Cách uống:</strong> Uống ngay sau ăn, kèm nhiều nước để giảm kích ứng dạ dày.</span></div>
+                <div class="guide-row"><i data-lucide="badge-info"></i><span><strong>Liều tham khảo:</strong> Người lớn 1 viên/lần, dùng theo chỉ định nếu đau/viêm kéo dài.</span></div>
+                <div class="guide-row warning"><i data-lucide="triangle-alert"></i><span>Không tự dùng nếu có tiền sử loét dạ dày, bệnh thận, đang dùng thuốc chống đông.</span></div>
+              </div>
+              <button class="btn-outline drug-guide-btn" onclick="toggleDrugGuide(this)">
+                <i data-lucide="chevron-down"></i> Xem hướng dẫn khi uống
+              </button>
             </div>
   
             <div class="drug-card">
-              <div class="drug-icon" style="color: #10B981; background: #D1FAE5;"><i data-lucide="leaf"></i></div>
+              <div class="drug-card-head">
+                <div class="drug-icon safe-icon"><i data-lucide="leaf"></i></div>
+                <span class="drug-risk low">Bổ sung</span>
+              </div>
               <div class="drug-info">
                 <h3>Ginkgo Biloba</h3>
                 <p class="drug-type">Thực phẩm chức năng</p>
@@ -233,14 +289,21 @@
                   <span class="d-tag safe">Hỗ trợ tuần hoàn não</span>
                 </div>
               </div>
-              <button class="btn-outline">Đọc HDSD</button>
+              <div class="drug-guide">
+                <div class="guide-row"><i data-lucide="clock-3"></i><span><strong>Cách uống:</strong> Uống sau ăn sáng hoặc trưa, duy trì cùng một thời điểm mỗi ngày.</span></div>
+                <div class="guide-row"><i data-lucide="badge-info"></i><span><strong>Liều tham khảo:</strong> Dùng theo hàm lượng trên sản phẩm hoặc hướng dẫn của bác sĩ/dược sĩ.</span></div>
+                <div class="guide-row warning"><i data-lucide="triangle-alert"></i><span>Hỏi bác sĩ nếu đang dùng thuốc chống đông, Aspirin hoặc chuẩn bị phẫu thuật.</span></div>
+              </div>
+              <button class="btn-outline drug-guide-btn" onclick="toggleDrugGuide(this)">
+                <i data-lucide="chevron-down"></i> Xem hướng dẫn khi uống
+              </button>
             </div>
           </div>
         </div>
 
         <!-- Right: Saved/History Panel (NEW) -->
-        <div class="ai-assistant saved-drugs-panel">
-          <div class="chat-header" style="background: linear-gradient(135deg, #10B981, #059669);">
+        <div class="saved-drugs-panel">
+          <div class="chat-header">
             <i data-lucide="package-plus"></i>
             <div>
               <h3>Tủ thuốc của tôi</h3>
@@ -248,10 +311,36 @@
             </div>
           </div>
           <div class="saved-drugs-body">
-            <div class="empty-state">
-              <i data-lucide="inbox"></i>
-              <p>Bạn chưa lưu loại thuốc nào.</p>
-              <button class="btn-outline">Quét toa thuốc ngay</button>
+            <div class="medicine-alert-card">
+              <i data-lucide="alert-circle"></i>
+              <div>
+                <strong>1 lưu ý cần kiểm tra</strong>
+                <span>Ibuprofen nên uống sau ăn và tránh dùng chung với Aspirin nếu chưa hỏi bác sĩ.</span>
+              </div>
+            </div>
+            <div class="saved-drug-list">
+              <div class="saved-drug-item">
+                <div class="saved-drug-icon"><i data-lucide="pill"></i></div>
+                <div>
+                  <strong>Omeprazole 20mg</strong>
+                  <span>Sáng trước ăn • còn 5 ngày</span>
+                </div>
+              </div>
+              <div class="saved-drug-item">
+                <div class="saved-drug-icon"><i data-lucide="pill"></i></div>
+                <div>
+                  <strong>Paracetamol 500mg</strong>
+                  <span>Khi sốt/đau • tối đa 4 lần/ngày</span>
+                </div>
+              </div>
+            </div>
+            <div class="scan-prescription-box">
+              <i data-lucide="file-scan"></i>
+              <div>
+                <strong>Quét toa thuốc</strong>
+                <span>AI tự nhận diện tên thuốc, liều dùng và cảnh báo.</span>
+              </div>
+              <button class="btn-primary">Quét ngay</button>
             </div>
           </div>
         </div>
@@ -2075,6 +2164,20 @@
       if(el.classList.contains('disabled')) return;
       document.querySelectorAll('#w-step-2 .time-chip').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
+    }
+
+    function toggleDrugGuide(button) {
+      const card = button.closest('.drug-card');
+      const guide = card?.querySelector('.drug-guide');
+      if (!guide) return;
+
+      const isOpen = guide.classList.toggle('is-open');
+      button.classList.toggle('active', isOpen);
+      button.innerHTML = isOpen
+        ? '<i data-lucide="chevron-up"></i> Thu gọn hướng dẫn'
+        : '<i data-lucide="chevron-down"></i> Xem hướng dẫn khi uống';
+
+      if (window.lucide) window.lucide.createIcons({ root: button });
     }
 
     function setPatientReviewRating(type, rating) {
