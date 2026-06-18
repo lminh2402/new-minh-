@@ -232,7 +232,7 @@
                   <div class="autocomplete-list" id="drug-autocomplete-list" style="display: none;"></div>
                 </div>
                 
-                <table class="prescription-table">
+                <table class="prescription-table" id="exam-prescription-table">
                   <thead>
                     <tr>
                       <th>Tên thuốc</th>
@@ -1380,7 +1380,7 @@
     }
 
     function addPrescriptionRow(name, route, qty, dose) {
-      const tbody = document.querySelector('.prescription-table tbody');
+      const tbody = document.querySelector('#exam-prescription-table tbody');
       if (!tbody) return;
       
       const tr = document.createElement('tr');
@@ -1615,6 +1615,78 @@
         prescriptions: []
       },
       {
+        id: "BN-1007",
+        name: "Đặng Minh Sốt",
+        time: "10:30",
+        duration: "30p",
+        status: "waiting",
+        statusText: "Đang chờ",
+        gender: "Nam",
+        age: 36,
+        blood: "A+",
+        history: "Viêm xoang mãn tính",
+        temp: "39.0°C",
+        pulse: "102 bpm",
+        bp: "118/76",
+        symptoms: "Sốt cao, đau họng, ho khan từ tối qua.",
+        triageAlert: "Theo dõi nhiễm siêu vi/viêm họng cấp. Cần khai thác dấu hiệu khó thở và test nhanh nếu cần.",
+        triageConfidence: "78%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: ["Công thức máu (CBC)"],
+        prescriptions: []
+      },
+      {
+        id: "BN-1008",
+        name: "Bùi Lan Anh",
+        time: "11:00",
+        duration: "30p",
+        status: "confirmed",
+        statusText: "Đã xác nhận",
+        gender: "Nữ",
+        age: 29,
+        blood: "O+",
+        history: "Không có",
+        temp: "36.9°C",
+        pulse: "88 bpm",
+        bp: "110/70",
+        symptoms: "Đau bụng âm ỉ vùng thượng vị, ợ nóng sau ăn.",
+        triageAlert: "Gợi ý rối loạn tiêu hóa/viêm dạ dày. Cân nhắc nội soi nếu triệu chứng kéo dài.",
+        triageConfidence: "76%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: ["Nội soi dạ dày"],
+        prescriptions: []
+      },
+      {
+        id: "BN-1009",
+        name: "Phan Quốc Huy",
+        time: "11:30",
+        duration: "30p",
+        status: "waiting",
+        statusText: "Đang chờ",
+        gender: "Nam",
+        age: 42,
+        blood: "B-",
+        history: "Rối loạn mỡ máu",
+        temp: "36.6°C",
+        pulse: "90 bpm",
+        bp: "145/92",
+        symptoms: "Tức ngực nhẹ, hồi hộp khi leo cầu thang.",
+        triageAlert: "Cần loại trừ nguy cơ tim mạch. Đề nghị đo điện tim và xét nghiệm men tim nếu triệu chứng tăng.",
+        triageConfidence: "82%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: ["Sinh hóa máu", "X-Quang ngực"],
+        prescriptions: []
+      },
+      {
         id: "BN-1005",
         name: "Phạm Văn Khỏe",
         time: "10:30",
@@ -1686,19 +1758,36 @@
       if (soapP) apt.plan = soapP.value;
       
       // Save orders (active chips)
-      const chips = document.querySelectorAll('.lab-chips .l-chip.active');
+      const chips = document.querySelectorAll('#record-content-container .lab-chips .l-chip.active');
       apt.orders = Array.from(chips).map(c => c.textContent.trim());
       
-      // Save prescriptions
-      const rows = document.querySelectorAll('.prescription-table tbody tr');
+      // Save prescriptions (exam table only — not patient list table)
+      const rows = document.querySelectorAll('#exam-prescription-table tbody tr');
       apt.prescriptions = Array.from(rows).map(row => {
-        const name = row.querySelector('td strong').textContent.trim();
-        const selectRoute = row.querySelector('td select.qty-input');
-        const route = selectRoute ? selectRoute.value : 'Uống';
-        const qty = row.querySelector('td input[type="number"]').value;
-        const dose = row.querySelector('td input.dose-input').value;
-        return { name, route, qty, dose };
-      });
+        const nameEl = row.querySelector('td strong');
+        if (!nameEl) return null;
+        const routeSelect = row.querySelector('td select');
+        const qtyInput = row.querySelector('td input[type="number"]');
+        const doseInput = row.querySelector('td input.dose-input');
+        return {
+          name: nameEl.textContent.trim(),
+          route: routeSelect ? routeSelect.value : 'Uống',
+          qty: qtyInput ? qtyInput.value : '',
+          dose: doseInput ? doseInput.value : ''
+        };
+      }).filter(Boolean);
+    }
+
+    function getWaitingAppointments() {
+      return appointments
+        .filter(a => a.status !== 'completed' && a.status !== 'cancelled')
+        .sort((a, b) => a.time.localeCompare(b.time));
+    }
+
+    function getCompletedAppointments() {
+      return appointments
+        .filter(a => a.status === 'completed')
+        .sort((a, b) => a.time.localeCompare(b.time));
     }
 
     function selectAppointment(id) {
@@ -1779,7 +1868,7 @@
       toggleAISuggestionBox(false);
       
       // 5. Orders (chips)
-      const chips = document.querySelectorAll('.lab-chips .l-chip');
+      const chips = document.querySelectorAll('#record-content-container .lab-chips .l-chip');
       chips.forEach(chip => {
         const text = chip.textContent.trim();
         if (apt.orders.includes(text)) {
@@ -1792,7 +1881,7 @@
       toggleAddOrderForm(false);
       
       // 6. Prescriptions table
-      const tbody = document.querySelector('.prescription-table tbody');
+      const tbody = document.querySelector('#exam-prescription-table tbody');
       if (tbody) {
         tbody.innerHTML = '';
         apt.prescriptions.forEach(p => {
@@ -1852,9 +1941,8 @@
     }
 
     function renderAppointments() {
-      // Count statuses
-      const waitingCount = appointments.filter(a => a.status !== 'completed').length;
-      const completedCount = appointments.filter(a => a.status === 'completed').length;
+      const waitingCount = getWaitingAppointments().length;
+      const completedCount = getCompletedAppointments().length;
       
       const tabWaiting = document.getElementById('tab-cho-kham');
       const tabCompleted = document.getElementById('tab-da-kham');
@@ -1869,14 +1957,9 @@
       const listContainer = document.getElementById('appointment-list-container');
       if (!listContainer) return;
       
-      // Filter based on active tab
-      const filtered = appointments.filter(a => {
-        if (activeAppointmentTab === 'waiting') {
-          return a.status !== 'completed';
-        } else {
-          return a.status === 'completed';
-        }
-      });
+      const filtered = activeAppointmentTab === 'waiting'
+        ? getWaitingAppointments()
+        : getCompletedAppointments();
       
       if (filtered.length === 0) {
         listContainer.innerHTML = `<div style="text-align: center; color: var(--gray-400); padding: 32px 16px; font-size: 14px;">Không có ca khám nào</div>`;
@@ -1930,56 +2013,45 @@
         element.classList.add('active');
       }
       
-      // Filter list
-      const filtered = appointments.filter(a => {
-        if (tab === 'waiting') {
-          return a.status !== 'completed';
-        } else {
-          return a.status === 'completed';
-        }
-      });
-      
+      const filtered = tab === 'waiting' ? getWaitingAppointments() : getCompletedAppointments();
+
       if (filtered.length > 0) {
-        // Check if currently selected is in the filtered list. If not, auto-select first one.
         const currentIsFound = filtered.some(a => a.id === selectedAppointmentId);
         if (!currentIsFound) {
           selectAppointment(filtered[0].id);
+        } else {
+          renderAppointments();
         }
       } else {
         selectAppointment(null);
+        renderAppointments();
       }
-      
-      renderAppointmentsListOnly();
     }
 
     function completeExamination() {
       if (!selectedAppointmentId) return;
-      
+
       const apt = appointments.find(a => a.id === selectedAppointmentId);
-      if (!apt) return;
-      
-      // Save data first
+      if (!apt || apt.status === 'completed' || apt.status === 'cancelled') return;
+
       saveCurrentPatientData();
-      
-      // Change status to completed
+
+      const completedName = apt.name;
       apt.status = 'completed';
       apt.statusText = 'Đã khám';
-      
-      // Custom Toast alert
-      showToast(`Hoàn thành khám cho bệnh nhân ${apt.name} thành công!`);
-      
-      // Switch to completed tab and select this patient
-      activeAppointmentTab = 'completed';
-      
-      // Update tab active classes
+
+      showToast(`Hoàn thành khám cho bệnh nhân ${completedName} thành công!`);
+
+      // Giữ tab "Chờ khám", chọn bệnh nhân kế tiếp trong hàng đợi
+      activeAppointmentTab = 'waiting';
       const tabWaiting = document.getElementById('tab-cho-kham');
       const tabCompleted = document.getElementById('tab-da-kham');
-      if (tabWaiting) tabWaiting.classList.remove('active');
-      if (tabCompleted) tabCompleted.classList.add('active');
-      
-      // Re-render and select
+      if (tabWaiting) tabWaiting.classList.add('active');
+      if (tabCompleted) tabCompleted.classList.remove('active');
+
+      const nextPatient = getWaitingAppointments()[0] || null;
       renderAppointments();
-      selectAppointment(apt.id);
+      selectAppointment(nextPatient ? nextPatient.id : null);
     }
 
     function showToast(message) {

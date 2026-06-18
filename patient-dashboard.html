@@ -58,7 +58,7 @@
 
     <!-- ═══ MAIN CONTENT ═══ -->
     <main id="main-content" class="main-content">
-      <div class="patient-main-wrapper" style="padding: 24px; flex: 1; display: flex; flex-direction: column; overflow-y: auto; height: calc(100vh - 64px); background-color: #F8F9FA;">
+      <div class="patient-main-wrapper" style="padding: 24px; flex: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; min-width: 0; height: calc(100vh - 64px); background-color: #F8F9FA;">
     
     <!-- View 1: Search Clinics -->
     <div id="view-search" class="tab-view active">
@@ -1430,7 +1430,9 @@
     window.scrollSlider = function(gridId, direction) {
       const grid = document.getElementById(gridId);
       if (!grid) return;
-      const scrollAmount = 344; // Card width (320px) + gap (24px)
+      const card = grid.querySelector('.clinic-card');
+      const gap = 24;
+      const scrollAmount = card ? card.offsetWidth + gap : 324;
       grid.scrollBy({
         left: direction * scrollAmount,
         behavior: 'smooth'
@@ -1499,10 +1501,12 @@
       grid.addEventListener('scroll', () => {
         window.updateSliderArrows(gridId);
       });
-      // Initial call
-      setTimeout(() => {
-        window.updateSliderArrows(gridId);
-      }, 200);
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => window.updateSliderArrows(gridId));
+        ro.observe(grid);
+      }
+      setTimeout(() => window.updateSliderArrows(gridId), 100);
+      setTimeout(() => window.updateSliderArrows(gridId), 400);
     }
 
     // Dynamic Render for Dashboard
@@ -1530,6 +1534,7 @@
         `);
       });
       if (window.lucide) window.lucide.createIcons({root: grid});
+      setTimeout(() => window.updateSliderArrows('dashboard-doctors-grid'), 50);
     }
 
     function renderDashboardPackages() {
@@ -1557,6 +1562,7 @@
         `);
       });
       if (window.lucide) window.lucide.createIcons({root: grid});
+      setTimeout(() => window.updateSliderArrows('dashboard-packages-grid'), 50);
     }
 
     // Dynamic Render for Wizard step 1
@@ -2009,21 +2015,35 @@
       }
     }
 
+    function setFloatingFabIcon(iconName) {
+      const fabButton = document.getElementById('floating-chat-btn');
+      if (!fabButton) return;
+      fabButton.innerHTML = `<i data-lucide="${iconName}" id="fab-icon"></i>`;
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons({ root: fabButton });
+      }
+    }
+
     function toggleFloatingChat() {
       const popover = document.getElementById('ai-chat-popover');
-      const fabIcon = document.getElementById('fab-icon');
       const widget = document.getElementById('floating-chat-widget');
+      const chatInput = document.getElementById('patient-chat-input');
+      if (!popover) return;
       
       popover.classList.toggle('active');
       
       if (popover.classList.contains('active')) {
-        fabIcon.setAttribute('data-lucide', 'x');
+        setFloatingFabIcon('x');
         widget?.classList.add('chat-open');
+        widget?.classList.add('hint-dismissed');
+        setTimeout(() => chatInput?.focus(), 150);
       } else {
-        fabIcon.setAttribute('data-lucide', 'bot');
+        setFloatingFabIcon('bot');
         widget?.classList.remove('chat-open');
       }
-      lucide.createIcons();
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons({ root: popover });
+      }
     }
 
     function dismissFabHint() {
@@ -2363,7 +2383,7 @@
     </button>
   </div>
 
-  <div class="ai-assistant floating-popover" id="ai-chat-popover">
+  <div class="ai-assistant floating-popover" id="ai-chat-popover" data-ai-chat="patient">
     <div class="chat-header" style="justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 16px;">
         <i data-lucide="bot"></i>
@@ -2384,8 +2404,8 @@
       <input type="file" id="ai-chat-upload" accept="image/*" style="display: none;" onchange="alert('Đã chọn tệp: ' + this.files[0].name)">
       <button onclick="document.getElementById('ai-chat-upload').click()" style="border: none; background: transparent; color: var(--gray-500); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 8px;" title="Tải ảnh lên (VD: Toa thuốc, hình ảnh da...)"><i data-lucide="image"></i></button>
       <button style="border: none; background: transparent; color: var(--gray-500); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 8px;"><i data-lucide="mic"></i></button>
-      <input type="text" placeholder="Nhập triệu chứng của bạn...">
-      <button class="send-btn"><i data-lucide="send"></i></button>
+      <input type="text" id="patient-chat-input" placeholder="Nhập triệu chứng của bạn...">
+      <button class="send-btn" type="button"><i data-lucide="send"></i></button>
     </div>
   </div>
   <script src="script.js"></script>

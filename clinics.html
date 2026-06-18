@@ -52,6 +52,214 @@
         stroke-dashoffset: 0;
       }
     }
+
+    /* Schedule dispatcher refresh */
+    .schedule-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .schedule-stat-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .schedule-stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .schedule-stat-icon i { width: 20px; height: 20px; }
+    .schedule-stat-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 3px; }
+    .schedule-stat-value { font-size: 22px; color: var(--gray-900); font-weight: 800; line-height: 1; }
+    .dispatcher-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
+    .shift-section {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+    .shift-header {
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #F8FAFC, #EEF6FF);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .doctor-dispatch-grid {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .doctor-lane {
+      min-height: 280px;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      background: #F8FAFC;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .doctor-lane-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--gray-200);
+    }
+    .doctor-name { font-size: 14px; color: var(--gray-900); font-weight: 800; margin-bottom: 3px; }
+    .doctor-meta { font-size: 12px; color: var(--gray-500); }
+    .load-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .load-low { background: #D1FAE5; color: #065F46; }
+    .load-mid { background: #FEF3C7; color: #92400E; }
+    .load-high { background: #FEE2E2; color: #991B1B; }
+    .dispatch-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 11px;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.05);
+      cursor: pointer;
+    }
+    .dispatch-card:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
+    .dispatch-card-row { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 6px; }
+    .dispatch-patient { font-size: 13px; font-weight: 800; color: var(--gray-900); }
+    .dispatch-time { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
+    .status-chip {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .st-wait { background: #FEF3C7; color: #92400E; }
+    .st-progress { background: #DBEAFE; color: #1D4ED8; }
+    .st-done { background: #D1FAE5; color: #065F46; }
+    .st-risk { background: #FEE2E2; color: #991B1B; }
+    .queue-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .queue-item {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+      cursor: grab;
+      box-shadow: 0 5px 12px rgba(15, 23, 42, 0.04);
+    }
+    .queue-item.urgent { border-left: 4px solid #EF4444; }
+    .queue-item.normal { border-left: 4px solid #0EA5E9; }
+    .queue-item.vip { border-left: 4px solid #8B5CF6; }
+    .calendar-shell {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      overflow-x: auto;
+    }
+    .calendar-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+      min-width: 1040px;
+    }
+    .calendar-grid {
+      min-width: 1040px;
+      display: grid;
+      grid-template-columns: 76px repeat(7, 1fr);
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .cal-head, .cal-time, .cal-cell {
+      border-right: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      min-height: 86px;
+    }
+    .cal-head {
+      min-height: auto;
+      padding: 12px 8px;
+      background: #F8FAFC;
+      text-align: center;
+      font-weight: 800;
+      color: var(--gray-700);
+      font-size: 13px;
+    }
+    .cal-head small { display: block; margin-top: 3px; color: var(--gray-400); font-weight: 600; }
+    .cal-time {
+      padding: 12px 10px;
+      background: #F8FAFC;
+      color: var(--gray-500);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+    }
+    .cal-cell {
+      padding: 6px;
+      background: linear-gradient(#fff, #fff), repeating-linear-gradient(90deg, transparent 0, transparent 23px, #F8FAFC 24px);
+    }
+    .cal-event {
+      border-radius: 9px;
+      padding: 7px 8px;
+      margin-bottom: 6px;
+      border: 1px solid transparent;
+      font-size: 11px;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .cal-event strong { display: block; font-size: 11.5px; }
+    .ev-blue { background: #EFF6FF; border-color: #BFDBFE; color: #1D4ED8; }
+    .ev-green { background: #ECFDF5; border-color: #A7F3D0; color: #047857; }
+    .ev-yellow { background: #FFFBEB; border-color: #FDE68A; color: #92400E; }
+    .ev-red { background: #FEF2F2; border-color: #FECACA; color: #991B1B; }
+    .ev-purple { background: #F5F3FF; border-color: #DDD6FE; color: #6D28D9; }
+    @media (max-width: 1280px) {
+      .schedule-stats { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+      .dispatcher-layout { grid-template-columns: 1fr; }
+      .doctor-dispatch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .doctor-dispatch-grid, .schedule-stats { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -319,220 +527,285 @@
       <!-- 2. ĐIỀU PHỐI LỊCH HẸN & BÁC SĨ (SMART QUEUE & DISPATCHER) -->
       <div id="tab-schedule" class="tab-pane">
         
-        <!-- Header & View Switcher -->
-        <div class="appointment-toolbar" style="align-items: flex-start;">
+        <div class="appointment-toolbar" style="align-items: flex-start; gap: 18px;">
           <div>
             <h2 class="card-title" style="margin-bottom: 8px;"><i data-lucide="calendar-days"></i> Điều phối Lịch trực & Tiếp nhận hẹn</h2>
-            <div style="display: flex; gap: 8px; background: #F1F5F9; padding: 4px; border-radius: 8px; width: fit-content;">
-              <button id="btn-view-kanban" onclick="setViewMode('kanban')" style="padding: 6px 12px; background: white; border: 1px solid var(--gray-200); border-radius: 6px; font-weight: 600; font-size: 13px; color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05); cursor: pointer;">Màn hình Điều phối (Ngày)</button>
-              <button id="btn-view-calendar" onclick="setViewMode('calendar')" style="padding: 6px 12px; background: transparent; border: none; font-weight: 500; font-size: 13px; color: var(--gray-500); cursor: pointer;">Lịch tổng (Tuần/Tháng)</button>
+            <p style="font-size: 14px; color: var(--gray-500); margin-bottom: 12px;">Theo dõi tải bác sĩ, ưu tiên ca khẩn và phân lịch theo tuần.</p>
+            <div style="display: flex; gap: 8px; background: #F1F5F9; padding: 4px; border-radius: 10px; width: fit-content;">
+              <button id="btn-view-kanban" onclick="setViewMode('kanban')" style="padding: 8px 14px; background: white; border: 1px solid var(--gray-200); border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05); cursor: pointer;">Màn hình điều phối</button>
+              <button id="btn-view-calendar" onclick="setViewMode('calendar')" style="padding: 8px 14px; background: transparent; border: none; font-weight: 600; font-size: 13px; color: var(--gray-500); cursor: pointer;">Lịch tổng tuần</button>
             </div>
           </div>
-          <div style="display: flex; gap: 12px;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <button onclick="setIsOpenAddShift(true)" class="btn-outline" style="height: 40px;"><i data-lucide="plus"></i> Thêm ca trực</button>
             <button onclick="setIsOpenNewBooking(true)" class="btn-primary" style="height: 40px; background: var(--primary); border-color: var(--primary);"><i data-lucide="calendar-plus"></i> Tạo lịch hẹn mới</button>
           </div>
         </div>
 
+        <div class="schedule-stats">
+          <div class="schedule-stat-card">
+            <div class="schedule-stat-icon" style="background:#E0F2FE; color:#0284C7;"><i data-lucide="calendar-check"></i></div>
+            <div><div class="schedule-stat-label">Lịch hôm nay</div><div class="schedule-stat-value">24</div></div>
+          </div>
+          <div class="schedule-stat-card">
+            <div class="schedule-stat-icon" style="background:#FEF3C7; color:#D97706;"><i data-lucide="clock"></i></div>
+            <div><div class="schedule-stat-label">Đang chờ</div><div class="schedule-stat-value">8</div></div>
+          </div>
+          <div class="schedule-stat-card">
+            <div class="schedule-stat-icon" style="background:#FEE2E2; color:#DC2626;"><i data-lucide="siren"></i></div>
+            <div><div class="schedule-stat-label">Ưu tiên cao</div><div class="schedule-stat-value">3</div></div>
+          </div>
+          <div class="schedule-stat-card">
+            <div class="schedule-stat-icon" style="background:#D1FAE5; color:#059669;"><i data-lucide="users"></i></div>
+            <div><div class="schedule-stat-label">Bác sĩ trực</div><div class="schedule-stat-value">7</div></div>
+          </div>
+        </div>
+
         <!-- VIEW KANBAN -->
-        <div id="view-kanban" style="display: grid; grid-template-columns: 7fr 3fr; gap: 24px;">
-          
-          <!-- LEFT COLUMN (70%): Dispatcher Board -->
-          <div class="card" style="padding: 24px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="layout-grid" style="color: var(--primary);"></i> Bảng Điều Phối (Hôm nay)
-            </h3>
-            
-            <div style="display: flex; flex-direction: column; gap: 24px;">
-              <!-- Sáng -->
-              <div>
-                <div style="font-weight: 700; color: var(--gray-800); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200);">
-                  Ca Sáng <span style="font-weight: 400; color: var(--gray-400); font-size: 13px; margin-left: 8px;">(08:00 - 12:00)</span>
+        <div id="view-kanban" class="dispatcher-layout">
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+            <section class="shift-section">
+              <div class="shift-header">
+                <div>
+                  <div style="font-weight: 800; color: var(--gray-900); display:flex; align-items:center; gap:8px;"><i data-lucide="sun" style="width:18px; color:#F59E0B;"></i> Ca sáng</div>
+                  <div style="font-size: 13px; color: var(--gray-500); margin-top: 3px;">08:00 - 12:00 • 13 lịch • 2 ca ưu tiên</div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                  
-                  <!-- Bác sĩ A Zone -->
-                  <div class="kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; min-height: 200px; display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                      <div style="font-weight: 700; color: var(--primary-dark);">👨‍⚕️ BS. Nguyễn Văn A</div>
-                      <div style="font-size: 12px; font-weight: 600; color: var(--primary); background: #E0F2FE; padding: 2px 8px; border-radius: 12px;">3/10 ca</div>
+                <span class="load-pill load-mid">Tải trung bình 68%</span>
+              </div>
+              <div class="doctor-dispatch-grid">
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Nguyễn Văn A</div><div class="doctor-meta">Tiêu hóa • Phòng 201</div></div>
+                    <span class="load-pill load-high">6/8 ca</span>
+                  </div>
+                  <div class="zone-content" id="zone-bs-a" style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dispatch-card" onclick="openStatusModal('Thanh Tùng')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Thanh Tùng</span><span class="status-chip st-wait">Chờ khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>08:30 • Khám Nội</div>
                     </div>
-                    <!-- Zone Content -->
-                    <div class="zone-content" id="zone-bs-a" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                      <!-- Existing Patient 1 -->
-                      <div class="patient-card assigned" onclick="openStatusModal('Thanh Tùng')" style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                          <div style="font-weight: 700; font-size: 14px;">Thanh Tùng</div>
-                          <span style="font-size: 11px; background: #FEF3C7; color: #D97706; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Chờ khám</span>
-                        </div>
-                        <div style="font-size: 12px; color: var(--gray-500);"><i data-lucide="clock" style="width: 12px; display: inline; margin-right: 4px;"></i>08:30 - Khám Nội</div>
-                      </div>
+                    <div class="dispatch-card" style="border-left-color:#EF4444;" onclick="openStatusModal('Nguyễn Thu A')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Nguyễn Thu A</span><span class="status-chip st-risk">Khẩn cấp</span></div>
+                      <div class="dispatch-time"><i data-lucide="activity" style="width:13px;"></i>09:15 • Đau bụng cấp</div>
+                    </div>
+                    <div class="dispatch-card" onclick="openStatusModal('Vũ Khoa')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Vũ Khoa</span><span class="status-chip st-progress">Đang khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>10:00 • Nội soi dạ dày</div>
                     </div>
                   </div>
+                </div>
 
-                  <!-- Bác sĩ C Zone -->
-                  <div class="kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; min-height: 200px; display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                      <div style="font-weight: 700; color: var(--primary-dark);">👩‍⚕️ BS. Lê Thị C</div>
-                      <div style="font-size: 12px; font-weight: 600; color: #10B981; background: #D1FAE5; padding: 2px 8px; border-radius: 12px;">1/10 ca</div>
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Lê Hoàng C</div><div class="doctor-meta">Nhi khoa • Phòng 203</div></div>
+                    <span class="load-pill load-mid">4/8 ca</span>
+                  </div>
+                  <div class="zone-content" id="zone-bs-c" style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dispatch-card" onclick="openStatusModal('Hoàng Nam')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Hoàng Nam</span><span class="status-chip st-progress">Đang khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>09:00 • Sốt cao</div>
                     </div>
-                    <!-- Zone Content -->
-                    <div class="zone-content" id="zone-bs-c" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                       <!-- Thẻ bệnh nhân mẫu -->
-                       <div class="patient-card assigned" onclick="openStatusModal('Hoàng Nam')" style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                          <div style="font-weight: 700; font-size: 14px;">Hoàng Nam</div>
-                          <span style="font-size: 11px; background: #DBEAFE; color: #2563EB; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Đang khám</span>
-                        </div>
-                        <div style="font-size: 12px; color: var(--gray-500);"><i data-lucide="clock" style="width: 12px; display: inline; margin-right: 4px;"></i>09:00 - Tiêu hóa</div>
-                      </div>
+                    <div class="dispatch-card" onclick="openStatusModal('Bé An Nhi')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Bé An Nhi</span><span class="status-chip st-wait">Chờ khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>10:30 • Ho kéo dài</div>
                     </div>
                   </div>
+                </div>
 
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Trần Thị B</div><div class="doctor-meta">Tim mạch • Phòng 205</div></div>
+                    <span class="load-pill load-low">2/8 ca</span>
+                  </div>
+                  <div class="zone-content" id="zone-bs-b" style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dispatch-card" onclick="openStatusModal('Phan Quốc Huy')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Phan Quốc Huy</span><span class="status-chip st-risk">Ưu tiên</span></div>
+                      <div class="dispatch-time"><i data-lucide="heart-pulse" style="width:13px;"></i>09:45 • Tức ngực</div>
+                    </div>
+                    <div class="dispatch-card" onclick="openStatusModal('Lê Minh Tâm')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Lê Minh Tâm</span><span class="status-chip st-wait">Chờ khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>11:15 • Đánh trống ngực</div>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </section>
 
-              <!-- Chiều -->
-              <div>
-                <div style="font-weight: 700; color: var(--gray-800); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200);">
-                  Ca Chiều <span style="font-weight: 400; color: var(--gray-400); font-size: 13px; margin-left: 8px;">(13:30 - 17:30)</span>
+            <section class="shift-section">
+              <div class="shift-header">
+                <div>
+                  <div style="font-weight: 800; color: var(--gray-900); display:flex; align-items:center; gap:8px;"><i data-lucide="cloud-sun" style="width:18px; color:#0EA5E9;"></i> Ca chiều</div>
+                  <div style="font-size: 13px; color: var(--gray-500); margin-top: 3px;">13:30 - 17:30 • 11 lịch • còn 5 slot trống</div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                  
-                  <!-- Bác sĩ B Zone -->
-                  <div class="kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)" style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 12px; padding: 16px; min-height: 150px; display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                      <div style="font-weight: 700; color: var(--gray-600);">👨‍⚕️ BS. Trần Thị B</div>
-                      <div style="font-size: 12px; font-weight: 600; color: var(--gray-500); background: #E2E8F0; padding: 2px 8px; border-radius: 12px;">0/10 ca</div>
+                <span class="load-pill load-low">Còn trống 42%</span>
+              </div>
+              <div class="doctor-dispatch-grid">
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Phạm Minh Đức</div><div class="doctor-meta">Cơ xương khớp • Phòng 208</div></div>
+                    <span class="load-pill load-mid">5/8 ca</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dispatch-card" onclick="openStatusModal('Trần Đau')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Trần Đau</span><span class="status-chip st-wait">Chờ khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>14:00 • Đau khớp gối</div>
                     </div>
-                    <!-- Zone Content -->
-                    <div class="zone-content" id="zone-bs-b" style="flex: 1; display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center;">
-                       <span style="font-size: 13px; color: var(--gray-400);">Thả bệnh nhân vào đây</span>
+                    <div class="dispatch-card" onclick="openStatusModal('Đỗ Hải')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Đỗ Hải</span><span class="status-chip st-done">Đã khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="check-circle" style="width:13px;"></i>14:30 • Tái khám</div>
                     </div>
                   </div>
-
+                </div>
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Đỗ Thùy Linh</div><div class="doctor-meta">Phụ sản • Phòng 210</div></div>
+                    <span class="load-pill load-low">3/8 ca</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="dispatch-card" onclick="openStatusModal('Bùi Lan Anh')">
+                      <div class="dispatch-card-row"><span class="dispatch-patient">Bùi Lan Anh</span><span class="status-chip st-wait">Chờ khám</span></div>
+                      <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>15:00 • Tư vấn phụ khoa</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="doctor-lane kanban-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="doctor-lane-header">
+                    <div><div class="doctor-name">BS. Hoàng Tùng</div><div class="doctor-meta">Da liễu • Phòng 212</div></div>
+                    <span class="load-pill load-low">2/8 ca</span>
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:center; flex:1; color:var(--gray-400); font-size:13px; border:1px dashed var(--gray-200); border-radius:12px;">Còn 6 slot trống</div>
                 </div>
               </div>
-
-            </div>
+            </section>
           </div>
 
-          <!-- RIGHT COLUMN (30%): Inbox Queue -->
-          <div class="card" style="padding: 24px; display: flex; flex-direction: column;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="inbox" style="color: var(--primary);"></i> Hàng đợi Tiếp nhận (2)
-            </h3>
-            
-            <div style="margin-bottom: 16px;">
-              <input type="text" placeholder="Tìm tên bệnh nhân..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 13px; margin-bottom: 8px;">
-              <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 13px; outline: none; background: #FAFAFA;">
-                <option>Tất cả trạng thái</option>
-                <option>Khẩn cấp</option>
-                <option>Sáng nay</option>
-              </select>
+          <aside class="queue-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <h3 style="font-size: 16px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="inbox" style="color: var(--primary);"></i> Hàng đợi tiếp nhận
+              </h3>
+              <span class="status-chip st-risk">5 ca</span>
             </div>
-
-            <!-- Queue Container -->
-            <div id="inbox-queue" style="flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
-              
-              <!-- Draggable Patient 1 -->
-              <div class="patient-card draggable-card" draggable="true" ondragstart="drag(event)" id="patient-1" style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; gap: 12px; align-items: flex-start;">
-                <i data-lucide="grip-vertical" style="color: var(--gray-400); width: 16px; flex-shrink: 0; margin-top: 2px;"></i>
-                <div style="flex: 1;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <div style="font-weight: 700; font-size: 14px;">Mai Anh</div>
-                    <span style="font-size: 10px; background: #FCE7F3; color: #DB2777; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Từ AI Triage</span>
-                  </div>
-                  <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;"><i data-lucide="alert-circle" style="width: 12px; display: inline; margin-right: 4px; color: #F59E0B;"></i>Đau dạ dày cấp</div>
-                  <div style="font-size: 12px; color: var(--gray-400);"><i data-lucide="clock" style="width: 12px; display: inline; margin-right: 4px;"></i>Hôm nay, 15:00</div>
-                </div>
+            <input type="text" placeholder="Tìm tên bệnh nhân..." style="width: 100%; padding: 9px 12px; border: 1px solid var(--gray-300); border-radius: 10px; font-size: 13px;">
+            <select style="width: 100%; padding: 9px 12px; border: 1px solid var(--gray-300); border-radius: 10px; font-size: 13px; outline: none; background: #FAFAFA;">
+              <option>Tất cả trạng thái</option>
+              <option>Khẩn cấp</option>
+              <option>Chờ phân bác sĩ</option>
+              <option>Từ AI Triage</option>
+            </select>
+            <div id="inbox-queue" style="display:flex; flex-direction:column; gap:10px; max-height: 620px; overflow-y:auto;">
+              <div class="queue-item urgent draggable-card" draggable="true" ondragstart="drag(event)" id="patient-1">
+                <div class="dispatch-card-row"><span class="dispatch-patient">Mai Anh</span><span class="status-chip st-risk">AI cảnh báo</span></div>
+                <div style="font-size:12px; color:var(--gray-600); margin-bottom:6px;">Đau dạ dày cấp, nôn nhiều</div>
+                <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>Hôm nay 15:00 • Ưu tiên tiêu hóa</div>
               </div>
-
-              <!-- Draggable Patient 2 -->
-              <div class="patient-card draggable-card" draggable="true" ondragstart="drag(event)" id="patient-2" style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; gap: 12px; align-items: flex-start;">
-                <i data-lucide="grip-vertical" style="color: var(--gray-400); width: 16px; flex-shrink: 0; margin-top: 2px;"></i>
-                <div style="flex: 1;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <div style="font-weight: 700; font-size: 14px;">Minh Hoàng</div>
-                    <span style="font-size: 10px; background: #E0E7FF; color: #4F46E5; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Từ Web</span>
-                  </div>
-                  <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;"><i data-lucide="stethoscope" style="width: 12px; display: inline; margin-right: 4px;"></i>Khám tổng quát</div>
-                  <div style="font-size: 12px; color: var(--gray-400);"><i data-lucide="clock" style="width: 12px; display: inline; margin-right: 4px;"></i>Ngày mai, 09:00</div>
-                </div>
+              <div class="queue-item normal draggable-card" draggable="true" ondragstart="drag(event)" id="patient-2">
+                <div class="dispatch-card-row"><span class="dispatch-patient">Minh Hoàng</span><span class="status-chip st-wait">Từ Web</span></div>
+                <div style="font-size:12px; color:var(--gray-600); margin-bottom:6px;">Khám tổng quát định kỳ</div>
+                <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>Ngày mai 09:00</div>
               </div>
-
+              <div class="queue-item vip draggable-card" draggable="true" ondragstart="drag(event)" id="patient-3">
+                <div class="dispatch-card-row"><span class="dispatch-patient">Ngọc Diễm</span><span class="status-chip st-progress">Premium</span></div>
+                <div style="font-size:12px; color:var(--gray-600); margin-bottom:6px;">Tư vấn online, yêu cầu bác sĩ nữ</div>
+                <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>Hôm nay 16:30</div>
+              </div>
+              <div class="queue-item urgent draggable-card" draggable="true" ondragstart="drag(event)" id="patient-4">
+                <div class="dispatch-card-row"><span class="dispatch-patient">Đặng Minh Sốt</span><span class="status-chip st-risk">Sốt cao</span></div>
+                <div style="font-size:12px; color:var(--gray-600); margin-bottom:6px;">Sốt 39°C, đau họng, ho khan</div>
+                <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>Hôm nay 10:30</div>
+              </div>
+              <div class="queue-item normal draggable-card" draggable="true" ondragstart="drag(event)" id="patient-5">
+                <div class="dispatch-card-row"><span class="dispatch-patient">Tạ Quốc Bảo</span><span class="status-chip st-wait">Call center</span></div>
+                <div style="font-size:12px; color:var(--gray-600); margin-bottom:6px;">Tái khám huyết áp</div>
+                <div class="dispatch-time"><i data-lucide="clock" style="width:13px;"></i>Thứ 7 08:30</div>
+              </div>
             </div>
-          </div>
-
+          </aside>
         </div>
 
         <!-- VIEW CALENDAR -->
         <div id="view-calendar" style="display: none;">
-          <div class="card" style="padding: 24px; overflow-x: auto;">
-            <div style="min-width: 900px;">
-              <!-- Calendar Header -->
-              <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 12px; margin-bottom: 16px; text-align: center; font-weight: 600; color: var(--gray-600); font-size: 13px;">
-                <div>Giờ</div>
-                <div>Thứ 2<br><span style="font-size: 11px; font-weight: 400; color: var(--gray-400);">13/05</span></div>
-                <div>Thứ 3<br><span style="font-size: 11px; font-weight: 400; color: var(--gray-400);">14/05</span></div>
-                <div>Thứ 4<br><span style="font-size: 11px; font-weight: 400; color: var(--gray-400);">15/05</span></div>
-                <div>Thứ 5<br><span style="font-size: 11px; font-weight: 400; color: var(--gray-400);">16/05</span></div>
-                <div>Thứ 6<br><span style="font-size: 11px; font-weight: 400; color: var(--gray-400);">17/05</span></div>
-                <div style="color: var(--primary);">Thứ 7<br><span style="font-size: 11px; font-weight: 400;">18/05</span></div>
-                <div style="color: #EF4444;">CN<br><span style="font-size: 11px; font-weight: 400;">19/05</span></div>
+          <div class="calendar-shell">
+            <div class="calendar-summary">
+              <div class="schedule-stat-card"><div class="schedule-stat-icon" style="background:#EFF6FF;color:#2563EB;"><i data-lucide="calendar"></i></div><div><div class="schedule-stat-label">Tổng lịch tuần</div><div class="schedule-stat-value">86</div></div></div>
+              <div class="schedule-stat-card"><div class="schedule-stat-icon" style="background:#ECFDF5;color:#059669;"><i data-lucide="check-circle"></i></div><div><div class="schedule-stat-label">Đã xác nhận</div><div class="schedule-stat-value">61</div></div></div>
+              <div class="schedule-stat-card"><div class="schedule-stat-icon" style="background:#FEF3C7;color:#D97706;"><i data-lucide="clock"></i></div><div><div class="schedule-stat-label">Chờ xác nhận</div><div class="schedule-stat-value">17</div></div></div>
+              <div class="schedule-stat-card"><div class="schedule-stat-icon" style="background:#FEE2E2;color:#DC2626;"><i data-lucide="alert-triangle"></i></div><div><div class="schedule-stat-label">Quá tải/đổi lịch</div><div class="schedule-stat-value">8</div></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; min-width:1040px; margin-bottom:14px;">
+              <div>
+                <h3 style="font-size:16px; font-weight:800; margin:0 0 4px;">Lịch tổng tuần 13/05 - 19/05</h3>
+                <p style="font-size:13px; color:var(--gray-500); margin:0;">Màu sắc thể hiện chuyên khoa/trạng thái lịch hẹn.</p>
               </div>
-
-              <!-- Calendar Grid Rows -->
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <!-- 08:00 -->
-                <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 12px; border-top: 1px solid var(--gray-200); padding-top: 12px;">
-                  <div style="font-size: 12px; color: var(--gray-500); text-align: right; padding-right: 12px; transform: translateY(-8px);">08:00</div>
-                  <!-- Slots -->
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <!-- Có lịch -->
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200); padding: 4px;">
-                    <div title="Lý do: Khám dạ dày" style="background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 6px; padding: 6px; cursor: pointer;">
-                      <div style="font-size: 11px; font-weight: 700; color: #D97706;">Nguyễn Văn A</div>
-                      <div style="font-size: 10px; color: #B45309;">BS. Lê Thị C</div>
-                    </div>
-                  </div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                </div>
-
-                <!-- 09:00 -->
-                <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 12px; border-top: 1px solid var(--gray-200); padding-top: 12px;">
-                  <div style="font-size: 12px; color: var(--gray-500); text-align: right; padding-right: 12px; transform: translateY(-8px);">09:00</div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200); padding: 4px;">
-                    <div title="Lý do: Đau đầu, chóng mặt" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; padding: 6px; cursor: pointer;">
-                      <div style="font-size: 11px; font-weight: 700; color: #2563EB;">Mai Anh</div>
-                      <div style="font-size: 10px; color: #1D4ED8;">BS. Trần B</div>
-                    </div>
-                  </div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                </div>
-
-                <!-- 10:00 - 17:00 (more slots for completeness, maybe just one more to show layout) -->
-                <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 12px; border-top: 1px solid var(--gray-200); padding-top: 12px;">
-                  <div style="font-size: 12px; color: var(--gray-500); text-align: right; padding-right: 12px; transform: translateY(-8px);">10:00</div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                  <div style="position: relative; min-height: 80px; border-radius: 8px; border: 1px dashed var(--gray-200);"></div>
-                </div>
-
+              <div style="display:flex; gap:12px; font-size:12px; color:var(--gray-600); flex-wrap:wrap;">
+                <span><i style="display:inline-block;width:10px;height:10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:3px;"></i> Đã xác nhận</span>
+                <span><i style="display:inline-block;width:10px;height:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:3px;"></i> Chờ khám</span>
+                <span><i style="display:inline-block;width:10px;height:10px;background:#FEF2F2;border:1px solid #FECACA;border-radius:3px;"></i> Ưu tiên</span>
+                <span><i style="display:inline-block;width:10px;height:10px;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:3px;"></i> Online/Premium</span>
               </div>
+            </div>
+            <div class="calendar-grid">
+              <div class="cal-head">Giờ</div>
+              <div class="cal-head">Thứ 2<small>13/05</small></div>
+              <div class="cal-head">Thứ 3<small>14/05</small></div>
+              <div class="cal-head">Thứ 4<small>15/05</small></div>
+              <div class="cal-head">Thứ 5<small>16/05</small></div>
+              <div class="cal-head">Thứ 6<small>17/05</small></div>
+              <div class="cal-head" style="color:var(--primary);">Thứ 7<small>18/05</small></div>
+              <div class="cal-head" style="color:#EF4444;">CN<small>19/05</small></div>
+
+              <div class="cal-time">08:00</div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Mai Anh</strong>BS. Trần B • Tổng quát</div></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Nguyễn Văn A</strong>BS. Lê C • Tiêu hóa</div></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Lê Thủy</strong>BS. Nguyễn A • Nội</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-purple"><strong>Tư vấn online</strong>Ngọc Diễm • Premium</div></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Tạ Quốc Bảo</strong>BS. Trần B</div></div>
+              <div class="cal-cell"></div>
+
+              <div class="cal-time">09:00</div>
+              <div class="cal-cell"><div class="cal-event ev-red"><strong>Nguyễn Thu A</strong>AI cảnh báo • Đau bụng</div></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Vũ Khoa</strong>Nội soi dạ dày</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Hoàng Nam</strong>Nhi khoa</div></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Đỗ Hải</strong>Tái khám xương khớp</div></div>
+              <div class="cal-cell"><div class="cal-event ev-red"><strong>Đặng Minh Sốt</strong>Sốt cao</div></div>
+              <div class="cal-cell"><div class="cal-event ev-purple"><strong>Video call</strong>Tư vấn thuốc</div></div>
+
+              <div class="cal-time">10:00</div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Thanh Tùng</strong>Khám Nội</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Bé An Nhi</strong>Ho kéo dài</div></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Minh Hoàng</strong>Khám tổng quát</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Phạm Văn Khỏe</strong>Định kỳ</div></div>
+              <div class="cal-cell"></div>
+
+              <div class="cal-time">13:30</div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Trần Đau</strong>Cơ xương khớp</div></div>
+              <div class="cal-cell"><div class="cal-event ev-purple"><strong>Online</strong>Theo dõi sau khám</div></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Bùi Lan Anh</strong>Phụ khoa</div></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Lê Minh Tâm</strong>Tim mạch</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"></div>
+
+              <div class="cal-time">15:00</div>
+              <div class="cal-cell"><div class="cal-event ev-red"><strong>Mai Anh</strong>Đau dạ dày cấp</div></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Hoàng Thị Yếu</strong>Đái tháo đường</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Đỗ Thùy</strong>Da liễu</div></div>
+              <div class="cal-cell"><div class="cal-event ev-purple"><strong>VIP</strong>Gói premium</div></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Lịch trống</strong>BS. Hoàng Tùng</div></div>
+              <div class="cal-cell"></div>
+
+              <div class="cal-time">16:30</div>
+              <div class="cal-cell"><div class="cal-event ev-purple"><strong>Ngọc Diễm</strong>Tư vấn online</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-blue"><strong>Phan Quốc Huy</strong>Tim mạch</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-green"><strong>Tổng kết</strong>BS trực</div></div>
+              <div class="cal-cell"></div>
+              <div class="cal-cell"><div class="cal-event ev-yellow"><strong>Ca trực</strong>08:00-12:00</div></div>
             </div>
           </div>
         </div>
@@ -890,7 +1163,8 @@
               if(gripIcon) gripIcon.style.display = "none"; // Ẩn icon kéo thả
               
               draggedElement.onclick = function() {
-                var patientName = draggedElement.querySelector('div[style*="font-weight: 700;"]').innerText;
+                var nameEl = draggedElement.querySelector('.dispatch-patient') || draggedElement.querySelector('div[style*="font-weight: 700;"]');
+                var patientName = nameEl ? nameEl.innerText : 'Bệnh nhân';
                 openStatusModal(patientName);
               };
               
@@ -1545,7 +1819,7 @@
                 <td style="font-weight: 700;">350,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="banknote" style="width:14px; color:var(--success);"></i> Tiền mặt</div></td>
                 <td><span style="font-size: 11px; background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Thành công</span></td>
-                <td><a href="#" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
+                <td><a href="#" onclick="openRevenueDetail(event, 'TX-9283')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
               </tr>
               <tr>
                 <td><strong>#TX-9284</strong></td>
@@ -1555,7 +1829,7 @@
                 <td style="font-weight: 700;">1,200,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="credit-card" style="width:14px; color:#3B82F6;"></i> Chuyển khoản</div></td>
                 <td><span style="font-size: 11px; background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Thành công</span></td>
-                <td><a href="#" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
+                <td><a href="#" onclick="openRevenueDetail(event, 'TX-9284')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
               </tr>
               <tr>
                 <td><strong>#TX-9285</strong></td>
@@ -1565,7 +1839,7 @@
                 <td style="font-weight: 700;">100,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="smartphone" style="width:14px; color:#8B5CF6;"></i> VNPay</div></td>
                 <td><span style="font-size: 11px; background: #FEF3C7; color: #B45309; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Đang xử lý</span></td>
-                <td><a href="#" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
+                <td><a href="#" onclick="openRevenueDetail(event, 'TX-9285')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
               </tr>
               <tr>
                 <td><strong>#TX-9286</strong></td>
@@ -1575,7 +1849,7 @@
                 <td style="font-weight: 700;">350,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="credit-card" style="width:14px; color:#3B82F6;"></i> Chuyển khoản</div></td>
                 <td><span style="font-size: 11px; background: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Hoàn tiền / Đã hủy</span></td>
-                <td><a href="#" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
+                <td><a href="#" onclick="openRevenueDetail(event, 'TX-9286')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
               </tr>
             </tbody>
           </table>
@@ -1601,6 +1875,170 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal: Chi tiết giao dịch thanh toán -->
+      <div id="modal-revenue-detail" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1300; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: white; width: 100%; max-width: 620px; border-radius: 14px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden;">
+          <div style="padding: 18px 22px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3 style="font-size: 18px; font-weight: 800; color: var(--gray-900); margin: 0;">Chi tiết giao dịch</h3>
+              <p id="revenue-detail-subtitle" style="font-size: 13px; color: var(--gray-500); margin: 4px 0 0;">Thông tin hóa đơn & thanh toán</p>
+            </div>
+            <button onclick="closeRevenueDetail()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 20px; height: 20px;"></i></button>
+          </div>
+          <div id="revenue-detail-body" style="padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+            <!-- Rendered by openRevenueDetail() -->
+          </div>
+          <div style="padding: 16px 22px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="printRevenueInvoice()" style="padding: 9px 14px; border: 1px solid #0284c7; background: white; border-radius: 8px; font-weight: 700; color: #0284c7; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><i data-lucide="printer" style="width: 15px;"></i> In hóa đơn</button>
+            <button onclick="closeRevenueDetail()" style="padding: 9px 16px; border: 1px solid var(--gray-300); background: white; border-radius: 8px; font-weight: 700; color: var(--gray-700); font-size: 13px; cursor: pointer;">Đóng</button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        const revenueDetails = {
+          'TX-9283': {
+            code: '#TX-9283',
+            invoice: 'HD-20260513-09283',
+            datetime: '13/05/2026 09:45',
+            customer: 'Lê Thủy',
+            phone: '0901.456.789',
+            service: 'Khám Nội tổng quát',
+            doctor: 'BS. Trần Văn A',
+            method: 'Tiền mặt',
+            status: 'Thành công',
+            statusColor: '#065F46',
+            statusBg: '#D1FAE5',
+            subtotal: 350000,
+            discount: 0,
+            fee: 0,
+            total: 350000,
+            note: 'Thu tại quầy sau khi hoàn tất khám.'
+          },
+          'TX-9284': {
+            code: '#TX-9284',
+            invoice: 'HD-20260513-09284',
+            datetime: '13/05/2026 10:15',
+            customer: 'Vũ Khoa',
+            phone: '0912.333.555',
+            service: 'Nội soi dạ dày',
+            doctor: 'BS. Nguyễn Văn A',
+            method: 'Chuyển khoản',
+            status: 'Thành công',
+            statusColor: '#065F46',
+            statusBg: '#D1FAE5',
+            subtotal: 1200000,
+            discount: 0,
+            fee: 0,
+            total: 1200000,
+            note: 'Đối soát ngân hàng đã khớp mã giao dịch.'
+          },
+          'TX-9285': {
+            code: '#TX-9285',
+            invoice: 'HD-20260513-09285',
+            datetime: '13/05/2026 14:00',
+            customer: 'Nguyễn Nam',
+            phone: '0987.111.222',
+            service: 'Tư vấn AI Online (Premium)',
+            doctor: 'Trợ lý AI MedTriage',
+            method: 'VNPay',
+            status: 'Đang xử lý',
+            statusColor: '#B45309',
+            statusBg: '#FEF3C7',
+            subtotal: 100000,
+            discount: 0,
+            fee: 2500,
+            total: 100000,
+            note: 'Đang chờ cổng VNPay xác nhận cuối.'
+          },
+          'TX-9286': {
+            code: '#TX-9286',
+            invoice: 'HD-20260513-09286',
+            datetime: '13/05/2026 15:30',
+            customer: 'Trần Đau',
+            phone: '0933.888.666',
+            service: 'Khám Cơ xương khớp',
+            doctor: 'BS. Phạm Minh Đức',
+            method: 'Chuyển khoản',
+            status: 'Hoàn tiền / Đã hủy',
+            statusColor: '#991B1B',
+            statusBg: '#FEE2E2',
+            subtotal: 350000,
+            discount: 0,
+            fee: 0,
+            total: 350000,
+            note: 'Bệnh nhân hủy lịch, hoàn tiền theo chính sách phòng khám.'
+          }
+        };
+
+        function formatVnd(amount) {
+          return Number(amount || 0).toLocaleString('vi-VN') + ' VNĐ';
+        }
+
+        function openRevenueDetail(event, txId) {
+          if (event) event.preventDefault();
+          const data = revenueDetails[txId];
+          if (!data) return;
+
+          document.getElementById('revenue-detail-subtitle').textContent = `${data.code} • ${data.invoice}`;
+          document.getElementById('revenue-detail-body').innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px; border: 1px solid var(--gray-200); border-radius: 12px; background: #F8FAFC;">
+              <div>
+                <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">Khách hàng</div>
+                <div style="font-size: 17px; font-weight: 800; color: var(--gray-900);">${data.customer}</div>
+                <div style="font-size: 13px; color: var(--gray-500); margin-top: 3px;">${data.phone}</div>
+              </div>
+              <span style="font-size: 12px; background: ${data.statusBg}; color: ${data.statusColor}; padding: 6px 10px; border-radius: 999px; font-weight: 800;">${data.status}</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
+                <div style="font-size: 12px; color: var(--gray-500);">Thời gian</div>
+                <div style="font-weight: 700; margin-top: 4px;">${data.datetime}</div>
+              </div>
+              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
+                <div style="font-size: 12px; color: var(--gray-500);">Phương thức</div>
+                <div style="font-weight: 700; margin-top: 4px;">${data.method}</div>
+              </div>
+              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
+                <div style="font-size: 12px; color: var(--gray-500);">Dịch vụ</div>
+                <div style="font-weight: 700; margin-top: 4px;">${data.service}</div>
+              </div>
+              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
+                <div style="font-size: 12px; color: var(--gray-500);">Phụ trách</div>
+                <div style="font-weight: 700; margin-top: 4px;">${data.doctor}</div>
+              </div>
+            </div>
+
+            <div style="border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden;">
+              <div style="padding: 12px 14px; background: var(--gray-50); font-weight: 800; color: var(--gray-800);">Tổng kết thanh toán</div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+                <div style="display:flex; justify-content:space-between;"><span>Tạm tính</span><strong>${formatVnd(data.subtotal)}</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span>Giảm giá</span><strong>${formatVnd(data.discount)}</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span>Phí cổng thanh toán</span><strong>${formatVnd(data.fee)}</strong></div>
+                <div style="height: 1px; background: var(--gray-200); margin: 4px 0;"></div>
+                <div style="display:flex; justify-content:space-between; font-size: 16px;"><span style="font-weight:800;">Tổng thanh toán</span><strong style="color: var(--primary);">${formatVnd(data.total)}</strong></div>
+              </div>
+            </div>
+
+            <div style="padding: 12px 14px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; color: #92400E; font-size: 13px;">
+              <strong>Ghi chú:</strong> ${data.note}
+            </div>
+          `;
+
+          document.getElementById('modal-revenue-detail').style.display = 'flex';
+          if (window.lucide) window.lucide.createIcons({ root: document.getElementById('modal-revenue-detail') });
+        }
+
+        function closeRevenueDetail() {
+          document.getElementById('modal-revenue-detail').style.display = 'none';
+        }
+
+        function printRevenueInvoice() {
+          alert('Đang mô phỏng in/xuất hóa đơn PDF cho giao dịch này.');
+        }
+      </script>
 
       <!-- MODULE: QUẢN LÝ KHO DƯỢC & VẬT TƯ -->
       <div id="tab-inventory" class="tab-pane">

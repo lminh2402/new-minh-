@@ -17,9 +17,11 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 const feedbackRoutes = require('./routes/feedbacks');
 const scenarioRoutes = require('./routes/scenarios');
+const chatRoutes = require('./routes/chat');
 
 app.use('/api/feedbacks', feedbackRoutes);
 app.use('/api/scenarios', scenarioRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Backend is running' });

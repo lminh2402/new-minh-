@@ -1,61 +1,62 @@
-// API Key dành cho Chatbot trang Khách (Login/Index)
-const GROQ_API_KEY_LOGIN = "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";
-// API Key dành cho Chatbot trang Bệnh Nhân (Patient Dashboard)
-const GROQ_API_KEY_PATIENT = "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";
-const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+// API Key — Trợ lý Khách (login.html)
+const GROQ_API_KEY_LOGIN = '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';
+// API Key — Trợ lý Bệnh nhân (patient-dashboard.html)
+const GROQ_API_KEY_PATIENT = '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';
 
-// Hàm lấy thời gian hiện tại để hiển thị (VD: 10:30 AM)
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const CHAT_BACKEND_URL = 'http://localhost:5000/api/chat';
+
 function getCurrentTime() {
   const now = new Date();
   let hours = now.getHours();
-  let minutes = now.getMinutes();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
   const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // 0 giờ thì thành 12
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  return hours + ':' + minutes + ' ' + ampm;
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes} ${ampm}`;
 }
 
-// Chờ DOM load xong mới thực thi
-document.addEventListener('DOMContentLoaded', () => {
-  // Đảm bảo icon Lucide được render cho toàn bộ trang
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-  
-  // 1. Lấy các DOM elements cần thiết từ giao diện
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function initMedTriageChat() {
   const chatPopover = document.getElementById('ai-chat-popover');
-  if (!chatPopover) return; // Tránh lỗi nếu không có popup này
+  if (!chatPopover) return;
 
   const chatBody = chatPopover.querySelector('.chat-body');
-  const chatInput = chatPopover.querySelector('input[type="text"]');
+  const chatInput =
+    chatPopover.querySelector('#public-chat-input') ||
+    chatPopover.querySelector('#patient-chat-input') ||
+    chatPopover.querySelector('input[type="text"]');
   const sendBtn = chatPopover.querySelector('.send-btn');
   const floatingChatBtn = document.getElementById('floating-chat-btn');
 
-  // Biến kiểm soát lần đầu tiên mở chat (bỏ qua nếu đã có tin nhắn chào sẵn trong HTML)
-  let isFirstTime = chatBody.children.length === 0;
-
-  // Lắng nghe sự kiện click vào nút mở khung chat
-  if (floatingChatBtn) {
-    floatingChatBtn.addEventListener('click', () => {
-      setTimeout(() => {
-        // Kiểm tra xem khung chat có đang được mở ra không và có phải lần đầu không
-        if (chatPopover.classList.contains('active') && isFirstTime) {
-          isFirstTime = false; // Đánh dấu là đã chào
-          
-          // Chờ 0.5s (500ms) rồi tự động in tin nhắn chào
-          setTimeout(() => {
-            const greetingText = "Chào bạn! Tôi có thể giúp phân tích triệu chứng và gợi ý bác sĩ/chuyên khoa phù hợp nhất tại phòng khám của chúng tôi. Bạn đang cảm thấy thế nào?";
-            appendMessage(greetingText, 'ai');
-            messageHistory.push({ role: "assistant", content: greetingText });
-          }, 500);
-        }
-      }, 50);
-    });
+  if (!chatBody || !chatInput || !sendBtn) {
+    console.error('[MedTriage Chat] Thiếu phần tử chat:', { chatBody: !!chatBody, chatInput: !!chatInput, sendBtn: !!sendBtn });
+    return;
   }
 
-  // Mảng lưu trữ lịch sử tin nhắn để gửi cho AI (giúp AI nhớ ngữ cảnh)
+  // Ensure floating chat icons are rendered even when page scripts run
+  // before the floating widget markup is fully processed.
+  const floatingChatWidget = document.getElementById('floating-chat-widget');
+  if (typeof lucide !== 'undefined') {
+    if (floatingChatWidget) lucide.createIcons({ root: floatingChatWidget });
+    lucide.createIcons({ root: chatPopover });
+  }
+
+  const chatMode = chatPopover.dataset.aiChat === 'patient' ? 'patient' : 'guest';
+  const groqApiKey = chatMode === 'patient' ? GROQ_API_KEY_PATIENT : GROQ_API_KEY_LOGIN;
+
+  let isFirstTime = chatBody.children.length === 0;
+  let isSending = false;
+
   let messageHistory = [
     {
-      role: "system",
+      role: 'system',
       content: `Vai trò: Bạn là trợ lý y tế thông minh MedTriage.
 
 Nhiệm vụ:
@@ -69,55 +70,35 @@ Nếu triệu chứng nhẹ (Cảm cúm, đau đầu nhẹ...): Khuyên tự the
 Nếu triệu chứng nặng/đặc thù (Đau ngực, khó thở, đau dạ dày cấp...): Yêu cầu đi khám gấp + [SHOW_BOOKING_WIDGET] (Chuyên khoa tương ứng).
 
 Định dạng trả về:
-Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở cuối cùng.`
-    }
+Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở cuối cùng.`,
+    },
   ];
 
   const existingWelcome = chatBody.querySelector('.msg.ai .msg-content');
   if (existingWelcome) {
     messageHistory.push({
       role: 'assistant',
-      content: existingWelcome.textContent.trim()
+      content: existingWelcome.textContent.trim(),
     });
   }
 
-  function escapeHtml(text) {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  // 2. Hàm thêm tin nhắn vào giao diện (cả User và Bot)
   function appendMessage(text, sender) {
-    const time = getCurrentTime();
     const msgDiv = document.createElement('div');
-    msgDiv.className = `msg ${sender}`; // sender là 'user' hoặc 'ai'
-    const safeText = escapeHtml(text).replace(/\n/g, '<br>');
-    
+    msgDiv.className = `msg ${sender}`;
     msgDiv.innerHTML = `
-      <div class="msg-content">
-        ${safeText}
-      </div>
-      <span class="time">${time}</span>
+      <div class="msg-content">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+      <span class="time">${getCurrentTime()}</span>
     `;
-
     chatBody.appendChild(msgDiv);
-    
-    // Tự động cuộn xuống dưới cùng khi có tin nhắn mới
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Hàm phụ để hiển thị Widget Đặt lịch
   function appendBookingWidget(specialty) {
-    const time = getCurrentTime();
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `msg ai alert`;
-    msgDiv.style.borderLeftColor = 'var(--primary)';
-    const bookAction = typeof openWizardModal === 'function' ? 'openWizardModal()' : 'openLoginModal()';
+    const bookFn = typeof openWizardModal === 'function' ? 'openWizardModal()' : 'openLoginModal()';
     const bookLabel = typeof openWizardModal === 'function' ? 'Đặt lịch ngay' : 'Đăng nhập để đặt lịch';
-    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg ai alert';
+    msgDiv.style.borderLeftColor = 'var(--primary)';
     msgDiv.innerHTML = `
       <div class="msg-content emergency-widget" style="background-color: var(--primary-light);">
         <div class="e-header" style="color: var(--primary);">
@@ -126,103 +107,96 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
         </div>
         <p style="color: var(--text-dark);">Dựa trên đánh giá sơ bộ, hệ thống khuyên bạn nên khám <strong>${escapeHtml(specialty)}</strong> để được chẩn đoán chính xác nhất.</p>
         <div class="e-actions">
-          <button class="btn-primary" style="width: 100%;" onclick="${bookAction}"><i data-lucide="calendar-plus"></i> ${bookLabel}</button>
+          <button class="btn-primary" style="width: 100%;" onclick="${bookFn}"><i data-lucide="calendar-plus"></i> ${bookLabel}</button>
         </div>
       </div>
-      <span class="time">${time}</span>
+      <span class="time">${getCurrentTime()}</span>
     `;
-
     chatBody.appendChild(msgDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
-    
     if (typeof lucide !== 'undefined') lucide.createIcons();
   }
 
-  // 3. Hàm gọi API của Groq để lấy câu trả lời
-  async function fetchAIResponse(userText) {
-    // Thêm câu hỏi của user vào lịch sử
-    messageHistory.push({ role: "user", content: userText });
+  async function callGroq(messages) {
+    const payload = {
+      model: 'llama-3.1-8b-instant',
+      messages,
+      temperature: 0.7,
+      max_tokens: 1024,
+    };
 
     try {
-      // Xác định API Key dựa trên trang hiện tại
-      const isGuestPage = document.getElementById('public-chat-body') !== null || window.location.pathname.includes('login');
-      const activeApiKey = isGuestPage ? GROQ_API_KEY_LOGIN : GROQ_API_KEY_PATIENT;
-
-      // Gọi fetch API
-      const response = await fetch(API_URL, {
+      const backendRes = await fetch(CHAT_BACKEND_URL, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${activeApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant", // Tên model bạn muốn dùng
-          messages: messageHistory,
-          temperature: 0.7, // Điều chỉnh độ sáng tạo của AI
-          max_tokens: 1024
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: chatMode, messages }),
       });
-
-      if (!response.ok) {
-        const errBody = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errBody}`);
+      if (backendRes.ok) {
+        return await backendRes.json();
       }
+    } catch (_) {
+      // Backend không chạy — fallback gọi Groq trực tiếp
+    }
 
-      const data = await response.json();
+    const response = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${groqApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.error?.message || `HTTP ${response.status}`);
+    }
+    return data;
+  }
+
+  async function fetchAIResponse(userText) {
+    messageHistory.push({ role: 'user', content: userText });
+
+    try {
+      const data = await callGroq(messageHistory);
       const aiReplyRaw = data.choices[0].message.content;
 
-      // Xử lý logic [SHOW_BOOKING_WIDGET]
       let aiReplyClean = aiReplyRaw;
       let showBooking = false;
-      let specialty = "Nội tổng quát"; // Mặc định
+      let specialty = 'Nội tổng quát';
 
       const triggerRegex = /\[?SHOW_BOOKING_WIDGET\]?\s*(?:\((.*?)\))?/i;
       const match = aiReplyRaw.match(triggerRegex);
 
       if (match) {
         showBooking = true;
-        if (match[1]) {
-          specialty = match[1].trim();
-        }
-        // Xóa lệnh trigger khỏi nội dung text hiển thị cho user
+        if (match[1]) specialty = match[1].trim();
         aiReplyClean = aiReplyRaw.replace(triggerRegex, '').trim();
       }
 
-      // Thêm câu trả lời nguyên bản của AI (có tag) vào lịch sử để duy trì ngữ cảnh
-      messageHistory.push({ role: "assistant", content: aiReplyRaw });
-
-      // Hiển thị câu trả lời (đã xóa tag) lên giao diện
+      messageHistory.push({ role: 'assistant', content: aiReplyRaw });
       appendMessage(aiReplyClean, 'ai');
 
-      // Nếu có trigger, hiển thị thêm widget đặt lịch ngay bên dưới
-      if (showBooking) {
-        appendBookingWidget(specialty);
-      }
-
+      if (showBooking) appendBookingWidget(specialty);
     } catch (error) {
-      console.error("Lỗi khi gọi API Groq:", error);
+      console.error('[MedTriage Chat] Lỗi Groq:', error);
       messageHistory.pop();
-      appendMessage("Xin lỗi, tôi đang gặp sự cố kết nối với AI. Vui lòng kiểm tra API key Groq trong script.js và thử lại.", 'ai');
+      appendMessage(
+        `Xin lỗi, AI tạm thời không phản hồi (${error.message}). Hãy mở trang qua http://localhost (không dùng file://) và thử lại.`,
+        'ai'
+      );
     }
   }
 
-  let isSending = false;
-
-  // 4. Hàm xử lý logic khi gửi tin nhắn
   async function handleSendMessage() {
     const text = chatInput.value.trim();
-    if (text === "" || isSending) return;
+    if (!text || isSending) return;
 
     isSending = true;
-    if (sendBtn) sendBtn.disabled = true;
-
-    // Xóa ô input
-    chatInput.value = "";
-
-    // Thêm tin nhắn của User vào giao diện
+    sendBtn.disabled = true;
+    chatInput.value = '';
     appendMessage(text, 'user');
 
-    // Thêm 1 dòng tin nhắn tạm "Đang gõ..." (Tuỳ chọn)
     const typingId = 'typing-' + Date.now();
     const typingDiv = document.createElement('div');
     typingDiv.className = 'msg ai';
@@ -234,35 +208,48 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
     `;
     chatBody.appendChild(typingDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
-    
-    // Gọi icon lucide nếu bạn có dùng thư viện Lucide (nếu có lỗi bạn có thể xóa đoạn này)
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // Chờ AI phản hồi
     await fetchAIResponse(text);
 
-    // Xóa dòng "Đang gõ..."
-    const typingElem = document.getElementById(typingId);
-    if (typingElem) {
-      typingElem.remove();
-    }
-
+    document.getElementById(typingId)?.remove();
     isSending = false;
-    if (sendBtn) sendBtn.disabled = false;
+    sendBtn.disabled = false;
     chatInput.focus();
   }
 
-  // 5. Gắn sự kiện click vào nút gửi
-  if (sendBtn) sendBtn.addEventListener('click', handleSendMessage);
+  sendBtn.addEventListener('click', handleSendMessage);
+  chatInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  });
+  chatInput.addEventListener('click', (event) => event.stopPropagation());
+  chatInput.addEventListener('mousedown', (event) => event.stopPropagation());
 
-  // 6. Gắn sự kiện ấn phím Enter trong ô input
-  if (chatInput) {
-    chatInput.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleSendMessage();
-      }
+  window.sendMedTriageChatMessage = handleSendMessage;
+
+  if (floatingChatBtn) {
+    floatingChatBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        if (!chatPopover.classList.contains('active') || !isFirstTime) return;
+        isFirstTime = false;
+        setTimeout(() => {
+          const greetingText =
+            'Chào bạn! Tôi có thể giúp phân tích triệu chứng và gợi ý bác sĩ/chuyên khoa phù hợp nhất tại phòng khám của chúng tôi. Bạn đang cảm thấy thế nào?';
+          appendMessage(greetingText, 'ai');
+          messageHistory.push({ role: 'assistant', content: greetingText });
+        }, 400);
+      }, 50);
     });
   }
 
-});
+  console.log(`[MedTriage Chat] Đã sẵn sàng — chế độ: ${chatMode}`);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMedTriageChat);
+} else {
+  initMedTriageChat();
+}

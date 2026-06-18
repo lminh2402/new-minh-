@@ -197,7 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scrollSlider = function(gridId, direction) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
-    const scrollAmount = 344; // Card width (320px) + gap (24px)
+    const card = grid.querySelector('.clinic-card');
+    const gap = 24;
+    const scrollAmount = card ? card.offsetWidth + gap : 324;
     grid.scrollBy({
       left: direction * scrollAmount,
       behavior: 'smooth'
@@ -266,10 +268,12 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.addEventListener('scroll', () => {
       window.updateSliderArrows(gridId);
     });
-    // Initial call
-    setTimeout(() => {
-      window.updateSliderArrows(gridId);
-    }, 200);
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => window.updateSliderArrows(gridId));
+      ro.observe(grid);
+    }
+    setTimeout(() => window.updateSliderArrows(gridId), 100);
+    setTimeout(() => window.updateSliderArrows(gridId), 400);
   }
 
   // Render doctors dynamically
@@ -296,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `);
     });
+    setTimeout(() => window.updateSliderArrows('landing-doctors-grid'), 50);
   }
 
   // Render packages dynamically
@@ -323,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `);
     });
+    setTimeout(() => window.updateSliderArrows('landing-packages-grid'), 50);
   }
 
   // Initial execution of dynamic rendering
@@ -495,12 +501,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const popover = document.getElementById('ai-chat-popover');
     const fabIcon = document.getElementById('fab-icon');
     const widget = document.getElementById('floating-chat-widget');
+    const chatInput = document.getElementById('public-chat-input');
     
     if (popover && fabIcon) {
       popover.classList.toggle('active');
       if (popover.classList.contains('active')) {
         fabIcon.setAttribute('data-lucide', 'x');
         widget?.classList.add('chat-open');
+        widget?.classList.add('hint-dismissed');
+        setTimeout(() => chatInput?.focus(), 150);
       } else {
         fabIcon.setAttribute('data-lucide', 'bot');
         widget?.classList.remove('chat-open');

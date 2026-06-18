@@ -12,32 +12,8 @@
   <link rel="stylesheet" href="shared.css" />
   <link rel="stylesheet" href="patient-styles.css" />
   <link rel="stylesheet" href="login-styles.css" />
-  <style>
-    /* Public landing specific styles */
-    .landing-header {
-      position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
-      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 5%; z-index: 1000;
-    }
-    .landing-container {
-      max-width: 1200px; margin: calc(var(--header-h) + 40px) auto 60px; padding: 0 24px;
-    }
-    .hero-search-box {
-      display: flex; align-items: center; background: white; border-radius: 9999px;
-      padding: 8px 8px 8px 24px; border: 1px solid var(--gray-200); max-width: 700px; margin: 24px auto 0;
-      box-shadow: var(--shadow-lg); transition: var(--transition);
-    }
-    .hero-search-box:focus-within {
-      border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
-    }
-    .hero-search-box input {
-      flex: 1; border: none; outline: none; font-size: 15px; padding: 0 12px; font-family: inherit;
-    }
-  </style>
 </head>
-<body style="background-color: #F8F9FA;">
+<body class="landing-page">
 
   <!-- ═══ PUBLIC HEADER ═══ -->
   <header class="landing-header">
@@ -53,35 +29,31 @@
   </header>
 
   <!-- ═══ LANDING PAGE CONTENT ═══ -->
-  <div class="landing-container">
-    
-    <!-- Hero Section -->
-    <section class="premium-hero" style="text-align: center; padding: 60px 24px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.04) 0%, rgba(79, 70, 229, 0.04) 100%);">
-      <div class="hero-content">
-        <h1 style="font-size: 40px; font-weight: 800; color: var(--gray-900); margin-bottom: 16px; line-height: 1.2;">
-          Hệ thống Triage & Khám bệnh thông minh bằng AI
-        </h1>
-        <p style="font-size: 16px; color: var(--gray-600); max-width: 700px; margin: 0 auto 32px;">
-          Tư vấn phân luồng triệu chứng 24/7 tức thì với trợ lý AI. Tra cứu danh bạ chuyên gia, bác sĩ hàng đầu và dịch vụ xét nghiệm trọn gói tiện lợi.
-        </p>
+  <main class="landing-main">
 
-        <!-- Search Bar -->
-        <div class="hero-search-box">
-          <i data-lucide="search" style="color: var(--gray-400); width: 20px; height: 20px;"></i>
-          <input type="text" id="landing-search-input" placeholder="Nhập triệu chứng, tên bác sĩ hoặc dịch vụ khám..." onkeypress="if(event.key === 'Enter') handleSearchSubmit()">
-          <button class="btn-primary" onclick="handleSearchSubmit()" style="border-radius: 9999px; padding: 10px 24px;">Tìm kiếm</button>
+    <!-- Hero Section -->
+    <section class="landing-hero">
+      <div class="landing-hero-card premium-hero">
+        <div class="hero-content">
+          <h1 class="landing-title">Hệ thống Triage & Khám bệnh thông minh bằng AI</h1>
+          <p class="landing-subtitle">Tư vấn phân luồng triệu chứng 24/7 tức thì với trợ lý AI. Tra cứu danh bạ chuyên gia, bác sĩ hàng đầu và dịch vụ xét nghiệm trọn gói tiện lợi.</p>
+          <div class="hero-search-box">
+            <i data-lucide="search" class="hero-search-icon"></i>
+            <input type="text" id="landing-search-input" placeholder="Nhập triệu chứng, tên bác sĩ hoặc dịch vụ khám..." onkeypress="if(event.key === 'Enter') handleSearchSubmit()">
+            <button class="btn-primary hero-search-btn" onclick="handleSearchSubmit()">Tìm kiếm</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Doctors Section -->
-    <section style="margin-top: 50px;">
-      <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <section class="landing-section">
+      <div class="list-header landing-section-header">
         <div>
-          <h2 style="font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="stethoscope" style="color: var(--primary);"></i> Đội ngũ Bác sĩ chuyên khoa
+          <h2 class="landing-section-title">
+            <i data-lucide="stethoscope"></i> Đội ngũ Bác sĩ chuyên khoa
           </h2>
-          <p style="color: var(--gray-500); font-size: 14px; margin-top: 4px;">Danh sách chuyên gia đang trực và sẵn sàng khám bệnh</p>
+          <p class="landing-section-desc">Danh sách chuyên gia đang trực và sẵn sàng khám bệnh</p>
         </div>
         <button class="btn-see-all" id="btn-toggle-doctors" onclick="toggleSliderMode('landing-doctors-grid', this)">
           <span>Xem tất cả</span>
@@ -89,23 +61,21 @@
         </button>
       </div>
 
-      <div class="slider-wrapper">
+      <div class="slider-wrapper landing-slider">
         <button class="slider-arrow prev" onclick="scrollSlider('landing-doctors-grid', -1)"><i data-lucide="chevron-left"></i></button>
-        <div class="cards-grid slider-mode" id="landing-doctors-grid">
-          <!-- Rendered dynamically -->
-        </div>
+        <div class="cards-grid slider-mode" id="landing-doctors-grid"></div>
         <button class="slider-arrow next" onclick="scrollSlider('landing-doctors-grid', 1)"><i data-lucide="chevron-right"></i></button>
       </div>
     </section>
 
     <!-- Packages Section -->
-    <section style="margin-top: 50px;">
-      <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <section class="landing-section">
+      <div class="list-header landing-section-header">
         <div>
-          <h2 style="font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="package" style="color: var(--primary);"></i> Gói khám sức khỏe trọn gói
+          <h2 class="landing-section-title">
+            <i data-lucide="package"></i> Gói khám sức khỏe trọn gói
           </h2>
-          <p style="color: var(--gray-500); font-size: 14px; margin-top: 4px;">Các gói tầm soát và kiểm tra chuyên sâu tối ưu chi phí</p>
+          <p class="landing-section-desc">Các gói tầm soát và kiểm tra chuyên sâu tối ưu chi phí</p>
         </div>
         <button class="btn-see-all" id="btn-toggle-packages" onclick="toggleSliderMode('landing-packages-grid', this)">
           <span>Xem tất cả</span>
@@ -113,15 +83,13 @@
         </button>
       </div>
 
-      <div class="slider-wrapper">
+      <div class="slider-wrapper landing-slider">
         <button class="slider-arrow prev" onclick="scrollSlider('landing-packages-grid', -1)"><i data-lucide="chevron-left"></i></button>
-        <div class="cards-grid slider-mode" id="landing-packages-grid">
-          <!-- Rendered dynamically -->
-        </div>
+        <div class="cards-grid slider-mode" id="landing-packages-grid"></div>
         <button class="slider-arrow next" onclick="scrollSlider('landing-packages-grid', 1)"><i data-lucide="chevron-right"></i></button>
       </div>
     </section>
-  </div>
+  </main>
 
   <!-- ═══ LOGIN MODAL OVERLAY ═══ -->
   <div class="modal-overlay" id="loginModal" style="z-index: 10000;">
@@ -227,7 +195,7 @@
     </button>
   </div>
 
-  <div class="ai-assistant floating-popover" id="ai-chat-popover" style="bottom: 110px; right: 32px; width: 380px; height: 500px; display: flex; flex-direction: column;">
+  <div class="ai-assistant floating-popover" id="ai-chat-popover" data-ai-chat="guest" style="bottom: 110px; right: 32px; width: 380px; height: 500px; display: flex; flex-direction: column;">
     <div class="chat-header" style="justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 16px;">
         <i data-lucide="bot"></i>
