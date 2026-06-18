@@ -1,5 +1,7 @@
-// Khai báo API Key của Groq (Lưu ý: Trong môi trường thực tế không nên hardcode key trên frontend)
-const GROQ_API_KEY = "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";
+// API Key dành cho Chatbot trang Khách (Login/Index)
+const GROQ_API_KEY_LOGIN = "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";
+// API Key dành cho Chatbot trang Bệnh Nhân (Patient Dashboard)
+const GROQ_API_KEY_PATIENT = "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";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 // Hàm lấy thời gian hiện tại để hiển thị (VD: 10:30 AM)
@@ -28,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sendBtn = chatPopover.querySelector('.send-btn');
   const floatingChatBtn = document.getElementById('floating-chat-btn');
 
-  // Biến kiểm soát lần đầu tiên mở chat
-  let isFirstTime = true;
+  // Biến kiểm soát lần đầu tiên mở chat (bỏ qua nếu đã có tin nhắn chào sẵn trong HTML)
+  let isFirstTime = chatBody.children.length === 0;
 
   // Lắng nghe sự kiện click vào nút mở khung chat
   if (floatingChatBtn) {
@@ -71,15 +73,32 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
     }
   ];
 
+  const existingWelcome = chatBody.querySelector('.msg.ai .msg-content');
+  if (existingWelcome) {
+    messageHistory.push({
+      role: 'assistant',
+      content: existingWelcome.textContent.trim()
+    });
+  }
+
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   // 2. Hàm thêm tin nhắn vào giao diện (cả User và Bot)
   function appendMessage(text, sender) {
     const time = getCurrentTime();
     const msgDiv = document.createElement('div');
     msgDiv.className = `msg ${sender}`; // sender là 'user' hoặc 'ai'
+    const safeText = escapeHtml(text).replace(/\n/g, '<br>');
     
     msgDiv.innerHTML = `
       <div class="msg-content">
-        ${text}
+        ${safeText}
       </div>
       <span class="time">${time}</span>
     `;
@@ -96,6 +115,8 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
     const msgDiv = document.createElement('div');
     msgDiv.className = `msg ai alert`;
     msgDiv.style.borderLeftColor = 'var(--primary)';
+    const bookAction = typeof openWizardModal === 'function' ? 'openWizardModal()' : 'openLoginModal()';
+    const bookLabel = typeof openWizardModal === 'function' ? 'Đặt lịch ngay' : 'Đăng nhập để đặt lịch';
     
     msgDiv.innerHTML = `
       <div class="msg-content emergency-widget" style="background-color: var(--primary-light);">
@@ -103,9 +124,9 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
           <i data-lucide="stethoscope"></i>
           <strong>Đề xuất chuyên khoa</strong>
         </div>
-        <p style="color: var(--text-dark);">Dựa trên đánh giá sơ bộ, hệ thống khuyên bạn nên khám <strong>${specialty}</strong> để được chẩn đoán chính xác nhất.</p>
+        <p style="color: var(--text-dark);">Dựa trên đánh giá sơ bộ, hệ thống khuyên bạn nên khám <strong>${escapeHtml(specialty)}</strong> để được chẩn đoán chính xác nhất.</p>
         <div class="e-actions">
-          <button class="btn-primary" style="width: 100%;" onclick="openWizardModal()"><i data-lucide="calendar-plus"></i> Đặt lịch ngay</button>
+          <button class="btn-primary" style="width: 100%;" onclick="${bookAction}"><i data-lucide="calendar-plus"></i> ${bookLabel}</button>
         </div>
       </div>
       <span class="time">${time}</span>
@@ -123,11 +144,15 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
     messageHistory.push({ role: "user", content: userText });
 
     try {
+      // Xác định API Key dựa trên trang hiện tại
+      const isGuestPage = document.getElementById('public-chat-body') !== null || window.location.pathname.includes('login');
+      const activeApiKey = isGuestPage ? GROQ_API_KEY_LOGIN : GROQ_API_KEY_PATIENT;
+
       // Gọi fetch API
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Authorization': `Bearer ${activeApiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -139,7 +164,8 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errBody = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errBody}`);
       }
 
       const data = await response.json();
@@ -175,14 +201,20 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
 
     } catch (error) {
       console.error("Lỗi khi gọi API Groq:", error);
-      appendMessage("Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.", 'ai');
+      messageHistory.pop();
+      appendMessage("Xin lỗi, tôi đang gặp sự cố kết nối với AI. Vui lòng kiểm tra API key Groq trong script.js và thử lại.", 'ai');
     }
   }
+
+  let isSending = false;
 
   // 4. Hàm xử lý logic khi gửi tin nhắn
   async function handleSendMessage() {
     const text = chatInput.value.trim();
-    if (text === "") return; // Không làm gì nếu input rỗng
+    if (text === "" || isSending) return;
+
+    isSending = true;
+    if (sendBtn) sendBtn.disabled = true;
 
     // Xóa ô input
     chatInput.value = "";
@@ -214,17 +246,23 @@ Luôn trả về văn bản tư vấn trước, sau đó là lệnh trigger ở 
     if (typingElem) {
       typingElem.remove();
     }
+
+    isSending = false;
+    if (sendBtn) sendBtn.disabled = false;
+    chatInput.focus();
   }
 
   // 5. Gắn sự kiện click vào nút gửi
-  sendBtn.addEventListener('click', handleSendMessage);
+  if (sendBtn) sendBtn.addEventListener('click', handleSendMessage);
 
   // 6. Gắn sự kiện ấn phím Enter trong ô input
-  chatInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // Ngăn chặn hành động mặc định của Enter (nếu có)
-      handleSendMessage();
-    }
-  });
+  if (chatInput) {
+    chatInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSendMessage();
+      }
+    });
+  }
 
 });

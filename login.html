@@ -3,107 +3,260 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MedTriageAI — Đăng nhập</title>
-  <meta name="description" content="Đăng nhập vào hệ thống AI Medical Triage Dashboard." />
+  <title>MedTriageAI — Cổng thông tin & Triage Y tế</title>
+  <meta name="description" content="AI Medical Triage Landing Page for searching services, viewing doctors, and AI diagnostic chat." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="patient-styles.css" />
   <link rel="stylesheet" href="login-styles.css" />
+  <style>
+    /* Public landing specific styles */
+    .landing-header {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; z-index: 1000;
+    }
+    .landing-container {
+      max-width: 1200px; margin: calc(var(--header-h) + 40px) auto 60px; padding: 0 24px;
+    }
+    .hero-search-box {
+      display: flex; align-items: center; background: white; border-radius: 9999px;
+      padding: 8px 8px 8px 24px; border: 1px solid var(--gray-200); max-width: 700px; margin: 24px auto 0;
+      box-shadow: var(--shadow-lg); transition: var(--transition);
+    }
+    .hero-search-box:focus-within {
+      border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+    }
+    .hero-search-box input {
+      flex: 1; border: none; outline: none; font-size: 15px; padding: 0 12px; font-family: inherit;
+    }
+  </style>
 </head>
-<body>
+<body style="background-color: #F8F9FA;">
 
-  <div class="login-page">
-
-    <!-- Left — Branding Panel -->
-    <div class="brand-panel" id="brand-panel">
-      <div class="brand-bg-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-      </div>
-      <div class="brand-content">
-        <div class="brand-logo">
-          <div class="brand-logo-icon"><i data-lucide="heart-pulse"></i></div>
-          <span class="brand-logo-text">MedTriage<span class="bl-accent">AI</span></span>
-        </div>
-        <h1 class="brand-headline">Hệ thống phân loại<br/>bệnh nhân thông minh</h1>
-        <p class="brand-desc">Ứng dụng AI hỗ trợ triage, đánh giá triệu chứng và phân loại mức độ khẩn cấp — giúp bệnh nhân tiếp cận chăm sóc y tế nhanh hơn.</p>
-        <div class="brand-stats">
-          <div class="stat-item">
-            <span class="stat-number">24/7</span>
-            <span class="stat-label">Hỗ trợ liên tục</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <span class="stat-number">98.5%</span>
-            <span class="stat-label">Độ chính xác AI</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <span class="stat-number">&lt;30s</span>
-            <span class="stat-label">Phản hồi trung bình</span>
-          </div>
-        </div>
-      </div>
-      <div class="brand-footer">
-        <p>&copy; 2026 MedTriageAI. Bảo mật theo tiêu chuẩn HIPAA.</p>
-      </div>
+  <!-- ═══ PUBLIC HEADER ═══ -->
+  <header class="landing-header">
+    <div class="header-logo" id="header-logo" style="cursor: pointer;" onclick="window.location.reload()">
+      <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
+      <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
     </div>
+    <div class="header-actions">
+      <button class="btn-primary" onclick="openLoginModal()" style="border-radius: 100px; padding: 10px 24px;">
+        <i data-lucide="log-in"></i> Đăng nhập / Đăng ký
+      </button>
+    </div>
+  </header>
 
-    <!-- Right — Login Form -->
-    <div class="login-panel" id="login-panel">
-      <div class="login-container">
+  <!-- ═══ LANDING PAGE CONTENT ═══ -->
+  <div class="landing-container">
+    
+    <!-- Hero Section -->
+    <section class="premium-hero" style="text-align: center; padding: 60px 24px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.04) 0%, rgba(79, 70, 229, 0.04) 100%);">
+      <div class="hero-content">
+        <h1 style="font-size: 40px; font-weight: 800; color: var(--gray-900); margin-bottom: 16px; line-height: 1.2;">
+          Hệ thống Triage & Khám bệnh thông minh bằng AI
+        </h1>
+        <p style="font-size: 16px; color: var(--gray-600); max-width: 700px; margin: 0 auto 32px;">
+          Tư vấn phân luồng triệu chứng 24/7 tức thì với trợ lý AI. Tra cứu danh bạ chuyên gia, bác sĩ hàng đầu và dịch vụ xét nghiệm trọn gói tiện lợi.
+        </p>
 
-        <!-- Mobile logo -->
-        <div class="mobile-logo">
-          <div class="brand-logo-icon"><i data-lucide="heart-pulse"></i></div>
-          <span class="brand-logo-text">MedTriage<span class="bl-accent">AI</span></span>
+        <!-- Search Bar -->
+        <div class="hero-search-box">
+          <i data-lucide="search" style="color: var(--gray-400); width: 20px; height: 20px;"></i>
+          <input type="text" id="landing-search-input" placeholder="Nhập triệu chứng, tên bác sĩ hoặc dịch vụ khám..." onkeypress="if(event.key === 'Enter') handleSearchSubmit()">
+          <button class="btn-primary" onclick="handleSearchSubmit()" style="border-radius: 9999px; padding: 10px 24px;">Tìm kiếm</button>
         </div>
+      </div>
+    </section>
 
-        <div class="login-header" style="text-align: center; margin-bottom: 32px;">
-          <h2>Đăng nhập hệ thống</h2>
-          <p>Bấm vào vai trò của bạn để truy cập ngay</p>
+    <!-- Doctors Section -->
+    <section style="margin-top: 50px;">
+      <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h2 style="font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="stethoscope" style="color: var(--primary);"></i> Đội ngũ Bác sĩ chuyên khoa
+          </h2>
+          <p style="color: var(--gray-500); font-size: 14px; margin-top: 4px;">Danh sách chuyên gia đang trực và sẵn sàng khám bệnh</p>
         </div>
+        <button class="btn-see-all" id="btn-toggle-doctors" onclick="toggleSliderMode('landing-doctors-grid', this)">
+          <span>Xem tất cả</span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
 
-        <!-- Role Selection (Click to Login) -->
+      <div class="slider-wrapper">
+        <button class="slider-arrow prev" onclick="scrollSlider('landing-doctors-grid', -1)"><i data-lucide="chevron-left"></i></button>
+        <div class="cards-grid slider-mode" id="landing-doctors-grid">
+          <!-- Rendered dynamically -->
+        </div>
+        <button class="slider-arrow next" onclick="scrollSlider('landing-doctors-grid', 1)"><i data-lucide="chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section style="margin-top: 50px;">
+      <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h2 style="font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="package" style="color: var(--primary);"></i> Gói khám sức khỏe trọn gói
+          </h2>
+          <p style="color: var(--gray-500); font-size: 14px; margin-top: 4px;">Các gói tầm soát và kiểm tra chuyên sâu tối ưu chi phí</p>
+        </div>
+        <button class="btn-see-all" id="btn-toggle-packages" onclick="toggleSliderMode('landing-packages-grid', this)">
+          <span>Xem tất cả</span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="slider-wrapper">
+        <button class="slider-arrow prev" onclick="scrollSlider('landing-packages-grid', -1)"><i data-lucide="chevron-left"></i></button>
+        <div class="cards-grid slider-mode" id="landing-packages-grid">
+          <!-- Rendered dynamically -->
+        </div>
+        <button class="slider-arrow next" onclick="scrollSlider('landing-packages-grid', 1)"><i data-lucide="chevron-right"></i></button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ LOGIN MODAL OVERLAY ═══ -->
+  <div class="modal-overlay" id="loginModal" style="z-index: 10000;">
+    <div class="modal-content" style="max-width: 440px; padding: 32px; border-radius: 20px;">
+      <button class="close-btn" onclick="closeLoginModal()"><i data-lucide="x" style="width: 24px; height: 24px;"></i></button>
+      
+      <div class="login-header" style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-size: 22px;">Đăng nhập hệ thống</h2>
+        <p id="login-header-desc">Bấm vào vai trò của bạn để truy cập nhanh</p>
+      </div>
+
+      <!-- Mode Selection Tabs -->
+      <div style="display: flex; background: #F1F5F9; border-radius: 8px; padding: 4px; margin-bottom: 24px;">
+        <button id="tab-quick-login" class="tab-btn active" style="flex: 1; border: none; background: white; padding: 10px 12px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--primary); font-family: inherit;">Đăng nhập nhanh</button>
+        <button id="tab-form-login" class="tab-btn" style="flex: 1; border: none; background: transparent; padding: 10px 12px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--gray-500); font-family: inherit;">Tài khoản & Mật khẩu</button>
+      </div>
+
+      <!-- Panel 1: Quick Login -->
+      <div id="quick-login-panel">
         <div class="role-selection" id="role-selection">
-          <div class="role-cards" style="display: flex; flex-direction: column; gap: 16px;">
-            <button class="role-card" data-role="patient" id="role-patient" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
-              <div class="role-icon patient-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="user" style="width: 28px; height: 28px;"></i></div>
+          <div class="role-cards" style="display: flex; flex-direction: column; gap: 14px;">
+            <button class="role-card" data-role="patient" id="role-patient" style="padding: 16px; flex-direction: row; justify-content: flex-start; gap: 16px; align-items: center; width: 100%;">
+              <div class="role-icon patient-icon" style="width: 44px; height: 44px; flex-shrink: 0;"><i data-lucide="user" style="width: 20px; height: 20px;"></i></div>
               <div style="text-align: left;">
-                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Người bệnh</span>
-                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Khám bệnh & Tư vấn bằng AI</span>
+                <span class="role-name" style="font-size: 15px; margin-bottom: 2px; display: block;">Người bệnh</span>
+                <span class="role-desc" style="display: block; font-size: 12px; text-align: left;">Khám bệnh & Tư vấn bằng AI</span>
               </div>
-              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400); width: 16px;"></i>
             </button>
-            <button class="role-card" data-role="doctor" id="role-doctor" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
-              <div class="role-icon doctor-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="stethoscope" style="width: 28px; height: 28px;"></i></div>
+            <button class="role-card" data-role="doctor" id="role-doctor" style="padding: 16px; flex-direction: row; justify-content: flex-start; gap: 16px; align-items: center; width: 100%;">
+              <div class="role-icon doctor-icon" style="width: 44px; height: 44px; flex-shrink: 0;"><i data-lucide="stethoscope" style="width: 20px; height: 20px;"></i></div>
               <div style="text-align: left;">
-                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Bác sĩ</span>
-                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Quản lý lịch khám và hồ sơ bệnh nhân</span>
+                <span class="role-name" style="font-size: 15px; margin-bottom: 2px; display: block;">Bác sĩ</span>
+                <span class="role-desc" style="display: block; font-size: 12px; text-align: left;">Quản lý lịch khám & hồ sơ</span>
               </div>
-              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400); width: 16px;"></i>
             </button>
-            <button class="role-card" data-role="clinic" id="role-clinic" style="padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; align-items: center;">
-              <div class="role-icon clinic-icon" style="width: 56px; height: 56px; flex-shrink: 0;"><i data-lucide="building-2" style="width: 28px; height: 28px;"></i></div>
+            <button class="role-card" data-role="clinic" id="role-clinic" style="padding: 16px; flex-direction: row; justify-content: flex-start; gap: 16px; align-items: center; width: 100%;">
+              <div class="role-icon clinic-icon" style="width: 44px; height: 44px; flex-shrink: 0;"><i data-lucide="building-2" style="width: 20px; height: 20px;"></i></div>
               <div style="text-align: left;">
-                <span class="role-name" style="font-size: 16px; margin-bottom: 4px; display: block;">Quản lý phòng khám</span>
-                <span class="role-desc" style="display: block; font-size: 13px; text-align: left;">Vận hành hệ thống phòng khám</span>
+                <span class="role-name" style="font-size: 15px; margin-bottom: 2px; display: block;">Quản lý phòng khám</span>
+                <span class="role-desc" style="display: block; font-size: 12px; text-align: left;">Vận hành hệ thống phòng khám</span>
               </div>
-              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400);"></i>
+              <i data-lucide="arrow-right" style="margin-left: auto; color: var(--gray-400); width: 16px;"></i>
             </button>
           </div>
         </div>
+      </div>
 
+      <!-- Panel 2: Form Login -->
+      <div id="form-login-panel" style="display: none;">
+        <form class="login-form" id="login-credentials-form" autocomplete="off">
+          <div class="form-group">
+            <label for="login-email">Email hoặc Số điện thoại</label>
+            <div class="input-icon-wrap">
+              <i data-lucide="mail"></i>
+              <input type="text" id="login-email" placeholder="you@medtriage.vn hoặc SĐT..." required />
+            </div>
+          </div>
+
+          <div class="form-group" style="position: relative;">
+            <label for="login-password">Mật khẩu</label>
+            <div class="input-icon-wrap">
+              <i data-lucide="lock"></i>
+              <input type="password" id="login-password" placeholder="••••••••" required />
+              <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Hiện mật khẩu" style="top: 8px;">
+                <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top: 8px;">
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="remember-me" />
+              <span class="checkmark"></span>
+              <span style="font-size: 13px; color: var(--gray-600);">Ghi nhớ đăng nhập</span>
+            </label>
+            <a href="forgot-password.html" class="forgot-link">Quên mật khẩu?</a>
+          </div>
+
+          <button type="submit" class="login-btn" id="login-submit-btn" style="width: 100%; margin-top: 16px;">
+            <span>Đăng nhập</span>
+            <i data-lucide="log-in"></i>
+          </button>
+        </form>
+      </div>
+
+      <div style="margin-top: 24px; text-align: center;">
+        <p class="register-text">Chưa có tài khoản? <a href="register.html">Đăng ký tại đây</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FLOATING AI CHAT ═══ -->
+  <div class="floating-chat-widget" id="floating-chat-widget">
+    <div class="fab-hint-bubble" id="fab-hint-bubble" role="status" aria-live="polite">
+      <i data-lucide="sparkles" class="fab-hint-icon"></i>
+      <span>Chào bạn! Tôi là trợ lý AI — bấm vào để được tư vấn sức khỏe nhé</span>
+      <button type="button" class="fab-hint-close" onclick="dismissFabHint()" aria-label="Ẩn gợi ý">&times;</button>
+    </div>
+    <button id="floating-chat-btn" onclick="toggleFloatingChat()" aria-label="Mở trợ lý AI">
+      <i data-lucide="bot" id="fab-icon"></i>
+    </button>
+  </div>
+
+  <div class="ai-assistant floating-popover" id="ai-chat-popover" style="bottom: 110px; right: 32px; width: 380px; height: 500px; display: flex; flex-direction: column;">
+    <div class="chat-header" style="justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <i data-lucide="bot"></i>
+        <div>
+          <h3>Trợ lý MedTriage (Khách)</h3>
+          <p>Tư vấn phân luồng triệu chứng 24/7</p>
+        </div>
+      </div>
+      <button class="close-chat-btn" onclick="toggleFloatingChat()" aria-label="Đóng">
+        <i data-lucide="chevron-down"></i>
+      </button>
+    </div>
+    
+    <div class="chat-body" id="public-chat-body" style="flex: 1; padding: 20px; overflow-y: auto; background: #FAFAFA; display: flex; flex-direction: column; gap: 16px;">
+      <!-- Welcome Message -->
+      <div class="msg ai" style="align-self: flex-start; max-width: 85%;">
+        <div class="msg-content" style="background: white; border: 1px solid var(--border); border-radius: 16px; border-bottom-left-radius: 4px; padding: 12px 16px; font-size: 14px; line-height: 1.5;">
+          Xin chào! Tôi là Trợ lý AI của MedTriage. Bạn có triệu chứng bất thường nào hoặc cần tư vấn khoa khám bệnh nào không?
+        </div>
       </div>
     </div>
 
+    <div class="chat-input-area" style="align-items: center; padding: 16px; border-top: 1px solid var(--border); display: flex; gap: 12px;">
+      <input type="text" id="public-chat-input" placeholder="Nhập triệu chứng của bạn..." style="flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 20px; outline: none;">
+      <button class="send-btn" type="button"><i data-lucide="send"></i></button>
+    </div>
   </div>
 
   <script src="login-app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-

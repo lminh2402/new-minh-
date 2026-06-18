@@ -11,6 +11,48 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <link rel="stylesheet" href="shared.css" />
   <link rel="stylesheet" href="manager-styles.css" />
+  <style>
+    /* Premium Hover & Combo Chart Styles */
+    .combo-chart-bar:hover {
+      filter: brightness(1.1);
+      transform: scaleX(1.05);
+    }
+    .combo-chart-node:hover {
+      transform: translate(-50%, 50%) scale(1.4) !important;
+      background-color: #D97706 !important; /* darker orange */
+    }
+    
+    /* Premium Floating Tooltip bubble */
+    .chart-tooltip-bubble {
+      position: absolute;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(4px);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: none;
+      white-space: nowrap;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    
+    /* Line draw animation */
+    .chart-line-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLinePath 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes drawLinePath {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -20,10 +62,7 @@
       <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
       <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
     </div>
-    <div class="header-search" id="header-search">
-      <i data-lucide="search" class="search-icon"></i>
-      <input type="text" placeholder="Tìm kiếm báo cáo, bác sĩ, case…" id="search-input" />
-    </div>
+
     <div class="header-actions" id="header-actions">
       <button class="icon-btn notification-btn" id="notification-btn" aria-label="Thông báo">
         <i data-lucide="bell"></i><span class="notification-badge">5</span>
@@ -135,48 +174,78 @@
             </select>
           </div>
           
-          <!-- Mock Chart -->
-          <div style="flex: 1; position: relative; min-height: 300px; border-left: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-left: 30px; margin-bottom: 20px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px;">
-            <!-- Gridlines -->
-            <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-            <div style="position: absolute; top: 25%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-            <div style="position: absolute; top: 75%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+          <!-- Mock Chart (Premium Labeled, Animated & Interactive Combo Chart) -->
+          <div style="flex: 1; position: relative; min-height: 300px; border-left: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-left: 45px; margin-right: 40px; margin-bottom: 30px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px;">
+            <!-- Gridlines with Left (Revenue) and Right (Traffic) Y-Axis Labels -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+              <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">20M</span>
+              <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">100</span>
+            </div>
+            <div style="position: absolute; top: 25%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+              <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">15M</span>
+              <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">75</span>
+            </div>
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+              <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">10M</span>
+              <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">50</span>
+            </div>
+            <div style="position: absolute; top: 75%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+              <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">5M</span>
+              <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">25</span>
+            </div>
+            <div style="position: absolute; top: 100%; left: 0; right: 0; height: 1px; background: var(--gray-200); display: flex; align-items: center;">
+              <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">0</span>
+              <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">0</span>
+            </div>
 
-            <!-- SVG Line for Patient Count -->
+            <!-- SVG Line & Area Gradient for Patient Count -->
             <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; overflow: visible;" preserveAspectRatio="none" viewBox="0 0 100 100">
-              <path d="M7.1,70 L21.4,50 L35.7,65 L50,30 L64.3,40 L78.6,10 L92.9,60" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="7.1" cy="70" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="21.4" cy="50" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="35.7" cy="65" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="50" cy="30" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="64.3" cy="40" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="78.6" cy="10" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-              <circle cx="92.9" cy="60" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+              <defs>
+                <linearGradient id="orange-gradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25" />
+                  <stop offset="100%" stop-color="#F59E0B" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <!-- Gradient Area -->
+              <path class="chart-area" d="M7.1,70 C14.2,60 14.2,50 21.4,50 C28.5,50 28.5,65 35.7,65 C42.8,65 42.8,30 50,30 C57.1,30 57.1,40 64.3,40 C71.4,40 71.4,10 78.6,10 C85.7,10 85.7,60 92.9,60 L92.9,100 L7.1,100 Z" fill="url(#orange-gradient)" style="opacity: 0; transition: opacity 1s ease 1s;" />
+              <!-- Smooth Line Path -->
+              <path class="chart-line-path" d="M7.1,70 C14.2,60 14.2,50 21.4,50 C28.5,50 28.5,65 35.7,65 C42.8,65 42.8,30 50,30 C57.1,30 57.1,40 64.3,40 C71.4,40 71.4,10 78.6,10 C85.7,10 85.7,60 92.9,60" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
             </svg>
 
-            <!-- Bars -->
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 40%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <!-- Circle Nodes for Patient Count (Perfect circles, won't squash) -->
+            <div class="combo-chart-node" style="position: absolute; left: 7.1%; bottom: 30%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 2" data-value="30 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 21.4%; bottom: 50%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 3" data-value="50 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 35.7%; bottom: 35%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 4" data-value="35 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 50%; bottom: 70%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 5" data-value="70 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 64.3%; bottom: 60%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 6" data-value="60 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 78.6%; bottom: 90%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 7" data-value="90 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+            <div class="combo-chart-node" style="position: absolute; left: 92.9%; bottom: 40%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Chủ Nhật" data-value="40 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+
+            <!-- Bars with slide-up animations on load -->
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="40%" data-label="Thứ 2" data-value="8.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T2</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 60%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="60%" data-label="Thứ 3" data-value="12.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T3</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 45%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="45%" data-label="Thứ 4" data-value="9.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T4</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 80%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="80%" data-label="Thứ 5" data-value="16.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T5</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 65%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="65%" data-label="Thứ 6" data-value="13.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T6</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, #10B981, #6EE7B7); height: 95%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, #10B981, #6EE7B7); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);" data-height="95%" data-label="Thứ 7" data-value="19.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-900); font-weight: 700;">T7</span>
             </div>
-            <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 35%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+            <div class="combo-chart-bar" style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="35%" data-label="Chủ Nhật" data-value="7.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
               <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">CN</span>
             </div>
+
+            <!-- Floating Tooltip Container -->
+            <div id="chart-tooltip" class="chart-tooltip-bubble"></div>
           </div>
           
           <div style="display: flex; justify-content: center; gap: 24px; margin-top: 8px; font-size: 13px; font-weight: 500;">
@@ -233,7 +302,7 @@
               <div style="position: relative; margin-bottom: 24px;">
                 <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
                 <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">1 giờ trước</div>
-                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> hoàn tất thanh toán hóa đơn 4.500.000đ (Gói khám tổng quát).</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #8B5CF6;">👤 Bệnh nhân Nguyễn Thu A</strong> hoàn tất thanh toán hóa đơn 4.500.000đ (Gói khám tổng quát).</div>
               </div>
               
               <!-- Item 4: 1.5 giờ trước -->
@@ -247,7 +316,7 @@
               <div style="position: relative; margin-bottom: 24px;">
                 <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
                 <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">2 giờ trước</div>
-                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> tiếp nhận thành công 5 bệnh nhân mới đặt lịch qua App.</div>
+                <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #8B5CF6;">👤 Bệnh nhân Nguyễn Thu A</strong> đăng ký lịch khám mới thành công qua App.</div>
               </div>
 
               <!-- Item 6: 3 giờ trước -->

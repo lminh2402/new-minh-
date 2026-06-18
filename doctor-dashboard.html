@@ -25,10 +25,7 @@
       <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
       <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
     </div>
-    <div class="header-search" id="header-search">
-      <i data-lucide="search" class="search-icon"></i>
-      <input type="text" placeholder="Tìm ID, Tên bệnh nhân..." id="search-input" />
-    </div>
+
     <div class="header-actions" id="header-actions">
       <button class="icon-btn notification-btn" id="notification-btn" aria-label="Thông báo">
         <i data-lucide="bell"></i><span class="notification-badge">1</span>
@@ -70,206 +67,233 @@
       <section class="appointments-panel premium-card">
         <div class="panel-header">
           <div class="tabs">
-            <button class="tab active">Chờ khám (4)</button>
-            <button class="tab">Đã khám (2)</button>
+            <button class="tab active" id="tab-cho-kham" onclick="switchAppointmentTab('waiting', this)">Chờ khám (3)</button>
+            <button class="tab" id="tab-da-kham" onclick="switchAppointmentTab('completed', this)">Đã khám (2)</button>
           </div>
           <input type="date" class="date-filter" value="2026-05-20">
         </div>
 
-        <div class="appointment-list">
-          <!-- Item 1 (Selected) -->
-          <div class="appointment-item active">
-            <div class="item-time">
-              <strong>09:00</strong>
-              <span>30p</span>
-            </div>
-            <div class="item-details">
-              <h4>Nguyễn Văn Bệnh</h4>
-              <p>Mã BA: BN-1002</p>
-              <span class="status-badge waiting"><i data-lucide="clock" style="width: 12px;"></i> Đang chờ</span>
-            </div>
-          </div>
-
-          <!-- Item 2 -->
-          <div class="appointment-item">
-            <div class="item-time">
-              <strong>09:30</strong>
-              <span>30p</span>
-            </div>
-            <div class="item-details">
-              <h4>Trần Thị Đau</h4>
-              <p>Mã BA: BN-1003</p>
-              <span class="status-badge pending"><i data-lucide="calendar-check" style="width: 12px;"></i> Đã xác nhận</span>
-            </div>
-          </div>
-          
-          <!-- Item 3 -->
-          <div class="appointment-item">
-            <div class="item-time" style="color: var(--text-muted);">
-              <strong>10:00</strong>
-              <span>30p</span>
-            </div>
-            <div class="item-details">
-              <h4 style="color: var(--text-muted);">Lê Văn Khám</h4>
-              <p>Mã BA: BN-1004</p>
-              <span class="status-badge pending" style="background: transparent; border: 1px solid var(--border);">Chưa đến</span>
-            </div>
-          </div>
+        <div class="appointment-list" id="appointment-list-container">
+          <!-- Rendered dynamically by renderAppointments() -->
         </div>
       </section>
 
-      <!-- Right Panel: Medical Record & Prescribing -->
+      <!-- Right Panel: Medical Record -->
       <section class="record-panel">
         
-        <!-- Header -->
-        <div class="record-header">
-          <div class="patient-summary">
-            <h2>Nguyễn Văn Bệnh</h2>
-            <p>Nam • 32 tuổi • Nhóm máu O+ • <span style="color: var(--warning); font-weight: 500;">Tiền sử: Viêm loét dạ dày</span></p>
-            <div class="vitals-bar">
-              <div class="vital-badge"><i data-lucide="thermometer" class="v-icon red"></i> 38.5°C</div>
-              <div class="vital-badge"><i data-lucide="heart" class="v-icon red"></i> 95 bpm</div>
-              <div class="vital-badge"><i data-lucide="droplet" class="v-icon blue"></i> 120/80</div>
-            </div>
-          </div>
-          <div style="display: flex; gap: 8px; height: fit-content;">
-            <button class="btn-outline" style="background: white;" onclick="confirmAction('consult')"><i data-lucide="share-2" style="width: 16px;"></i> Hội chẩn</button>
-            <button class="btn-primary" style="height: fit-content;">Hoàn thành khám</button>
-          </div>
+        <!-- Empty State Placeholder -->
+        <div id="record-empty-state" style="display: none; flex: 1; flex-direction: column; justify-content: center; align-items: center; color: var(--gray-400); padding: 48px; text-align: center;">
+          <i data-lucide="folder-open" style="width: 48px; height: 48px; margin-bottom: 16px; stroke-width: 1.5; color: var(--gray-400);"></i>
+          <p style="font-size: 16px; font-weight: 600; color: var(--gray-700); margin: 0 0 6px 0;">Chưa chọn bệnh nhân</p>
+          <p style="font-size: 13px; color: var(--gray-400); margin: 0; max-width: 280px; line-height: 1.5;">Vui lòng chọn một bệnh nhân từ danh sách bên trái để xem chi tiết bệnh án.</p>
         </div>
 
-        <!-- Content Tabs -->
-        <div class="record-tabs">
-          <button class="rtab active" onclick="switchRecordTab('record-main', this)">Bệnh án & Kê đơn</button>
-          <button class="rtab" onclick="switchRecordTab('record-history', this)">Lịch sử khám</button>
-        </div>
-
-        <div class="record-content" id="record-main">
-          
-          <!-- Triage Info from AI -->
-          <div class="info-card ai-triage-widget danger">
-            <div class="widget-header">
-              <i data-lucide="bot"></i>
-              <span>Cảnh báo AI Triage</span>
-              <div class="confidence-badge">Độ tin cậy: 85%</div>
+        <div id="record-content-container" style="display: flex; flex-direction: column; flex: 1;">
+          <!-- Header -->
+          <div class="record-header">
+            <div class="patient-summary">
+              <h2 id="patient-detail-name">Nguyễn Văn Bệnh</h2>
+              <p id="patient-detail-info">Nam • 32 tuổi • Nhóm máu O+ • <span style="color: var(--warning); font-weight: 500;">Tiền sử: Viêm loét dạ dày</span></p>
+              <div class="vitals-bar" id="patient-vitals-bar">
+                <div class="vital-badge"><i data-lucide="thermometer" class="v-icon red"></i> 38.5°C</div>
+                <div class="vital-badge"><i data-lucide="heart" class="v-icon red"></i> 95 bpm</div>
+                <div class="vital-badge"><i data-lucide="droplet" class="v-icon blue"></i> 120/80</div>
+              </div>
             </div>
-            <div class="widget-body">
-              <p><strong>Triệu chứng khai báo:</strong> Đau bụng dưới bên phải, buồn nôn từ sáng nay.</p>
-              <p class="alert-message"><i data-lucide="alert-triangle"></i> Nguy cơ cao viêm ruột thừa cấp. Đề nghị chuyển siêu âm và xét nghiệm máu gấp.</p>
+            <div style="display: flex; gap: 8px; height: fit-content; align-items: center;">
+              <button class="btn-outline text-danger" id="cancel-exam-btn" style="background: white; color: #EF4444; border-color: #FECACA; display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; height: 36px; line-height: 1;" onclick="confirmAction('cancel', this)"><i data-lucide="x-circle" style="width: 16px; height: 16px;"></i> Hủy</button>
+              <button class="btn-primary" id="complete-exam-btn" onclick="completeExamination()" style="height: 36px; padding: 8px 16px; line-height: 1;">Hoàn thành khám</button>
             </div>
           </div>
 
-          <!-- Doctor Notes (SOAP Format) -->
-          <div class="info-card">
-            <div class="card-title"><i data-lucide="stethoscope"></i> Khám Lâm Sàng (SOAP)</div>
-            <div class="card-body soap-form">
-              <div class="soap-group">
-                <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                  <span>S - Triệu chứng cơ năng (Subjective)</span>
-                  <button class="btn-icon recording-btn" style="color: var(--gray-500); padding: 4px;" onclick="toggleRecording(this)" title="Nhập liệu bằng giọng nói"><i data-lucide="mic" style="width: 16px;"></i></button>
-                </label>
-                <textarea placeholder="Bệnh nhân than phiền..."></textarea>
-              </div>
-              <div class="soap-group">
-                <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                  <span>O - Khám thực thể (Objective)</span>
-                  <button class="btn-icon recording-btn" style="color: var(--gray-500); padding: 4px;" onclick="toggleRecording(this)" title="Nhập liệu bằng giọng nói"><i data-lucide="mic" style="width: 16px;"></i></button>
-                </label>
-                <textarea placeholder="Khám thấy: Bụng mềm, ấn đau hố chậu phải..."></textarea>
-              </div>
-              <div class="soap-group">
-                <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                  <span>A - Chẩn đoán (Assessment)</span>
-                  <button class="btn-outline ai-suggest-btn" style="font-size: 12px; padding: 4px 8px; color: #6D28D9; border-color: #C4B5FD; background: #F5F3FF;" onclick="alert('AI Suggestion: K35 - Viêm ruột thừa cấp')"><i data-lucide="sparkles" style="width: 14px;"></i> Gợi ý AI</button>
-                </label>
-                <input type="text" placeholder="Nhập mã ICD-10 hoặc chẩn đoán xác định..." class="soap-input">
-              </div>
-              <div class="soap-group">
-                <label>P - Hướng điều trị (Plan)</label>
-                <textarea placeholder="Nhập hướng xử trí..."></textarea>
-              </div>
-            </div>
+
+          <!-- Content Tabs -->
+          <div class="record-tabs">
+            <button class="rtab active" onclick="switchRecordTab('record-main', this)">Bệnh án & Kê đơn</button>
+            <button class="rtab" onclick="switchRecordTab('record-history', this)">Lịch sử khám</button>
           </div>
 
-          <!-- Lab Orders -->
-          <div class="info-card">
-            <div class="card-title"><i data-lucide="microscope"></i> Chỉ định Cận lâm sàng</div>
-            <div class="card-body">
-              <div class="lab-chips">
-                <button class="l-chip active">Siêu âm ổ bụng</button>
-                <button class="l-chip active">Công thức máu (CBC)</button>
-                <button class="l-chip">X-Quang ngực</button>
-                <button class="l-chip">Sinh hóa máu</button>
-                <button class="l-chip">Nội soi dạ dày</button>
-              </div>
-              <button class="btn-outline" style="margin-top: 12px; font-size: 13px;"><i data-lucide="plus"></i> Thêm chỉ định khác</button>
-            </div>
-          </div>
-
-          <!-- Prescription Form -->
-          <div class="info-card">
-            <div class="card-title"><i data-lucide="pill"></i> Kê đơn thuốc</div>
-            <div class="card-body">
-              
-              <div class="drug-autocomplete">
-                <input type="text" placeholder="Tìm tên thuốc (Gõ 'Para'...)" class="drug-input">
-              </div>
-              
-              <table class="prescription-table">
-                <thead>
-                  <tr>
-                    <th>Tên thuốc</th>
-                    <th style="width: 80px;">Đ.Dùng</th>
-                    <th style="width: 80px;">S.Lượng</th>
-                    <th>Cách dùng / Liều lượng</th>
-                    <th style="width: 40px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Paracetamol 500mg</strong></td>
-                    <td>Uống</td>
-                    <td><input type="number" value="10" class="qty-input"></td>
-                    <td><input type="text" value="Ngày 2 lần, mỗi lần 1 viên sau ăn." class="dose-input"></td>
-                    <td><button class="btn-icon danger"><i data-lucide="trash-2"></i></button></td>
-                  </tr>
-                </tbody>
-              </table>
-              <button class="btn-outline" style="margin-top: 12px; font-size: 13px;"><i data-lucide="plus"></i> Thêm thuốc</button>
-            </div>
-          </div>
-
-        </div> <!-- End record-main -->
-
-        <!-- Tab Lịch sử -->
-        <div class="record-content" id="record-history" style="display: none; padding: 20px;">
-          <div class="timeline-container" style="position: relative; padding-left: 24px;">
-            <div style="position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--gray-200);"></div>
+          <div class="record-content" id="record-main">
             
-            <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
-              <div style="position: absolute; left: -24px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 4px solid white; box-shadow: 0 0 0 1px var(--primary-light);"></div>
-              <div class="tl-date" style="font-size: 13px; color: var(--gray-500); font-weight: 500; margin-bottom: 4px;">10/04/2026</div>
-              <div class="tl-content info-card" style="padding: 16px;">
-                <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Khám nội tiêu hóa</h4>
-                <p style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;"><strong>CĐ:</strong> Viêm loét dạ dày tá tràng (K27)</p>
-                <div style="display: flex; gap: 8px;">
-                  <button class="btn-outline" style="font-size: 12px; padding: 4px 8px; background: white;"><i data-lucide="file-text" style="width: 14px;"></i> Đơn thuốc cũ</button>
-                  <button class="btn-outline" style="font-size: 12px; padding: 4px 8px; background: white;"><i data-lucide="image" style="width: 14px;"></i> Kết quả Nội soi</button>
+            <!-- Triage Info from AI -->
+            <div class="info-card ai-triage-widget danger" id="patient-triage-widget">
+              <div class="widget-header">
+                <i data-lucide="bot"></i>
+                <span>Cảnh báo AI Triage</span>
+                <div class="confidence-badge" id="patient-triage-confidence">Độ tin cậy: 85%</div>
+              </div>
+              <div class="widget-body">
+                <p id="patient-triage-symptoms"><strong>Triệu chứng khai báo:</strong> Đau bụng dưới bên phải, buồn nôn từ sáng nay.</p>
+                <p class="alert-message" id="patient-triage-alert"><i data-lucide="alert-triangle"></i> Nguy cơ cao viêm ruột thừa cấp. Đề nghị chuyển siêu âm và xét nghiệm máu gấp.</p>
+              </div>
+            </div>
+
+            <!-- Doctor Notes (SOAP Format) -->
+            <div class="info-card">
+              <div class="card-title"><i data-lucide="stethoscope"></i> Khám Lâm Sàng (SOAP)</div>
+              <div class="card-body soap-form">
+                <div class="soap-group">
+                  <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span>S - Triệu chứng cơ năng (Subjective)</span>
+                    <button class="btn-icon recording-btn" style="color: var(--gray-500); padding: 4px;" onclick="toggleRecording(this)" title="Nhập liệu bằng giọng nói"><i data-lucide="mic" style="width: 16px;"></i></button>
+                  </label>
+                  <textarea id="soap-s" placeholder="Bệnh nhân than phiền..." oninput="saveCurrentPatientData()"></textarea>
+                </div>
+                <div class="soap-group">
+                  <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span>O - Khám thực thể (Objective)</span>
+                    <button class="btn-icon recording-btn" style="color: var(--gray-500); padding: 4px;" onclick="toggleRecording(this)" title="Nhập liệu bằng giọng nói"><i data-lucide="mic" style="width: 16px;"></i></button>
+                  </label>
+                  <textarea id="soap-o" placeholder="Khám thấy: Bụng mềm, ấn đau hố chậu phải..." oninput="saveCurrentPatientData()"></textarea>
+                </div>
+
+                <div class="soap-group" style="position: relative;">
+                  <label style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span>A - Chẩn đoán (Assessment)</span>
+                    <button type="button" class="btn-outline ai-suggest-btn" style="font-size: 12px; padding: 4px 8px; color: #6D28D9; border-color: #C4B5FD; background: #F5F3FF;" onclick="toggleAISuggestionBox()"><i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Gợi ý AI</button>
+                  </label>
+                  <input type="text" id="diagnose-input" placeholder="Nhập mã ICD-10 hoặc chẩn đoán xác định..." class="soap-input" oninput="saveCurrentPatientData()">
+                  
+                  <!-- AI Diagnosis Suggestion Panel -->
+                  <div id="ai-suggestion-box" class="ai-suggestion-box" style="display: none;">
+                    <div class="ai-suggestion-header">
+                      <div class="ai-suggestion-title">
+                        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                        <span>Gợi ý chẩn đoán từ AI</span>
+                      </div>
+                      <button type="button" class="ai-suggestion-close" onclick="toggleAISuggestionBox(false)">
+                        <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                      </button>
+                    </div>
+                    <div class="ai-suggestion-list">
+                      <div class="ai-suggestion-item" onclick="selectDiagnosis('K35 - Viêm ruột thừa cấp')">
+                        <span style="font-size: 13.5px; color: var(--gray-800);"><strong style="color: #6D28D9;">K35</strong> - Viêm ruột thừa cấp</span>
+                        <span class="ai-suggest-badge">Độ tin cậy 92%</span>
+                      </div>
+                      <div class="ai-suggestion-item" onclick="selectDiagnosis('K35.9 - Viêm ruột thừa cấp không xác định')">
+                        <span style="font-size: 13.5px; color: var(--gray-800);"><strong style="color: #6D28D9;">K35.9</strong> - Viêm ruột thừa cấp không xác định</span>
+                        <span class="ai-suggest-badge" style="color: #4F46E5; background: #EEF2FF; border-color: #C7D2FE;">Độ tin cậy 74%</span>
+                      </div>
+                      <div class="ai-suggestion-item" onclick="selectDiagnosis('K52.9 - Viêm dạ dày ruột phi nhiễm trùng')">
+                        <span style="font-size: 13.5px; color: var(--gray-800);"><strong style="color: #6D28D9;">K52.9</strong> - Viêm dạ dày ruột phi nhiễm trùng</span>
+                        <span class="ai-suggest-badge" style="color: #6B7280; background: #F3F4F6; border-color: #E5E7EB;">Độ tin cậy 45%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="soap-group">
+                  <label>P - Hướng điều trị (Plan)</label>
+                  <textarea id="soap-p" placeholder="Nhập hướng xử trí..." oninput="saveCurrentPatientData()"></textarea>
                 </div>
               </div>
             </div>
 
-            <div class="timeline-item" style="position: relative;">
-              <div style="position: absolute; left: -24px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--gray-400); border: 4px solid white; box-shadow: 0 0 0 1px var(--gray-200);"></div>
-              <div class="tl-date" style="font-size: 13px; color: var(--gray-500); font-weight: 500; margin-bottom: 4px;">15/01/2026</div>
-              <div class="tl-content info-card" style="padding: 16px;">
-                <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Khám tổng quát</h4>
-                <p style="font-size: 14px; color: var(--gray-700);">Không phát hiện bất thường nghiêm trọng. Men gan hơi cao, đã tư vấn chế độ ăn uống.</p>
+            <!-- Lab Orders -->
+            <div class="info-card">
+              <div class="card-title"><i data-lucide="microscope"></i> Chỉ định Cận lâm sàng</div>
+              <div class="card-body">
+                <div class="lab-chips">
+                  <button class="l-chip active">Siêu âm ổ bụng</button>
+                  <button class="l-chip active">Công thức máu (CBC)</button>
+                  <button class="l-chip">X-Quang ngực</button>
+                  <button class="l-chip">Sinh hóa máu</button>
+                  <button class="l-chip">Nội soi dạ dày</button>
+                </div>
+                
+                <button class="btn-outline" id="add-order-btn" onclick="toggleAddOrderForm()" style="margin-top: 12px; font-size: 13px;"><i data-lucide="plus" style="width: 14px; height: 14px;"></i> Thêm chỉ định khác</button>
+                
+                <!-- Inline Quick-Add Clinical Order Form -->
+                <div id="add-order-form" style="display: none; margin-top: 12px; padding: 16px; background: #F8FAFC; border: 1px solid var(--gray-200); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-direction: column; gap: 10px; animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+                  <div style="display: flex; gap: 8px;">
+                    <input type="text" id="new-order-input" placeholder="Nhập tên chỉ định khác (ví dụ: Chụp CT ổ bụng)..." style="flex: 1; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 13px; outline: none; background: white;">
+                    <button type="button" class="btn-primary" onclick="addNewOrder()" style="padding: 8px 16px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: 8px;"><i data-lucide="plus" style="width: 14px; height: 14px;"></i> Thêm</button>
+                  </div>
+                  <div style="margin-top: 6px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--gray-500); margin-bottom: 6px;">Gợi ý chỉ định nhanh:</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                      <span class="suggest-chip" onclick="addSuggestedOrder('Chụp CT ổ bụng')">Chụp CT ổ bụng</span>
+                      <span class="suggest-chip" onclick="addSuggestedOrder('Xét nghiệm nước tiểu')">Xét nghiệm nước tiểu</span>
+                      <span class="suggest-chip" onclick="addSuggestedOrder('Điện tâm đồ (ECG)')">Điện tâm đồ (ECG)</span>
+                      <span class="suggest-chip" onclick="addSuggestedOrder('Siêu âm tuyến giáp')">Siêu âm tuyến giáp</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div> <!-- End record-history -->
 
+            <!-- Prescription Form -->
+            <div class="info-card">
+              <div class="card-title"><i data-lucide="pill"></i> Kê đơn thuốc</div>
+              <div class="card-body">
+                
+                <div class="drug-autocomplete" style="position: relative;">
+                  <input type="text" placeholder="Tìm tên thuốc (Gõ 'Para', 'Amo', 'Ibu'...)" class="drug-input" id="drug-input" autocomplete="off">
+                  <div class="autocomplete-list" id="drug-autocomplete-list" style="display: none;"></div>
+                </div>
+                
+                <table class="prescription-table">
+                  <thead>
+                    <tr>
+                      <th>Tên thuốc</th>
+                      <th style="width: 100px;">Đ.Dùng</th>
+                      <th style="width: 80px;">S.Lượng</th>
+                      <th>Cách dùng / Liều lượng</th>
+                      <th style="width: 40px;"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Paracetamol 500mg</strong></td>
+                      <td>
+                        <select class="qty-input" style="padding: 4px 8px; width: 100px; font-family: inherit;">
+                          <option value="Uống" selected>Uống</option>
+                          <option value="Tiêm">Tiêm</option>
+                          <option value="Bôi">Bôi</option>
+                          <option value="Đặt">Đặt</option>
+                        </select>
+                      </td>
+                      <td><input type="number" value="10" class="qty-input"></td>
+                      <td><input type="text" value="Ngày 2 lần, mỗi lần 1 viên sau ăn." class="dose-input"></td>
+                      <td><button type="button" class="btn-icon danger" onclick="removePrescriptionRow(this)"><i data-lucide="trash-2"></i></button></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button type="button" class="btn-outline" onclick="addNewDrugManual()" style="margin-top: 12px; font-size: 13px;"><i data-lucide="plus" style="width: 14px; height: 14px;"></i> Thêm thuốc</button>
+              </div>
+            </div>
+
+          </div> <!-- End record-main -->
+
+          <!-- Tab Lịch sử -->
+          <div class="record-content" id="record-history" style="display: none; padding: 20px;">
+            <div class="timeline-container" style="position: relative; padding-left: 24px;">
+              <div style="position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--gray-200);"></div>
+              
+              <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
+                <div style="position: absolute; left: -24px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 4px solid white; box-shadow: 0 0 0 1px var(--primary-light);"></div>
+                <div class="tl-date" style="font-size: 13px; color: var(--gray-500); font-weight: 500; margin-bottom: 4px;">10/04/2026</div>
+                <div class="tl-content info-card" style="padding: 16px;">
+                  <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Khám nội tiêu hóa</h4>
+                  <p style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;"><strong>CĐ:</strong> Viêm loét dạ dày tá tràng (K27)</p>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn-outline" style="font-size: 12px; padding: 4px 8px; background: white;"><i data-lucide="file-text" style="width: 14px;"></i> Đơn thuốc cũ</button>
+                    <button class="btn-outline" style="font-size: 12px; padding: 4px 8px; background: white;"><i data-lucide="image" style="width: 14px;"></i> Kết quả Nội soi</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item" style="position: relative;">
+                <div style="position: absolute; left: -24px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--gray-400); border: 4px solid white; box-shadow: 0 0 0 1px var(--gray-200);"></div>
+                <div class="tl-date" style="font-size: 13px; color: var(--gray-500); font-weight: 500; margin-bottom: 4px;">15/01/2026</div>
+                <div class="tl-content info-card" style="padding: 16px;">
+                  <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Khám tổng quát</h4>
+                  <p style="font-size: 14px; color: var(--gray-700);">Không phát hiện bất thường nghiêm trọng. Men gan hơi cao, đã tư vấn chế độ ăn uống.</p>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End record-history -->
+        </div>
       </section>
 
     </div>
@@ -900,8 +924,64 @@
       <!-- Main Chart Area (Placeholder) -->
       <div class="info-card" style="padding: 24px;">
         <h3 style="font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 24px;">Thống kê ca bệnh theo tuần</h3>
-        <div style="height: 300px; background: #F1F5F9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px dashed #CBD5E1;">
-          <p style="color: var(--gray-500); font-weight: 500;"><i data-lucide="bar-chart" style="margin-right: 8px; display: inline-block; vertical-align: middle;"></i> Biểu đồ sẽ hiển thị tại đây</p>
+        <div style="height: 300px; position: relative; padding: 20px 20px 30px 40px; display: flex; flex-direction: column; justify-content: flex-end; background: white; border-radius: 16px; border: 1px solid var(--gray-200); box-shadow: inset 0 -10px 20px rgba(0,0,0,0.01);">
+          <!-- Y Axis Gridlines -->
+          <div style="position: absolute; top: 20px; left: 40px; right: 20px; height: 1px; background: var(--gray-100); display: flex; align-items: center;"><span style="position: absolute; left: -25px; font-size: 11px; color: var(--gray-400); font-weight: 500;">30</span></div>
+          <div style="position: absolute; top: 90px; left: 40px; right: 20px; height: 1px; background: var(--gray-100); display: flex; align-items: center;"><span style="position: absolute; left: -25px; font-size: 11px; color: var(--gray-400); font-weight: 500;">20</span></div>
+          <div style="position: absolute; top: 160px; left: 40px; right: 20px; height: 1px; background: var(--gray-100); display: flex; align-items: center;"><span style="position: absolute; left: -25px; font-size: 11px; color: var(--gray-400); font-weight: 500;">10</span></div>
+          <div style="position: absolute; top: 230px; left: 40px; right: 20px; height: 1px; background: var(--gray-100); display: flex; align-items: center;"><span style="position: absolute; left: -25px; font-size: 11px; color: var(--gray-400); font-weight: 500;">0</span></div>
+          
+          <!-- Bars Container -->
+          <div style="position: relative; height: 210px; display: flex; justify-content: space-around; align-items: flex-end; z-index: 2;">
+            <!-- Bar 1 (T2: 18 ca -> height: 60%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">18 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="60%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T2</span>
+            </div>
+            
+            <!-- Bar 2 (T3: 24 ca -> height: 80%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">24 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="80%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T3</span>
+            </div>
+            
+            <!-- Bar 3 (T4: 15 ca -> height: 50%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">15 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="50%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T4</span>
+            </div>
+            
+            <!-- Bar 4 (T5: 28 ca -> height: 93%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">28 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="93%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T5</span>
+            </div>
+            
+            <!-- Bar 5 (T6: 22 ca -> height: 73%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">22 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="73%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T6</span>
+            </div>
+            
+            <!-- Bar 6 (T7: 12 ca -> height: 40%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">12 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="40%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">T7</span>
+            </div>
+            
+            <!-- Bar 7 (CN: 8 ca -> height: 27%) -->
+            <div class="weekly-bar-wrapper" style="width: 8%; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; position: relative;">
+              <div class="weekly-bar-tooltip" style="position: absolute; top: -35px; background: var(--gray-900); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">8 ca</div>
+              <div class="weekly-bar" style="width: 100%; height: 0%; background: linear-gradient(to top, var(--primary), var(--primary-light)); border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);" data-height="27%"></div>
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 500; position: absolute; bottom: -24px;">CN</span>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -988,7 +1068,7 @@
           </div>
         </div>
         
-        <div class="chat-messages" style="background-image: radial-gradient(var(--gray-300) 1px, transparent 0); background-size: 20px 20px;">
+        <div id="doctor-chat-messages" class="chat-messages" style="background-image: radial-gradient(var(--gray-300) 1px, transparent 0); background-size: 20px 20px;">
           <div class="msg-bubble msg-received" style="box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: none;">
             Bác sĩ ơi, từ sáng nay em uống Paracetamol xong thì cứ bị buồn nôn. Cho em hỏi có sao không ạ?
             <div style="font-size: 11px; color: var(--gray-400); text-align: right; margin-top: 4px;">09:12 AM</div>
@@ -1022,8 +1102,8 @@
           <!-- AI Suggestions inside Input Area -->
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 12px; font-weight: 700; color: #6D28D9; display: flex; align-items: center; background: #F5F3FF; padding: 4px 10px; border-radius: 100px;"><i data-lucide="sparkles" style="width:12px; margin-right:4px;"></i> Gợi ý:</span>
-            <div class="ai-chip" style="background: white; border: 1px solid var(--gray-200); color: var(--gray-700); padding: 4px 12px; font-size: 12px; border-radius: 100px; cursor: pointer;"><i data-lucide="coffee" style="width: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Khuyên ăn nhẹ</div>
-            <div class="ai-chip" style="background: white; border: 1px solid var(--gray-200); color: var(--gray-700); padding: 4px 12px; font-size: 12px; border-radius: 100px; cursor: pointer;"><i data-lucide="clock" style="width: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Theo dõi thêm</div>
+            <div class="ai-chip" style="background: white; border: 1px solid var(--gray-200); color: var(--gray-700); padding: 4px 12px; font-size: 12px; border-radius: 100px; cursor: pointer;" onclick="fillDoctorChat('Chào em, em nên ăn nhẹ một chút cháo hoặc bánh mì để lót dạ nhé.')"><i data-lucide="coffee" style="width: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Khuyên ăn nhẹ</div>
+            <div class="ai-chip" style="background: white; border: 1px solid var(--gray-200); color: var(--gray-700); padding: 4px 12px; font-size: 12px; border-radius: 100px; cursor: pointer;" onclick="fillDoctorChat('Em cứ theo dõi thêm đến chiều nay, nếu vẫn buồn nôn thì nhắn lại cho bác sĩ.')"><i data-lucide="clock" style="width: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Theo dõi thêm</div>
           </div>
 
           <!-- Real Input Wrapper -->
@@ -1031,9 +1111,9 @@
             <button class="btn-outline" style="border:none;background:transparent;box-shadow:none;width:32px;height:32px;padding:0; color: var(--gray-500); display:flex; justify-content:center; align-items:center;"><i data-lucide="paperclip" style="width: 18px;"></i></button>
             <button class="btn-outline" style="border:none;background:transparent;box-shadow:none;width:32px;height:32px;padding:0; color: var(--gray-500); display:flex; justify-content:center; align-items:center;"><i data-lucide="camera" style="width: 18px;"></i></button>
             
-            <input type="text" class="chat-input" placeholder="Phản hồi Nguyễn Văn Bệnh..." style="font-size: 14px; flex: 1; border: none; outline: none; background: transparent; padding: 8px 0;">
+            <input type="text" id="doctor-chat-input" class="chat-input" placeholder="Phản hồi Nguyễn Văn Bệnh..." onkeypress="handleDoctorChatKeypress(event)" style="font-size: 14px; flex: 1; border: none; outline: none; background: transparent; padding: 8px 0;">
             
-            <button class="btn-send" style="background: linear-gradient(135deg, var(--primary), var(--primary-hover)); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white;"><i data-lucide="send" style="width: 16px; margin-left: -2px;"></i></button>
+            <button class="btn-send" onclick="sendDoctorChatMessage()" style="background: linear-gradient(135deg, var(--primary), var(--primary-hover)); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white;"><i data-lucide="send" style="width: 16px; margin-left: -2px;"></i></button>
           </div>
         </div>
       </div>
@@ -1135,12 +1215,220 @@
       document.getElementById('videoCallModal').style.display = 'none';
     });
 
-    // Auto-complete simple interaction
-    const drugInput = document.querySelector('.drug-input');
-    const acList = document.querySelector('.autocomplete-list');
-    if(drugInput && acList) {
-      drugInput.addEventListener('focus', () => acList.style.display = 'block');
-      drugInput.addEventListener('blur', () => setTimeout(() => acList.style.display = 'none', 200));
+    // AI Suggestion Box Toggle & Auto-fill
+    function toggleAISuggestionBox(show) {
+      const box = document.getElementById('ai-suggestion-box');
+      if (!box) return;
+      if (show === undefined) {
+        box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      } else {
+        box.style.display = show ? 'block' : 'none';
+      }
+    }
+
+    function selectDiagnosis(val) {
+      const input = document.getElementById('diagnose-input');
+      if (input) {
+        input.value = val;
+        
+        // Add a beautiful glow animation
+        input.style.transition = 'all 0.2s';
+        input.style.borderColor = '#8B5CF6';
+        input.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.2)';
+        input.style.background = '#F5F3FF';
+        
+        setTimeout(() => {
+          input.style.borderColor = '';
+          input.style.boxShadow = '';
+          input.style.background = '';
+        }, 1000);
+      }
+      toggleAISuggestionBox(false);
+    }
+
+    // Toggle Order Form
+    function toggleAddOrderForm(show) {
+      const form = document.getElementById('add-order-form');
+      if (!form) return;
+      if (show === undefined) {
+        form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+      } else {
+        form.style.display = show ? 'flex' : 'none';
+      }
+      if (form.style.display === 'flex') {
+        document.getElementById('new-order-input').focus();
+      }
+    }
+
+    // Add Clinical Orders
+    function addNewOrder() {
+      const input = document.getElementById('new-order-input');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) {
+        input.focus();
+        return;
+      }
+      addSuggestedOrder(val);
+      input.value = '';
+      toggleAddOrderForm(false);
+    }
+
+    function addSuggestedOrder(name) {
+      const chipsContainer = document.querySelector('.lab-chips');
+      if (!chipsContainer) return;
+      
+      // Check if it already exists to prevent duplicate chips
+      let exists = false;
+      const existingChips = chipsContainer.querySelectorAll('.l-chip');
+      existingChips.forEach(chip => {
+        if (chip.textContent.trim().toLowerCase() === name.toLowerCase()) {
+          chip.classList.add('active');
+          exists = true;
+        }
+      });
+      
+      if (!exists) {
+        const btn = document.createElement('button');
+        btn.className = 'l-chip active';
+        btn.textContent = name;
+        chipsContainer.appendChild(btn);
+      }
+    }
+
+    // Toggle active state of chips
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('l-chip')) {
+        e.target.classList.toggle('active');
+      }
+    });
+
+    // Drug Autocomplete Logic
+    const mockDrugs = [
+      { name: "Paracetamol 500mg", route: "Uống", qty: 10, dose: "Ngày 2 lần, mỗi lần 1 viên sau ăn." },
+      { name: "Amoxicillin 500mg", route: "Uống", qty: 14, dose: "Ngày 2 lần, mỗi lần 1 viên sau ăn." },
+      { name: "Ibuprofen 400mg", route: "Uống", qty: 10, dose: "Ngày 2 lần, mỗi lần 1 viên sau ăn, no." },
+      { name: "Gaviscon hỗn dịch", route: "Uống", qty: 20, dose: "Ngày 3 lần, mỗi lần 1 gói sau ăn." },
+      { name: "Omeprazole 20mg", route: "Uống", qty: 14, dose: "Ngày 1 lần, 1 viên trước ăn sáng 30 phút." },
+      { name: "Rutozym", route: "Uống", qty: 30, dose: "Ngày 2 lần, mỗi lần 1 viên." },
+      { name: "Loperamide 2mg", route: "Uống", qty: 6, dose: "Ngày 2 lần, mỗi lần 1 viên khi tiêu chảy." },
+      { name: "Aspirin 81mg", route: "Uống", qty: 30, dose: "Ngày 1 lần, mỗi lần 1 viên sau ăn sáng." }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('videoCallModal').style.display = 'none';
+      
+      const drugInput = document.getElementById('drug-input');
+      const acList = document.getElementById('drug-autocomplete-list');
+      
+      if (drugInput && acList) {
+        drugInput.addEventListener('input', () => {
+          const query = drugInput.value.trim().toLowerCase();
+          if (!query) {
+            acList.innerHTML = '';
+            acList.style.display = 'none';
+            return;
+          }
+          
+          const filtered = mockDrugs.filter(d => d.name.toLowerCase().includes(query));
+          if (filtered.length === 0) {
+            acList.innerHTML = `<div style="padding: 10px 14px; color: var(--gray-400); font-size: 13px;">Không tìm thấy kết quả</div>`;
+            acList.style.display = 'block';
+            return;
+          }
+          
+          acList.innerHTML = filtered.map(d => `
+            <div class="ac-item" onclick="selectDrugFromAC('${d.name}', '${d.route}', ${d.qty}, '${d.dose}')">
+              <span>${d.name}</span>
+              <span style="font-size: 11px; background: #EEF2FF; color: var(--primary); padding: 2px 6px; border-radius: 4px;">Chọn</span>
+            </div>
+          `).join('');
+          acList.style.display = 'block';
+        });
+
+        drugInput.addEventListener('focus', () => {
+          if (drugInput.value.trim()) {
+            acList.style.display = 'block';
+          }
+        });
+
+        // Close AC list when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!drugInput.contains(e.target) && !acList.contains(e.target)) {
+            acList.style.display = 'none';
+          }
+        });
+      }
+    });
+
+    function selectDrugFromAC(name, route, qty, dose) {
+      addPrescriptionRow(name, route, qty, dose);
+      const drugInput = document.getElementById('drug-input');
+      if (drugInput) drugInput.value = '';
+      const acList = document.getElementById('drug-autocomplete-list');
+      if (acList) acList.style.display = 'none';
+    }
+
+    function addNewDrugManual() {
+      const drugInput = document.getElementById('drug-input');
+      if (!drugInput) return;
+      const name = drugInput.value.trim() || "Thuốc mới";
+      addPrescriptionRow(name, "Uống", 10, "Ngày 2 lần, mỗi lần 1 viên sau ăn.");
+      drugInput.value = '';
+      const acList = document.getElementById('drug-autocomplete-list');
+      if (acList) acList.style.display = 'none';
+    }
+
+    function addPrescriptionRow(name, route, qty, dose) {
+      const tbody = document.querySelector('.prescription-table tbody');
+      if (!tbody) return;
+      
+      const tr = document.createElement('tr');
+      tr.style.opacity = '0';
+      tr.style.transform = 'translateY(6px)';
+      tr.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+      
+      tr.innerHTML = `
+        <td><strong>${name}</strong></td>
+        <td>
+          <select class="qty-input" style="padding: 4px 8px; width: 100px; font-family: inherit;">
+            <option value="Uống" ${route === 'Uống' ? 'selected' : ''}>Uống</option>
+            <option value="Tiêm" ${route === 'Tiêm' ? 'selected' : ''}>Tiêm</option>
+            <option value="Bôi" ${route === 'Bôi' ? 'selected' : ''}>Bôi</option>
+            <option value="Đặt" ${route === 'Đặt' ? 'selected' : ''}>Đặt</option>
+          </select>
+        </td>
+        <td><input type="number" value="${qty}" class="qty-input"></td>
+        <td><input type="text" value="${dose}" class="dose-input"></td>
+        <td><button type="button" class="btn-icon danger" onclick="removePrescriptionRow(this)"><i data-lucide="trash-2"></i></button></td>
+      `;
+      tbody.appendChild(tr);
+      
+      // Trigger animations
+      requestAnimationFrame(() => {
+        tr.style.opacity = '1';
+        tr.style.transform = 'translateY(0)';
+      });
+
+      // Update Lucide icons for the newly added button
+      if (window.lucide) {
+        window.lucide.createIcons({
+          attrs: {
+            class: 'lucide'
+          }
+        });
+      }
+    }
+
+    function removePrescriptionRow(btn) {
+      const row = btn.closest('tr');
+      if (!row) return;
+      row.style.opacity = '0';
+      row.style.transform = 'scale(0.95)';
+      row.style.transition = 'all 0.2s ease';
+      setTimeout(() => {
+        row.remove();
+      }, 200);
     }
 
     // Tab switching logic
@@ -1152,6 +1440,21 @@
       if(element) element.classList.add('active');
     }
 
+    function confirmAction(action, btn) {
+      if (action === 'cancel') {
+        if (confirm("Bạn có chắc chắn muốn hủy ca khám này?")) {
+          const apt = appointments.find(a => a.id === selectedAppointmentId);
+          if (apt) {
+            apt.status = 'cancelled';
+            apt.statusText = 'Đã hủy';
+            showToast(`Đã hủy ca khám cho bệnh nhân ${apt.name} thành công!`);
+            renderAppointments();
+            selectAppointment(apt.id);
+          }
+        }
+      }
+    }
+
     // Inner Record Tab switching
     function switchRecordTab(viewId, element) {
       document.getElementById('record-main').style.display = 'none';
@@ -1161,6 +1464,39 @@
       
       document.querySelectorAll('.record-tabs .rtab').forEach(el => el.classList.remove('active'));
       if(element) element.classList.add('active');
+    }
+
+    // Chat functionalities
+    function handleDoctorChatKeypress(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendDoctorChatMessage();
+      }
+    }
+
+    function sendDoctorChatMessage() {
+      var input = document.getElementById('doctor-chat-input');
+      var container = document.getElementById('doctor-chat-messages');
+      var message = input.value.trim();
+      
+      if (message !== '') {
+        var time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        var msgHtml = `
+          <div class="msg-bubble msg-sent" style="background: linear-gradient(135deg, var(--primary), var(--primary-hover)); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); animation: slideInRight 0.3s ease;">
+            ${message}
+            <div style="font-size: 11px; color: rgba(255,255,255,0.7); text-align: right; margin-top: 4px;">${time}</div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', msgHtml);
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    function fillDoctorChat(text) {
+      var input = document.getElementById('doctor-chat-input');
+      input.value = text;
+      input.focus();
     }
 
     // Recording toggle
@@ -1201,6 +1537,512 @@
       }
     `;
     document.head.appendChild(styleSheet);
+
+    // Appointments Data State
+    let appointments = [
+      {
+        id: "BN-1002",
+        name: "Nguyễn Văn Bệnh",
+        time: "09:00",
+        duration: "30p",
+        status: "waiting", // "waiting", "completed", "cancelled", "confirmed", "noshow"
+        statusText: "Đang chờ",
+        gender: "Nam",
+        age: 32,
+        blood: "O+",
+        history: "Viêm loét dạ dày",
+        temp: "38.5°C",
+        pulse: "95 bpm",
+        bp: "120/80",
+        symptoms: "Đau bụng dưới bên phải, buồn nôn từ sáng nay.",
+        triageAlert: "Nguy cơ cao viêm ruột thừa cấp. Đề nghị chuyển siêu âm và xét nghiệm máu gấp.",
+        triageConfidence: "85%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: ["Siêu âm ổ bụng", "Công thức máu (CBC)"],
+        prescriptions: [
+          { name: "Paracetamol 500mg", route: "Uống", qty: 10, dose: "Ngày 2 lần, mỗi lần 1 viên sau ăn." }
+        ]
+      },
+      {
+        id: "BN-1003",
+        name: "Trần Thị Đau",
+        time: "09:30",
+        duration: "30p",
+        status: "confirmed",
+        statusText: "Đã xác nhận",
+        gender: "Nữ",
+        age: 45,
+        blood: "A-",
+        history: "Cao huyết áp",
+        temp: "37.2°C",
+        pulse: "80 bpm",
+        bp: "130/85",
+        symptoms: "Đau đầu dữ dội, chóng mặt kéo dài.",
+        triageAlert: "Theo dõi cơn tăng huyết áp kịch phát.",
+        triageConfidence: "70%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: ["Sinh hóa máu"],
+        prescriptions: []
+      },
+      {
+        id: "BN-1004",
+        name: "Lê Văn Khám",
+        time: "10:00",
+        duration: "30p",
+        status: "noshow",
+        statusText: "Chưa đến",
+        gender: "Nam",
+        age: 28,
+        blood: "B+",
+        history: "Dị ứng phấn hoa",
+        temp: "36.8°C",
+        pulse: "72 bpm",
+        bp: "115/75",
+        symptoms: "Hắt hơi, sổ mũi liên tục 3 ngày.",
+        triageAlert: "Viêm mũi dị ứng thời tiết.",
+        triageConfidence: "90%",
+        subjective: "",
+        objective: "",
+        assessment: "",
+        plan: "",
+        orders: [],
+        prescriptions: []
+      },
+      {
+        id: "BN-1005",
+        name: "Phạm Văn Khỏe",
+        time: "10:30",
+        duration: "30p",
+        status: "completed",
+        statusText: "Đã khám",
+        gender: "Nam",
+        age: 50,
+        blood: "O-",
+        history: "Không có",
+        temp: "36.5°C",
+        pulse: "68 bpm",
+        bp: "120/80",
+        symptoms: "Khám sức khỏe định kỳ.",
+        triageAlert: "Chỉ số bình thường.",
+        triageConfidence: "95%",
+        subjective: "Khám định kỳ",
+        objective: "Các cơ quan bình thường",
+        assessment: "Khám sức khỏe tổng quát",
+        plan: "Tiếp tục duy trì lối sống lành mạnh.",
+        orders: ["Sinh hóa máu", "Nội soi dạ dày"],
+        prescriptions: []
+      },
+      {
+        id: "BN-1006",
+        name: "Hoàng Thị Yếu",
+        time: "11:00",
+        duration: "30p",
+        status: "completed",
+        statusText: "Đã khám",
+        gender: "Nữ",
+        age: 65,
+        blood: "AB+",
+        history: "Đái tháo đường Tuýp 2",
+        temp: "36.7°C",
+        pulse: "78 bpm",
+        bp: "125/82",
+        symptoms: "Tê bì tay chân, mệt mỏi.",
+        triageAlert: "Theo dõi biến chứng thần kinh ngoại vi do đái tháo đường.",
+        triageConfidence: "80%",
+        subjective: "Tê bì đầu ngón tay",
+        objective: "Đường huyết đói 7.2 mmol/L",
+        assessment: "Đái tháo đường Tuýp 2",
+        plan: "Uống thuốc đúng giờ, hạn chế tinh bột.",
+        orders: ["Sinh hóa máu"],
+        prescriptions: [
+          { name: "Rutozym", route: "Uống", qty: 30, dose: "Ngày 2 lần, mỗi lần 1 viên." }
+        ]
+      }
+    ];
+
+    let selectedAppointmentId = "BN-1002";
+    let activeAppointmentTab = "waiting"; // "waiting" or "completed"
+
+    function saveCurrentPatientData() {
+      if (!selectedAppointmentId) return;
+      const apt = appointments.find(a => a.id === selectedAppointmentId);
+      if (!apt) return;
+      
+      // Save SOAP notes
+      const soapS = document.getElementById('soap-s');
+      const soapO = document.getElementById('soap-o');
+      const diagnoseInput = document.getElementById('diagnose-input');
+      const soapP = document.getElementById('soap-p');
+      
+      if (soapS) apt.subjective = soapS.value;
+      if (soapO) apt.objective = soapO.value;
+      if (diagnoseInput) apt.assessment = diagnoseInput.value;
+      if (soapP) apt.plan = soapP.value;
+      
+      // Save orders (active chips)
+      const chips = document.querySelectorAll('.lab-chips .l-chip.active');
+      apt.orders = Array.from(chips).map(c => c.textContent.trim());
+      
+      // Save prescriptions
+      const rows = document.querySelectorAll('.prescription-table tbody tr');
+      apt.prescriptions = Array.from(rows).map(row => {
+        const name = row.querySelector('td strong').textContent.trim();
+        const selectRoute = row.querySelector('td select.qty-input');
+        const route = selectRoute ? selectRoute.value : 'Uống';
+        const qty = row.querySelector('td input[type="number"]').value;
+        const dose = row.querySelector('td input.dose-input').value;
+        return { name, route, qty, dose };
+      });
+    }
+
+    function selectAppointment(id) {
+      // Save previous data first
+      saveCurrentPatientData();
+      
+      const recordEmpty = document.getElementById('record-empty-state');
+      const recordContent = document.getElementById('record-content-container');
+      
+      if (!id) {
+        selectedAppointmentId = null;
+        if (recordEmpty) recordEmpty.style.display = 'flex';
+        if (recordContent) recordContent.style.display = 'none';
+        return;
+      }
+      
+      selectedAppointmentId = id;
+      const apt = appointments.find(a => a.id === id);
+      if (!apt) {
+        selectedAppointmentId = null;
+        if (recordEmpty) recordEmpty.style.display = 'flex';
+        if (recordContent) recordContent.style.display = 'none';
+        return;
+      }
+      
+      if (recordEmpty) recordEmpty.style.display = 'none';
+      if (recordContent) recordContent.style.display = 'flex';
+      
+      // Update Right Panel UI
+      
+      // 1. Header Details
+      const detailName = document.getElementById('patient-detail-name');
+      const detailInfo = document.getElementById('patient-detail-info');
+      if (detailName) detailName.textContent = apt.name;
+      if (detailInfo) {
+        detailInfo.innerHTML = `${apt.gender} • ${apt.age} tuổi • Nhóm máu ${apt.blood} • <span style="color: var(--warning); font-weight: 500;">Tiền sử: ${apt.history}</span>`;
+      }
+      
+      // 2. Vitals
+      const vitalsBar = document.getElementById('patient-vitals-bar');
+      if (vitalsBar) {
+        vitalsBar.innerHTML = `
+          <div class="vital-badge"><i data-lucide="thermometer" class="v-icon red"></i> ${apt.temp}</div>
+          <div class="vital-badge"><i data-lucide="heart" class="v-icon red"></i> ${apt.pulse}</div>
+          <div class="vital-badge"><i data-lucide="droplet" class="v-icon blue"></i> ${apt.bp}</div>
+        `;
+      }
+      
+      // 3. AI Triage Widget
+      const triageWidget = document.getElementById('patient-triage-widget');
+      if (triageWidget) {
+        if (apt.symptoms || apt.triageAlert) {
+          triageWidget.style.display = 'block';
+          const symptomsEl = document.getElementById('patient-triage-symptoms');
+          const alertEl = document.getElementById('patient-triage-alert');
+          const confidenceEl = document.getElementById('patient-triage-confidence');
+          
+          if (symptomsEl) symptomsEl.innerHTML = `<strong>Triệu chứng khai báo:</strong> ${apt.symptoms}`;
+          if (alertEl) alertEl.innerHTML = `<i data-lucide="alert-triangle"></i> ${apt.triageAlert}`;
+          if (confidenceEl) confidenceEl.textContent = `Độ tin cậy: ${apt.triageConfidence}`;
+        } else {
+          triageWidget.style.display = 'none';
+        }
+      }
+      
+      // 4. SOAP notes
+      const soapS = document.getElementById('soap-s');
+      const soapO = document.getElementById('soap-o');
+      const diagnoseInput = document.getElementById('diagnose-input');
+      const soapP = document.getElementById('soap-p');
+      
+      if (soapS) soapS.value = apt.subjective || '';
+      if (soapO) soapO.value = apt.objective || '';
+      if (diagnoseInput) diagnoseInput.value = apt.assessment || '';
+      if (soapP) soapP.value = apt.plan || '';
+      
+      // Close AI suggestion popover if open
+      toggleAISuggestionBox(false);
+      
+      // 5. Orders (chips)
+      const chips = document.querySelectorAll('.lab-chips .l-chip');
+      chips.forEach(chip => {
+        const text = chip.textContent.trim();
+        if (apt.orders.includes(text)) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+      // Close dynamic order form if open
+      toggleAddOrderForm(false);
+      
+      // 6. Prescriptions table
+      const tbody = document.querySelector('.prescription-table tbody');
+      if (tbody) {
+        tbody.innerHTML = '';
+        apt.prescriptions.forEach(p => {
+          addPrescriptionRow(p.name, p.route, p.qty, p.dose);
+        });
+      }
+      
+      // 7. Update button state for "Hoàn thành khám" & "Hủy"
+      const completeBtn = document.getElementById('complete-exam-btn');
+      const cancelBtn = document.getElementById('cancel-exam-btn');
+      
+      if (completeBtn) {
+        if (apt.status === 'completed') {
+          completeBtn.innerHTML = '<i data-lucide="check-circle" style="width: 16px; height: 16px;"></i> Đã hoàn thành';
+          completeBtn.disabled = true;
+          completeBtn.style.opacity = '0.6';
+          completeBtn.style.cursor = 'not-allowed';
+        } else if (apt.status === 'cancelled') {
+          completeBtn.innerHTML = 'Hoàn thành khám';
+          completeBtn.disabled = true;
+          completeBtn.style.opacity = '0.5';
+          completeBtn.style.cursor = 'not-allowed';
+        } else {
+          completeBtn.innerHTML = 'Hoàn thành khám';
+          completeBtn.disabled = false;
+          completeBtn.style.opacity = '1';
+          completeBtn.style.cursor = 'pointer';
+        }
+      }
+      
+      if (cancelBtn) {
+        if (apt.status === 'cancelled') {
+          cancelBtn.innerHTML = '<i data-lucide="x-circle" style="width: 16px; height: 16px;"></i> Đã hủy';
+          cancelBtn.disabled = true;
+          cancelBtn.style.opacity = '0.6';
+          cancelBtn.style.cursor = 'not-allowed';
+        } else if (apt.status === 'completed') {
+          cancelBtn.innerHTML = '<i data-lucide="x-circle" style="width: 16px; height: 16px;"></i> Hủy';
+          cancelBtn.disabled = true;
+          cancelBtn.style.opacity = '0.5';
+          cancelBtn.style.cursor = 'not-allowed';
+        } else {
+          cancelBtn.innerHTML = '<i data-lucide="x-circle" style="width: 16px; height: 16px;"></i> Hủy';
+          cancelBtn.disabled = false;
+          cancelBtn.style.opacity = '1';
+          cancelBtn.style.cursor = 'pointer';
+        }
+      }
+      
+      // Re-render appointment items to show active class
+      renderAppointmentsListOnly();
+      
+      // Recreate Lucide Icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function renderAppointments() {
+      // Count statuses
+      const waitingCount = appointments.filter(a => a.status !== 'completed').length;
+      const completedCount = appointments.filter(a => a.status === 'completed').length;
+      
+      const tabWaiting = document.getElementById('tab-cho-kham');
+      const tabCompleted = document.getElementById('tab-da-kham');
+      
+      if (tabWaiting) tabWaiting.textContent = `Chờ khám (${waitingCount})`;
+      if (tabCompleted) tabCompleted.textContent = `Đã khám (${completedCount})`;
+      
+      renderAppointmentsListOnly();
+    }
+
+    function renderAppointmentsListOnly() {
+      const listContainer = document.getElementById('appointment-list-container');
+      if (!listContainer) return;
+      
+      // Filter based on active tab
+      const filtered = appointments.filter(a => {
+        if (activeAppointmentTab === 'waiting') {
+          return a.status !== 'completed';
+        } else {
+          return a.status === 'completed';
+        }
+      });
+      
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `<div style="text-align: center; color: var(--gray-400); padding: 32px 16px; font-size: 14px;">Không có ca khám nào</div>`;
+        return;
+      }
+      
+      listContainer.innerHTML = filtered.map(a => {
+        const isActive = a.id === selectedAppointmentId ? 'active' : '';
+        
+        let statusBadgeHtml = '';
+        if (a.status === 'waiting') {
+          statusBadgeHtml = `<span class="status-badge waiting"><i data-lucide="clock" style="width: 12px;"></i> Đang chờ</span>`;
+        } else if (a.status === 'confirmed') {
+          statusBadgeHtml = `<span class="status-badge pending"><i data-lucide="calendar-check" style="width: 12px;"></i> Đã xác nhận</span>`;
+        } else if (a.status === 'noshow') {
+          statusBadgeHtml = `<span class="status-badge pending" style="background: transparent; border: 1px solid var(--border);">Chưa đến</span>`;
+        } else if (a.status === 'completed') {
+          statusBadgeHtml = `<span class="status-badge" style="background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="check-circle" style="width: 12px; height: 12px;"></i> Đã khám</span>`;
+        } else if (a.status === 'cancelled') {
+          statusBadgeHtml = `<span class="status-badge" style="background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA;">Đã hủy</span>`;
+        }
+        
+        const textMutedStyle = (a.status === 'noshow' || a.status === 'cancelled') ? 'style="color: var(--text-muted);"' : '';
+        const headerMutedStyle = (a.status === 'noshow' || a.status === 'cancelled') ? 'style="color: var(--text-muted);"' : '';
+
+        return `
+          <div class="appointment-item ${isActive}" onclick="selectAppointment('${a.id}')">
+            <div class="item-time" ${textMutedStyle}>
+              <strong>${a.time}</strong>
+              <span>${a.duration}</span>
+            </div>
+            <div class="item-details">
+              <h4 ${headerMutedStyle}>${a.name}</h4>
+              <p>Mã BA: ${a.id}</p>
+              ${statusBadgeHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function switchAppointmentTab(tab, element) {
+      activeAppointmentTab = tab;
+      
+      document.querySelectorAll('.appointments-panel .tabs .tab').forEach(el => el.classList.remove('active'));
+      if (element) {
+        element.classList.add('active');
+      }
+      
+      // Filter list
+      const filtered = appointments.filter(a => {
+        if (tab === 'waiting') {
+          return a.status !== 'completed';
+        } else {
+          return a.status === 'completed';
+        }
+      });
+      
+      if (filtered.length > 0) {
+        // Check if currently selected is in the filtered list. If not, auto-select first one.
+        const currentIsFound = filtered.some(a => a.id === selectedAppointmentId);
+        if (!currentIsFound) {
+          selectAppointment(filtered[0].id);
+        }
+      } else {
+        selectAppointment(null);
+      }
+      
+      renderAppointmentsListOnly();
+    }
+
+    function completeExamination() {
+      if (!selectedAppointmentId) return;
+      
+      const apt = appointments.find(a => a.id === selectedAppointmentId);
+      if (!apt) return;
+      
+      // Save data first
+      saveCurrentPatientData();
+      
+      // Change status to completed
+      apt.status = 'completed';
+      apt.statusText = 'Đã khám';
+      
+      // Custom Toast alert
+      showToast(`Hoàn thành khám cho bệnh nhân ${apt.name} thành công!`);
+      
+      // Switch to completed tab and select this patient
+      activeAppointmentTab = 'completed';
+      
+      // Update tab active classes
+      const tabWaiting = document.getElementById('tab-cho-kham');
+      const tabCompleted = document.getElementById('tab-da-kham');
+      if (tabWaiting) tabWaiting.classList.remove('active');
+      if (tabCompleted) tabCompleted.classList.add('active');
+      
+      // Re-render and select
+      renderAppointments();
+      selectAppointment(apt.id);
+    }
+
+    function showToast(message) {
+      // Remove existing toast if any
+      const existingToast = document.getElementById('custom-toast');
+      if (existingToast) existingToast.remove();
+      
+      const toast = document.createElement('div');
+      toast.id = 'custom-toast';
+      toast.style.position = 'fixed';
+      toast.style.top = '24px';
+      toast.style.right = '24px';
+      toast.style.background = 'linear-gradient(135deg, #059669 0%, #10B981 100%)';
+      toast.style.color = 'white';
+      toast.style.padding = '16px 24px';
+      toast.style.borderRadius = '12px';
+      toast.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+      toast.style.zIndex = '9999';
+      toast.style.fontSize = '14px';
+      toast.style.fontWeight = '600';
+      toast.style.display = 'flex';
+      toast.style.alignItems = 'center';
+      toast.style.gap = '8px';
+      toast.style.transform = 'translateY(-20px)';
+      toast.style.opacity = '0';
+      toast.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+      
+      toast.innerHTML = `<i data-lucide="check-circle" style="width: 18px; height: 18px;"></i> <span>${message}</span>`;
+      document.body.appendChild(toast);
+      
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+      });
+      
+      // Animate out
+      setTimeout(() => {
+        toast.style.transform = 'translateY(-20px)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Call dynamic initialization inside DomContentLoaded
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAppointments();
+      selectAppointment("BN-1002");
+      
+      // Animate weekly bars height on load
+      setTimeout(() => {
+        document.querySelectorAll('.weekly-bar').forEach(bar => {
+          const targetHeight = bar.getAttribute('data-height');
+          if (targetHeight) {
+            bar.style.height = targetHeight;
+          }
+        });
+      }, 300);
+    });
   </script>
 </body>
 </html>

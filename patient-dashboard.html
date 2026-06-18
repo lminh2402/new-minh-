@@ -25,10 +25,7 @@
       <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
       <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
     </div>
-    <div class="header-search" id="header-search">
-      <i data-lucide="search" class="search-icon"></i>
-      <input type="text" placeholder="Tìm phòng khám, thuốc, triệu chứng..." id="search-input" />
-    </div>
+
     <div class="header-actions" id="header-actions">
       <button class="btn-primary global-book-btn" onclick="openWizardModal()">
         <i data-lucide="plus"></i> Đặt lịch ngay
@@ -81,6 +78,7 @@
               </div>
             </div>
           </div>
+
           
 
         </div>
@@ -91,89 +89,59 @@
       
       <!-- Left: Clinic Results -->
       <div class="clinics-list">
-        <div class="list-header">
-          <h2>Dịch vụ & Bác sĩ nổi bật</h2>
-          <div class="sort-by">
-            <span>Sắp xếp: </span>
-            <select><option>Phù hợp nhất</option><option>Đánh giá cao</option></select>
+        
+        <!-- Bác sĩ Section -->
+        <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: var(--text-dark);">
+              <i data-lucide="stethoscope" style="color: var(--primary); width: 22px; height: 22px;"></i> Đội ngũ Bác sĩ chuyên khoa
+            </h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Danh sách chuyên gia đang trực và sẵn sàng khám bệnh</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="sort-by">
+              <span>Sắp xếp: </span>
+              <select><option>Phù hợp nhất</option><option>Đánh giá cao</option></select>
+            </div>
+            <button class="btn-see-all" id="btn-toggle-dash-doctors" onclick="toggleSliderMode('dashboard-doctors-grid', this)">
+              <span>Xem tất cả</span>
+              <i data-lucide="chevron-right"></i>
+            </button>
           </div>
         </div>
-
-        <div class="cards-grid">
-          <!-- Doctor 1 -->
-          <div class="clinic-card premium-card" onclick="openWizardModal()">
-            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop');">
-              <span class="tag open">Đang trực</span>
-            </div>
-            <div class="card-content">
-              <h3>BS. Nguyễn Văn A</h3>
-              <p class="specialty">Chuyên khoa Tiêu hóa</p>
-              
-              <div class="info-row">
-                <i data-lucide="clock"></i>
-                <span>14:00 - 18:00 Hôm nay</span>
-              </div>
-              <div class="info-row">
-                <i data-lucide="star" class="star"></i>
-                <span>4.9 (150 đánh giá)</span>
-              </div>
-
-              <div class="card-actions">
-                <button class="btn-primary" style="width: 100%;">Đặt lịch ngay</button>
-              </div>
-            </div>
+        
+        <div class="slider-wrapper" style="margin-bottom: 48px;">
+          <button class="slider-arrow prev" onclick="scrollSlider('dashboard-doctors-grid', -1)"><i data-lucide="chevron-left"></i></button>
+          <div class="cards-grid slider-mode" id="dashboard-doctors-grid">
+            <!-- Rendered dynamically -->
           </div>
-
-          <!-- Service 1 -->
-          <div class="clinic-card">
-            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop');">
-              <span class="tag" style="background: var(--primary); color: white;">Gói khám</span>
-            </div>
-            <div class="card-content">
-              <h3>Gói Tầm Soát Ung Thư</h3>
-              <p class="specialty">Xét nghiệm máu, siêu âm toàn diện</p>
-              <div class="info-row">
-                <i data-lucide="tag"></i>
-                <span style="font-weight: bold; color: var(--primary);">2.500.000đ</span>
-              </div>
-              <div class="info-row">
-                <i data-lucide="clock"></i>
-                <span>Ước tính 120 phút</span>
-              </div>
-              <div class="card-actions">
-                <button class="btn-primary" style="width: 100%;" onclick="openWizardModal()">Tìm hiểu & Đặt lịch</button>
-              </div>
-            </div>
-          </div>
-          
-           <!-- Service 2 -->
-           <div class="clinic-card">
-            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=400&auto=format&fit=crop');">
-              <span class="tag" style="background: var(--primary); color: white;">Gói khám</span>
-            </div>
-            <div class="card-content">
-              <h3>Khám Tim Mạch Chuyên Sâu</h3>
-              <p class="specialty">Điện tim, siêu âm tim, huyết áp</p>
-              <div class="info-row">
-                <i data-lucide="tag"></i>
-                <span style="font-weight: bold; color: var(--primary);">1.200.000đ</span>
-              </div>
-              <div class="info-row">
-                <i data-lucide="clock"></i>
-                <span>Ước tính 60 phút</span>
-              </div>
-              <div class="card-actions">
-                <button class="btn-primary" style="width: 100%;" onclick="openWizardModal()">Tìm hiểu & Đặt lịch</button>
-              </div>
-            </div>
-          </div>
-
+          <button class="slider-arrow next" onclick="scrollSlider('dashboard-doctors-grid', 1)"><i data-lucide="chevron-right"></i></button>
         </div>
-      </div>
 
-      <!-- Right: AI Chat Assistant removed (now floating) -->
+        <!-- Gói khám Section -->
+        <div class="list-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: var(--text-dark);">
+              <i data-lucide="package" style="color: var(--primary); width: 22px; height: 22px;"></i> Gói khám sức khỏe trọn gói
+            </h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Các gói tầm soát và kiểm tra chuyên sâu tối ưu chi phí</p>
+          </div>
+          <button class="btn-see-all" id="btn-toggle-dash-packages" onclick="toggleSliderMode('dashboard-packages-grid', this)">
+            <span>Xem tất cả</span>
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="slider-wrapper">
+          <button class="slider-arrow prev" onclick="scrollSlider('dashboard-packages-grid', -1)"><i data-lucide="chevron-left"></i></button>
+          <div class="cards-grid slider-mode" id="dashboard-packages-grid">
+            <!-- Rendered dynamically -->
+          </div>
+          <button class="slider-arrow next" onclick="scrollSlider('dashboard-packages-grid', 1)"><i data-lucide="chevron-right"></i></button>
+        </div>
 
       </div>
+    </div>
     </div> <!-- End view-search -->
 
     <!-- View 2: Drug Lookup -->
@@ -329,6 +297,10 @@
             <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
               <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa Nội Tiêu Hóa</h3>
               <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">Bác sĩ Nguyễn Văn A</p>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;">
+                <i data-lucide="map-pin" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                <span>Địa điểm: <strong>Phòng khám 102, Tầng 1, Khu A</strong></span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
                 <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
                 <span>Lý do: Khám tổng quát, Đau dạ dày</span>
@@ -337,8 +309,8 @@
 
             <!-- Col 3: Actions -->
             <div class="appt-col-actions" style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center;">
-              <button class="btn-outline text-danger"><i data-lucide="x-circle"></i> Hủy lịch</button>
-              <button class="btn-primary"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
+              <button class="btn-outline text-danger" onclick="cancelAppointment(this)"><i data-lucide="x-circle"></i> Hủy lịch</button>
+              <button class="btn-primary" onclick="rescheduleAppointment(this)"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
             </div>
             
           </div>
@@ -359,6 +331,10 @@
             <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
               <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa Nội Tổng Quát</h3>
               <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">Bác sĩ Trần Thị B</p>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;">
+                <i data-lucide="map-pin" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                <span>Địa điểm: <strong>Phòng khám 105, Tầng 1, Khu A</strong></span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
                 <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
                 <span>Lý do: Khám định kỳ</span>
@@ -384,6 +360,10 @@
             <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
               <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa Nhi</h3>
               <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">Bác sĩ Lê Văn C</p>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;">
+                <i data-lucide="map-pin" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                <span>Địa điểm: <strong>Phòng khám 201, Tầng 2, Khu B</strong></span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
                 <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
                 <span>Lý do: Sốt cao</span>
@@ -451,7 +431,7 @@
           </div>
 
           <!-- Chat Messages Container -->
-          <div style="flex: 1; padding: 24px; overflow-y: auto; background: #F8F9FA; display: flex; flex-direction: column; gap: 24px;">
+          <div id="doctor-chat-container" style="flex: 1; padding: 24px; overflow-y: auto; background: #F8F9FA; display: flex; flex-direction: column; gap: 24px;">
             
             <!-- System Msg -->
             <div style="text-align: center;">
@@ -510,8 +490,8 @@
           <div id="chat-input-active" style="padding: 20px 24px; border-top: 1px solid #EAECF0; background: #FFFFFF; display: flex; align-items: center; gap: 16px;">
             <button style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.color='var(--primary)';" onmouseout="this.style.background='none'; this.style.color='#94A3B8';"><i data-lucide="paperclip"></i></button>
             <button style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.color='var(--primary)';" onmouseout="this.style.background='none'; this.style.color='#94A3B8';"><i data-lucide="camera"></i></button>
-            <input type="text" placeholder="Nhắn tin cho bác sĩ... (Gửi ảnh đơn thuốc/triệu chứng)" style="flex: 1; padding: 12px 20px; border-radius: 24px; border: 1px solid #EAECF0; background: #F8F9FA; outline: none; font-family: inherit; font-size: 14px;">
-            <button style="background: var(--primary); border: none; color: white; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);"><i data-lucide="send" style="width: 18px; height: 18px; margin-left: -2px;"></i></button>
+            <input type="text" id="doctor-chat-input" placeholder="Nhắn tin cho bác sĩ... (Gửi ảnh đơn thuốc/triệu chứng)" style="flex: 1; padding: 12px 20px; border-radius: 24px; border: 1px solid #EAECF0; background: #F8F9FA; outline: none; font-family: inherit; font-size: 14px;" onkeypress="if(event.key === 'Enter') sendDoctorMessage()">
+            <button onclick="sendDoctorMessage()" style="background: var(--primary); border: none; color: white; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);"><i data-lucide="send" style="width: 18px; height: 18px; margin-left: -2px;"></i></button>
           </div>
 
           <!-- Chat Input (Closed State) -->
@@ -614,7 +594,7 @@
           <button class="btn-outline"><i data-lucide="message-square"></i> Xem đoạn chat</button>
         </div>
         
-        <div class="history-item" style="cursor: pointer; transition: all 0.2s; background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0px 4px 12px rgba(0, 0, 0, 0.05)';">
+        <div class="history-item" style="cursor: pointer; transition: all 0.2s; background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0px 4px 12px rgba(0, 0, 0, 0.05)';" onclick="openRecordDetail('general')">
           <div class="date-col">
             <strong>15/04</strong>
             <span>2026</span>
@@ -627,10 +607,10 @@
               <span class="h-tag" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='white';" onmouseout="this.style.backgroundColor=''; this.style.color='';" onclick="event.stopPropagation(); alert('Đang tải PDF X-Quang...')"><i data-lucide="image"></i> X-Quang (Chi tiết)</span>
             </div>
           </div>
-          <button class="btn-primary" style="padding: 8px 16px;">Xem hồ sơ</button>
+          <button class="btn-primary" style="padding: 8px 16px;" onclick="event.stopPropagation(); openRecordDetail('general')">Xem hồ sơ</button>
         </div>
 
-        <div class="history-item" style="cursor: pointer; transition: all 0.2s; background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0px 4px 12px rgba(0, 0, 0, 0.05)';">
+        <div class="history-item" style="cursor: pointer; transition: all 0.2s; background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0px 4px 12px rgba(0, 0, 0, 0.05)';" onclick="openRecordDetail('gi')">
           <div class="date-col">
             <strong>10/01</strong>
             <span>2026</span>
@@ -642,7 +622,7 @@
               <span class="h-tag" style="cursor: pointer; transition: all 0.2s; background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-light);" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='white';" onmouseout="this.style.backgroundColor='var(--primary-light)'; this.style.color='var(--primary)';" onclick="event.stopPropagation(); switchTab('view-medicine', document.querySelector('.sidebar-nav a[onclick*=\'view-medicine\']'))"><i data-lucide="pill"></i> Đơn thuốc (Mở tủ thuốc)</span>
             </div>
           </div>
-          <button class="btn-primary" style="padding: 8px 16px;">Xem hồ sơ</button>
+          <button class="btn-primary" style="padding: 8px 16px;" onclick="event.stopPropagation(); openRecordDetail('gi')">Xem hồ sơ</button>
         </div>
 
       </div>
@@ -658,7 +638,7 @@
           <h1 style="font-size: 28px; margin-bottom: 8px;">Hồ sơ cá nhân</h1>
           <p>Thông tin định danh và chỉ số y tế cơ sở</p>
         </div>
-        <button class="btn-primary" onclick="alert('Tính năng chỉnh sửa đang được cập nhật')"><i data-lucide="edit-3"></i> Chỉnh sửa hồ sơ</button>
+        <button class="btn-primary" onclick="openEditProfileModal()"><i data-lucide="edit-3"></i> Chỉnh sửa hồ sơ</button>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px;">
@@ -667,31 +647,31 @@
         <div class="profile-card" style="background: #FFFFFF; padding: 24px; border-radius: 16px; border: 1px solid #EAECF0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);">
           <div style="display: flex; gap: 24px; align-items: flex-start;">
             <div style="position: relative;">
-              <div class="user-avatar" style="width: 100px; height: 100px; font-size: 32px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold;">NB</div>
+              <div id="profile-avatar" class="user-avatar" style="width: 100px; height: 100px; font-size: 32px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold;">NB</div>
               <button style="position: absolute; bottom: -10px; right: -10px; background: white; border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-dark); box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><i data-lucide="camera" style="width: 16px; height: 16px;"></i></button>
             </div>
             <div style="flex: 1;">
-              <h2 style="margin: 0 0 16px 0; font-size: 24px; color: var(--text-dark);">Nguyễn Bệnh Nhân</h2>
+              <h2 id="profile-fullname" style="margin: 0 0 16px 0; font-size: 24px; color: var(--text-dark);">Nguyễn Bệnh Nhân</h2>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
                 <div>
                   <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Ngày sinh</span>
-                  <strong style="color: var(--text-dark);">12/08/1990</strong>
+                  <strong id="profile-dob" style="color: var(--text-dark);">12/08/1990</strong>
                 </div>
                 <div>
                   <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Giới tính</span>
-                  <strong style="color: var(--text-dark);">Nam</strong>
+                  <strong id="profile-gender" style="color: var(--text-dark);">Nam</strong>
                 </div>
                 <div>
                   <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Số điện thoại (ID)</span>
-                  <strong style="color: var(--text-dark);">0901 234 567</strong>
+                  <strong id="profile-phone" style="color: var(--text-dark);">0901 234 567</strong>
                 </div>
                 <div>
                   <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Email</span>
-                  <strong style="color: var(--text-dark);">nguyenbenhnhan@email.com</strong>
+                  <strong id="profile-email" style="color: var(--text-dark);">nguyenbenhnhan@email.com</strong>
                 </div>
                 <div style="grid-column: 1 / -1;">
                   <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Địa chỉ cư trú</span>
-                  <strong style="color: var(--text-dark);">123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM</strong>
+                  <strong id="profile-address" style="color: var(--text-dark);">123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM</strong>
                 </div>
               </div>
             </div>
@@ -703,7 +683,7 @@
           <h3 style="margin: 0 0 20px 0; font-size: 18px; color: var(--text-dark); display: flex; align-items: center; gap: 8px;"><i data-lucide="dna" style="color: var(--primary);"></i> Chỉ số cơ thể & Nhóm máu</h3>
           <div style="display: flex; gap: 24px;">
             <div style="flex: 1; display: flex; align-items: center; gap: 16px; padding: 16px; background: #FEF2F2; border-radius: 12px; border: 1px dashed #FCA5A5;">
-              <div style="width: 48px; height: 48px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">O+</div>
+              <div id="profile-bloodtype" style="width: 48px; height: 48px; border-radius: 50%; background: #EF4444; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">O+</div>
               <div>
                 <span style="display: block; color: #991B1B; font-weight: 600; font-size: 16px;">Nhóm máu</span>
                 <span style="color: #DC2626; font-size: 13px;">Quan trọng trong cấp cứu</span>
@@ -711,11 +691,11 @@
             </div>
             <div style="flex: 1; padding: 16px; background: #F8F9FA; border-radius: 12px; border: 1px solid #EAECF0;">
               <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Chiều cao</span>
-              <strong style="font-size: 18px; color: var(--text-dark);">175 <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">cm</span></strong>
+              <strong style="font-size: 18px; color: var(--text-dark);"><span id="profile-height">175</span> <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">cm</span></strong>
             </div>
             <div style="flex: 1; padding: 16px; background: #F8F9FA; border-radius: 12px; border: 1px solid #EAECF0;">
               <span style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Cân nặng gốc</span>
-              <strong style="font-size: 18px; color: var(--text-dark);">68 <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">kg</span></strong>
+              <strong style="font-size: 18px; color: var(--text-dark);"><span id="profile-weight">68</span> <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">kg</span></strong>
             </div>
           </div>
         </div>
@@ -877,6 +857,202 @@
 
     </div>
   </div>
+ 
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal-content" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+      <div class="ai-modal-header">
+        <h2 style="display: flex; align-items: center; gap: 10px;">Chỉnh sửa hồ sơ cá nhân <i data-lucide="user-cog" style="color: var(--primary);"></i></h2>
+        <button class="close-btn" onclick="closeEditProfileModal()" style="position: static;"><i data-lucide="x"></i></button>
+      </div>
+      
+      <form id="edit-profile-form" onsubmit="saveProfile(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Họ & Tên</label>
+            <input type="text" id="edit-fullname" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Ngày sinh</label>
+            <input type="text" id="edit-dob" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" placeholder="DD/MM/YYYY" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Giới tính</label>
+            <select id="edit-gender" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; background: white; font-size: 14px;">
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Số điện thoại (ID)</label>
+            <input type="text" id="edit-phone" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Email</label>
+            <input type="email" id="edit-email" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Địa chỉ cư trú</label>
+            <input type="text" id="edit-address" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Nhóm máu</label>
+            <select id="edit-bloodtype" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; background: white; font-size: 14px;">
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Chiều cao (cm)</label>
+            <input type="number" id="edit-height" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+          <div>
+            <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Cân nặng (kg)</label>
+            <input type="number" id="edit-weight" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Tiền sử dị ứng (phân tách bằng dấu phẩy)</label>
+          <input type="text" id="edit-allergies" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" placeholder="Ví dụ: Dị ứng Penicillin, Dị ứng Hải sản">
+        </div>
+
+        <div>
+          <label class="form-label" style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-dark);">Bệnh nền mãn tính (phân tách bằng dấu phẩy)</label>
+          <input type="text" id="edit-conditions" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px;" placeholder="Ví dụ: Tiểu đường type 2, Huyết áp cao">
+        </div>
+
+        <div class="modal-actions" style="margin-top: 16px;">
+          <button type="button" class="btn-outline" onclick="closeEditProfileModal()">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Medical Record Modal -->
+  <div class="modal-overlay" id="viewRecordModal">
+    <div class="modal-content" style="max-width: 650px; max-height: 90vh; overflow-y: auto; padding: 0; border-radius: 16px; display: flex; flex-direction: column;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 24px; background: linear-gradient(135deg, var(--primary), var(--accent, #6366F1)); color: white; display: flex; justify-content: space-between; align-items: center; border-top-left-radius: 16px; border-top-right-radius: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; background: rgba(255, 255, 255, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="file-text" style="color: white; width: 24px; height: 24px;"></i>
+          </div>
+          <div>
+            <h3 id="rec-title" style="margin: 0; font-size: 18px; color: white;">Chi tiết Hồ sơ Bệnh án</h3>
+            <p id="rec-subtitle" style="margin: 4px 0 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.85);"></p>
+          </div>
+        </div>
+        <button class="close-chat-btn" onclick="closeRecordModal()" style="border: none; background: transparent; cursor: pointer; color: white;">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 20px; text-align: left; overflow-y: auto;">
+        
+        <!-- Section: General Info & Doctor -->
+        <div style="display: flex; gap: 16px; align-items: center; padding: 16px; background: #F8FAFC; border-radius: 12px; border: 1px solid #E2E8F0;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">BS</div>
+          <div>
+            <span style="font-size: 12px; color: var(--text-muted); display: block;">Bác sĩ phụ trách</span>
+            <strong id="rec-doctor" style="font-size: 15px; color: var(--text-dark);"></strong>
+          </div>
+        </div>
+
+        <!-- Section: Diagnostics -->
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="activity" style="color: var(--primary); width: 16px; height: 16px;"></i> Chẩn đoán & Sinh hiệu
+          </h4>
+          <div style="background: #FFF; border: 1px solid #EAECF0; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <div style="margin-bottom: 12px;">
+              <span style="font-size: 13px; color: var(--text-muted);">Kết quả chẩn đoán chính:</span>
+              <p id="rec-diagnosis" style="margin: 4px 0 0 0; font-size: 15px; font-weight: 600; color: var(--text-dark);"></p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid #EAECF0; padding-top: 12px;">
+              <div>
+                <span style="font-size: 12px; color: var(--text-muted);">Huyết áp</span>
+                <strong id="rec-bp" style="display: block; font-size: 14px; color: var(--text-dark); margin-top: 2px;"></strong>
+              </div>
+              <div>
+                <span style="font-size: 12px; color: var(--text-muted);">Nhịp tim</span>
+                <strong id="rec-hr" style="display: block; font-size: 14px; color: var(--text-dark); margin-top: 2px;"></strong>
+              </div>
+              <div>
+                <span style="font-size: 12px; color: var(--text-muted);">Thể trạng</span>
+                <strong id="rec-weight" style="display: block; font-size: 14px; color: var(--text-dark); margin-top: 2px;"></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Lab Results -->
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="clipboard" style="color: var(--primary); width: 16px; height: 16px;"></i> Chỉ định & Kết quả Cận lâm sàng
+          </h4>
+          <div id="rec-labs" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Section: Prescription -->
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="pill" style="color: var(--primary); width: 16px; height: 16px;"></i> Đơn thuốc điều trị
+          </h4>
+          <div style="background: #FFF; border: 1px solid #EAECF0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left;">
+              <thead>
+                <tr style="background: #F8FAFC; border-bottom: 1px solid #EAECF0;">
+                  <th style="padding: 10px 16px; font-weight: 600; color: var(--text-dark);">Tên thuốc</th>
+                  <th style="padding: 10px 16px; font-weight: 600; color: var(--text-dark); width: 80px; text-align: center;">SL</th>
+                  <th style="padding: 10px 16px; font-weight: 600; color: var(--text-dark);">Hướng dẫn sử dụng</th>
+                </tr>
+              </thead>
+              <tbody id="rec-prescription-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section: Doctor's Advice -->
+        <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px; padding: 16px; display: flex; gap: 12px; align-items: flex-start;">
+          <i data-lucide="lightbulb" style="color: var(--warning); width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+          <div>
+            <span style="font-size: 13px; font-weight: 600; color: #92400E; display: block; margin-bottom: 4px;">Lời khuyên từ Bác sĩ</span>
+            <p id="rec-advice" style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #78350F;"></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 16px 24px; border-top: 1px solid #EAECF0; background: #F8FAFC; display: flex; justify-content: flex-end; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+        <button class="btn-primary" onclick="closeRecordModal()" style="padding: 8px 20px; font-size: 14px;">Đóng</button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Wizard Booking Modal -->
   <div class="modal-overlay" id="wizardBookingModal">
@@ -909,38 +1085,11 @@
         <!-- Step 1 -->
         <div class="wizard-step-content active" id="w-step-1">
           <div class="layout-30-70">
-            <div class="specialty-list">
-              <div class="specialty-item active">Nội tổng quát</div>
-              <div class="specialty-item">Tiêu hóa</div>
-              <div class="specialty-item">Tim mạch</div>
-              <div class="specialty-item">Nhi khoa</div>
-              <div class="specialty-item">Da liễu</div>
+            <div class="specialty-list" id="w-specialty-list">
+              <!-- Rendered dynamically -->
             </div>
-            <div class="doctor-grid">
-              <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
-                <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=E0E7FF&color=4F46E5">
-                <div>
-                  <h4>BS. Nguyễn Văn A</h4>
-                  <p>Khoa Tiêu hóa</p>
-                </div>
-                <i data-lucide="check-circle-2" class="doc-check"></i>
-              </div>
-              <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
-                <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=FCE7F3&color=DB2777">
-                <div>
-                  <h4>BS. Trần Thị B</h4>
-                  <p>Khoa Tiêu hóa</p>
-                </div>
-                <i data-lucide="check-circle-2" class="doc-check"></i>
-              </div>
-              <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
-                <div style="width:48px;height:48px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;color:var(--gray-500)"><i data-lucide="calendar-clock"></i></div>
-                <div>
-                  <h4>Không chỉ định</h4>
-                  <p>Hệ thống tự sắp xếp</p>
-                </div>
-                <i data-lucide="check-circle-2" class="doc-check"></i>
-              </div>
+            <div class="doctor-grid" id="w-doctor-grid">
+              <!-- Rendered dynamically -->
             </div>
           </div>
         </div>
@@ -1083,6 +1232,400 @@
   </div>
 
   <script>
+    // === INIT MOCK LOCALSTORAGE DATA ===
+    const defaultServices = [
+      {
+        name: "Gói Tầm Soát Ung Thư",
+        desc: "Xét nghiệm máu, siêu âm toàn diện, tầm soát dấu ấn ung thư",
+        price: "2,500,000",
+        duration: "120 phút",
+        image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Khám Tim Mạch Chuyên Sâu",
+        desc: "Điện tim, siêu âm tim, đo huyết áp 24h và khám với BS chuyên khoa",
+        price: "1,200,000",
+        duration: "60 phút",
+        image: "https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Khám Tổng Quát Premium",
+        desc: "Xét nghiệm máu, siêu âm, điện tâm đồ, nội soi tiêu hóa không đau",
+        price: "3,200,000",
+        duration: "180 phút",
+        image: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Tầm Soát Đột Quỵ",
+        desc: "Chụp MRI não, siêu âm động mạch cảnh tầm soát nguy cơ xơ vữa",
+        price: "4,500,000",
+        duration: "150 phút",
+        image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "Gói Chăm Sóc Sức Khỏe Mẹ & Bé",
+        desc: "Khám nhi khoa, tư vấn dinh dưỡng cho bé và tiêm chủng định kỳ",
+        price: "1,800,000",
+        duration: "90 phút",
+        image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Khám Xương Khớp Chuyên Sâu",
+        desc: "Chụp X-quang cột sống, đo mật độ xương và siêu âm khớp gối",
+        price: "1,500,000",
+        duration: "75 phút",
+        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Khám Phụ Khoa Toàn Diện",
+        desc: "Khám phụ sản, siêu âm đầu dò, tầm soát ung thư cổ tử cung HPV",
+        price: "1,600,000",
+        duration: "90 phút",
+        image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Tầm Soát Đái Tháo Đường",
+        desc: "Đường huyết đói, chỉ số HbA1c, chức năng thận và tư vấn dinh dưỡng",
+        price: "950,000",
+        duration: "60 phút",
+        image: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Gói Khám Da Liễu Thẩm Mỹ",
+        desc: "Soi da, phân tích mụn, sắc tố và tư vấn liệu trình chăm sóc da khoa học",
+        price: "850,000",
+        duration: "45 phút",
+        image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Khám Nội tổng quát",
+        desc: "Khám lâm sàng với BS chuyên khoa",
+        price: "350,000",
+        duration: "30 phút",
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "Tư vấn Chuyên gia (Online)",
+        desc: "Chat/Video call với BS trong 30 phút",
+        price: "200,000",
+        duration: "30 phút",
+        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "Nội soi dạ dày tiền mê",
+        desc: "Nội soi không đau, áp dụng công nghệ NBI",
+        price: "1,200,000",
+        duration: "45 phút",
+        image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop",
+        isActive: false
+      }
+    ];
+
+    const defaultDoctors = [
+      {
+        name: "BS. Nguyễn Văn A",
+        specialty: "Tiêu hóa",
+        schedule: "14:00 - 18:00 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 150,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "BS. Trần Thị B",
+        specialty: "Tim mạch",
+        schedule: "08:00 - 12:00 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 120,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "BS. Lê Hoàng C",
+        specialty: "Nhi khoa",
+        schedule: "08:30 - 17:00 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 95,
+        status: "Có lịch hẹn",
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "BS. Phạm Minh Đức",
+        specialty: "Xương khớp",
+        schedule: "09:00 - 16:30 Hôm nay",
+        rating: "4.9",
+        reviewsCount: 85,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=400&auto=format&fit=crop",
+        isActive: true
+      },
+      {
+        name: "BS. Đỗ Thùy Linh",
+        specialty: "Phụ sản",
+        schedule: "13:30 - 17:30 Hôm nay",
+        rating: "4.8",
+        reviewsCount: 110,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1591604021695-0c69b7c05981?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      },
+      {
+        name: "BS. Hoàng Lâm Tùng",
+        specialty: "Da liễu",
+        schedule: "08:00 - 11:30 Hôm nay",
+        rating: "4.7",
+        reviewsCount: 95,
+        status: "Đang trực",
+        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=400&q=80",
+        isActive: true
+      }
+    ];
+
+    if (!localStorage.getItem('hospitalServices')) {
+      localStorage.setItem('hospitalServices', JSON.stringify(defaultServices));
+    }
+    if (!localStorage.getItem('hospitalDoctors')) {
+      localStorage.setItem('hospitalDoctors', JSON.stringify(defaultDoctors));
+    }
+
+    // === LOCALSTORAGE MIGRATION FOR BROKEN IMAGES ===
+    (function() {
+      let services = localStorage.getItem('hospitalServices');
+      if (services && services.includes('photo-1594824813573-246434de83fb')) {
+        services = services.replaceAll('photo-1594824813573-246434de83fb', 'photo-1576091160550-2173dba999ef');
+        localStorage.setItem('hospitalServices', services);
+      }
+      let doctors = localStorage.getItem('hospitalDoctors');
+      if (doctors) {
+        let updated = false;
+        if (doctors.includes('photo-1594824813573-246434de83fb')) {
+          doctors = doctors.replaceAll('photo-1594824813573-246434de83fb', 'photo-1591604021695-0c69b7c05981');
+          updated = true;
+        }
+        if (doctors.includes('photo-1579684214004-f22f620c8501')) {
+          doctors = doctors.replaceAll('photo-1579684214004-f22f620c8501', 'photo-1537368910025-700350fe46c7');
+          updated = true;
+        }
+        if (updated) {
+          localStorage.setItem('hospitalDoctors', doctors);
+        }
+      }
+    })();
+
+    // === CAROUSEL SLIDER CONTROLLER ===
+    window.scrollSlider = function(gridId, direction) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      const scrollAmount = 344; // Card width (320px) + gap (24px)
+      grid.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+      });
+    };
+
+    window.toggleSliderMode = function(gridId, btn) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      const wrapper = grid.parentElement;
+      const prevBtn = wrapper.querySelector('.slider-arrow.prev');
+      const nextBtn = wrapper.querySelector('.slider-arrow.next');
+      
+      const isSlider = grid.classList.contains('slider-mode');
+      if (isSlider) {
+        grid.classList.remove('slider-mode');
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        btn.querySelector('span').innerText = 'Thu gọn';
+        btn.querySelector('i').setAttribute('data-lucide', 'chevron-up');
+      } else {
+        grid.classList.add('slider-mode');
+        if (prevBtn) prevBtn.style.display = 'flex';
+        if (nextBtn) nextBtn.style.display = 'flex';
+        btn.querySelector('span').innerText = 'Xem tất cả';
+        btn.querySelector('i').setAttribute('data-lucide', 'chevron-right');
+        grid.scrollLeft = 0;
+        setTimeout(() => updateSliderArrows(gridId), 100);
+      }
+      if (window.lucide) window.lucide.createIcons({root: btn});
+    };
+
+    window.updateSliderArrows = function(gridId) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      const wrapper = grid.parentElement;
+      const prevBtn = wrapper.querySelector('.slider-arrow.prev');
+      const nextBtn = wrapper.querySelector('.slider-arrow.next');
+      if (!prevBtn || !nextBtn) return;
+
+      if (!grid.classList.contains('slider-mode')) {
+        prevBtn.classList.add('disabled');
+        nextBtn.classList.add('disabled');
+        return;
+      }
+
+      const scrollLeft = grid.scrollLeft;
+      const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+
+      if (scrollLeft <= 5) {
+        prevBtn.classList.add('disabled');
+      } else {
+        prevBtn.classList.remove('disabled');
+      }
+
+      if (scrollLeft >= maxScrollLeft - 5) {
+        nextBtn.classList.add('disabled');
+      } else {
+        nextBtn.classList.remove('disabled');
+      }
+    };
+
+    function initSliderEvents(gridId) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      grid.addEventListener('scroll', () => {
+        window.updateSliderArrows(gridId);
+      });
+      // Initial call
+      setTimeout(() => {
+        window.updateSliderArrows(gridId);
+      }, 200);
+    }
+
+    // Dynamic Render for Dashboard
+    function renderDashboardDoctors() {
+      const grid = document.getElementById('dashboard-doctors-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const doctors = JSON.parse(localStorage.getItem('hospitalDoctors') || '[]');
+      doctors.filter(d => d.isActive).forEach(doc => {
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="clinic-card premium-card" onclick="openWizardModal()">
+            <div class="card-image" style="background-image: url('${doc.image}');">
+              <span class="tag open">${doc.status}</span>
+            </div>
+            <div class="card-content">
+              <h3>${doc.name}</h3>
+              <p class="specialty">Chuyên khoa ${doc.specialty}</p>
+              <div class="info-row"><i data-lucide="clock"></i><span>${doc.schedule}</span></div>
+              <div class="info-row"><i data-lucide="star" class="star"></i><span>${doc.rating} (${doc.reviewsCount} đánh giá)</span></div>
+              <div class="card-actions">
+                <button class="btn-primary" style="width: 100%;">Đặt lịch ngay</button>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+      if (window.lucide) window.lucide.createIcons({root: grid});
+    }
+
+    function renderDashboardPackages() {
+      const grid = document.getElementById('dashboard-packages-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+      services.filter(s => s.isActive).forEach(svc => {
+        const priceVal = parseInt(svc.price.toString().replace(/,/g, ''));
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="clinic-card">
+            <div class="card-image" style="background-image: url('${svc.image}');">
+              <span class="tag" style="background: var(--primary); color: white;">Gói khám</span>
+            </div>
+            <div class="card-content">
+              <h3>${svc.name}</h3>
+              <p class="specialty">${svc.desc}</p>
+              <div class="info-row"><i data-lucide="tag"></i><span style="font-weight: bold; color: var(--primary);">${priceVal.toLocaleString('vi-VN')}đ</span></div>
+              <div class="info-row"><i data-lucide="clock"></i><span>Ước tính ${svc.duration}</span></div>
+              <div class="card-actions">
+                <button class="btn-primary" style="width: 100%;" onclick="openWizardModal()">Tìm hiểu & Đặt lịch</button>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+      if (window.lucide) window.lucide.createIcons({root: grid});
+    }
+
+    // Dynamic Render for Wizard step 1
+    let selectedWizardSpecialty = "Nội tổng quát";
+    function renderWizardStep1() {
+      const specialties = ["Nội tổng quát", "Tiêu hóa", "Tim mạch", "Nhi khoa", "Da liễu", "Xương khớp", "Phụ sản"];
+      const specList = document.getElementById('w-specialty-list');
+      if (specList) {
+        specList.innerHTML = '';
+        specialties.forEach(spec => {
+          const activeClass = spec === selectedWizardSpecialty ? 'active' : '';
+          specList.insertAdjacentHTML('beforeend', `
+            <div class="specialty-item ${activeClass}" onclick="selectWizardSpecialty(this, '${spec}')">${spec}</div>
+          `);
+        });
+      }
+
+      const docGrid = document.getElementById('w-doctor-grid');
+      if (docGrid) {
+        docGrid.innerHTML = '';
+        const doctors = JSON.parse(localStorage.getItem('hospitalDoctors') || '[]');
+        
+        // Filter doctors that belong to the active specialty
+        const filteredDocs = doctors.filter(doc => doc.isActive && doc.specialty.toLowerCase().includes(selectedWizardSpecialty.toLowerCase().replace(" khoa", "")));
+        
+        filteredDocs.forEach(doc => {
+          docGrid.insertAdjacentHTML('beforeend', `
+            <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
+              <img src="${doc.image}" style="object-fit: cover; width: 48px; height: 48px; border-radius: 50%;">
+              <div>
+                <h4>${doc.name}</h4>
+                <p>Khoa ${doc.specialty}</p>
+              </div>
+              <i data-lucide="check-circle-2" class="doc-check"></i>
+            </div>
+          `);
+        });
+
+        // Always add "Không chỉ định" card at the end
+        docGrid.insertAdjacentHTML('beforeend', `
+          <div class="doctor-card-wizard" onclick="selectWizardDoctor(this)">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;color:var(--gray-500)"><i data-lucide="calendar-clock"></i></div>
+            <div>
+              <h4>Không chỉ định</h4>
+              <p>Hệ thống tự sắp xếp</p>
+            </div>
+            <i data-lucide="check-circle-2" class="doc-check"></i>
+          </div>
+        `);
+        
+        if (window.lucide) window.lucide.createIcons({root: docGrid});
+      }
+    }
+
+    window.selectWizardSpecialty = function(el, spec) {
+      selectedWizardSpecialty = spec;
+      document.querySelectorAll('#w-specialty-list .specialty-item').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+      renderWizardStep1();
+    }
+
+    // Call dynamic rendering on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      renderDashboardDoctors();
+      renderDashboardPackages();
+      initSliderEvents('dashboard-doctors-grid');
+      initSliderEvents('dashboard-packages-grid');
+    });
+
     lucide.createIcons();
 
     function testIncomingCall() {
@@ -1182,6 +1725,75 @@
       lucide.createIcons();
       
       setTimeout(() => {
+        // Collect booking info to add to list
+        const specVal = document.getElementById('specialty-select').value;
+        let specialty = "Nội tổng quát";
+        let roomLoc = "Phòng khám 110, Tầng 1, Khu A";
+        if (specVal === 'tieu-hoa') {
+          specialty = "Nội Tiêu hóa";
+          roomLoc = "Phòng khám 102, Tầng 1, Khu A";
+        } else if (specVal === 'tim-mach') {
+          specialty = "Tim mạch";
+          roomLoc = "Phòng khám 108, Tầng 1, Khu A";
+        } else if (specVal === 'nhi') {
+          specialty = "Nhi khoa";
+          roomLoc = "Phòng khám 201, Tầng 2, Khu B";
+        }
+
+        const doctorEl = document.querySelector('.doctor-card-mini.active strong');
+        const doctorName = doctorEl ? doctorEl.innerText : 'BS. Nguyễn Văn A';
+
+        const datePickerVal = document.getElementById('date-picker').value;
+        let fullDate = '21/05/2026';
+        if (datePickerVal) {
+          const dateParts = datePickerVal.split('-');
+          if (dateParts.length === 3) {
+            fullDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+          }
+        }
+
+        const timeEl = document.querySelector('.time-chip.active');
+        const time = timeEl ? timeEl.innerText : '09:00 AM';
+
+        const reasonInput = document.getElementById('symptom-input').value.trim();
+        const reason = reasonInput ? 'Lý do: ' + reasonInput : 'Lý do: Đặt lịch khám AI';
+
+        // Add to appointment list
+        const appointmentList = document.querySelector('.appointment-list');
+        if(appointmentList) {
+          const newAppt = document.createElement('div');
+          newAppt.className = 'appointment-row';
+          newAppt.style.cssText = 'display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; padding: 20px; border-radius: 12px; border: 1px solid #10B981; box-shadow: 0px 4px 12px rgba(16, 185, 129, 0.15); margin-bottom: 16px; animation: modalFadeIn 0.5s ease;';
+          newAppt.innerHTML = `
+            <div class="appt-col-time" style="flex: 0 0 200px; border-right: 1px solid var(--border-color); padding-right: 20px;">
+              <span class="status-badge pending" style="display: inline-block; margin-bottom: 8px; background: #D1FAE5; color: #059669;">Mới đặt (AI)</span>
+              <strong style="display: block; font-size: 16px; color: var(--text-dark);">${fullDate}</strong>
+              <span style="color: var(--text-muted); font-size: 14px;">${time}</span>
+            </div>
+            <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
+              <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa ${specialty}</h3>
+              <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">${doctorName}</p>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;">
+                <i data-lucide="map-pin" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                <span>Địa điểm: <strong>${roomLoc}</strong></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
+                <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                <span>${reason}</span>
+              </div>
+            </div>
+            <div class="appt-col-actions" style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center;">
+              <button class="btn-outline text-danger" onclick="cancelAppointment(this)"><i data-lucide="x-circle"></i> Hủy lịch</button>
+              <button class="btn-primary" onclick="rescheduleAppointment(this)"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
+            </div>
+          `;
+          appointmentList.prepend(newAppt);
+          lucide.createIcons({root: newAppt});
+          
+          const emptyState = document.querySelector('.appointments-container .empty-state');
+          if(emptyState) emptyState.style.display = 'none';
+        }
+
         btn.innerHTML = '<i data-lucide="check-circle"></i> Đặt lịch thành công!';
         btn.style.background = 'var(--success)';
         lucide.createIcons();
@@ -1212,6 +1824,8 @@
         document.querySelectorAll('#w-time-chips-grid .time-chip').forEach(t => t.classList.remove('active'));
       }
 
+      selectedWizardSpecialty = "Nội tổng quát"; // Reset active specialty
+      renderWizardStep1(); // Render Wizard step 1 dynamic lists
       updateWizardUI();
     }
     
@@ -1297,6 +1911,12 @@
           // Thêm thẻ lịch hẹn mới vào tab Lịch hẹn
           const appointmentList = document.querySelector('.appointment-list');
           if(appointmentList) {
+            let roomLoc = "Phòng khám 110, Tầng 1, Khu A";
+            if (specialty.includes("Tiêu hóa")) roomLoc = "Phòng khám 102, Tầng 1, Khu A";
+            else if (specialty.includes("Tổng quát")) roomLoc = "Phòng khám 105, Tầng 1, Khu A";
+            else if (specialty.includes("Tim mạch")) roomLoc = "Phòng khám 108, Tầng 1, Khu A";
+            else if (specialty.includes("Nhi")) roomLoc = "Phòng khám 201, Tầng 2, Khu B";
+
             const newAppt = document.createElement('div');
             newAppt.className = 'appointment-row';
             newAppt.style.cssText = 'display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; padding: 20px; border-radius: 12px; border: 1px solid #10B981; box-shadow: 0px 4px 12px rgba(16, 185, 129, 0.15); margin-bottom: 16px; animation: modalFadeIn 0.5s ease;';
@@ -1309,14 +1929,18 @@
               <div class="appt-col-info" style="flex: 1; padding: 0 24px;">
                 <h3 style="margin: 0 0 4px 0; color: var(--text-dark); font-size: 18px;">Khoa ${specialty}</h3>
                 <p style="margin: 0 0 8px 0; color: var(--text-muted); font-size: 15px;">${doctorName}</p>
+                <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;">
+                  <i data-lucide="map-pin" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                  <span>Địa điểm: <strong>${roomLoc}</strong></span>
+                </div>
                 <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px;">
                   <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
                   <span>Lý do: Khám theo yêu cầu</span>
                 </div>
               </div>
               <div class="appt-col-actions" style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center;">
-                <button class="btn-outline text-danger"><i data-lucide="x-circle"></i> Hủy lịch</button>
-                <button class="btn-primary"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
+                <button class="btn-outline text-danger" onclick="cancelAppointment(this)"><i data-lucide="x-circle"></i> Hủy lịch</button>
+                <button class="btn-primary" onclick="rescheduleAppointment(this)"><i data-lucide="calendar-sync"></i> Đổi giờ</button>
               </div>
             `;
             appointmentList.prepend(newAppt);
@@ -1388,22 +2012,356 @@
     function toggleFloatingChat() {
       const popover = document.getElementById('ai-chat-popover');
       const fabIcon = document.getElementById('fab-icon');
+      const widget = document.getElementById('floating-chat-widget');
       
       popover.classList.toggle('active');
       
       if (popover.classList.contains('active')) {
         fabIcon.setAttribute('data-lucide', 'x');
+        widget?.classList.add('chat-open');
       } else {
         fabIcon.setAttribute('data-lucide', 'bot');
+        widget?.classList.remove('chat-open');
       }
       lucide.createIcons();
     }
+
+    function dismissFabHint() {
+      document.getElementById('floating-chat-widget')?.classList.add('hint-dismissed');
+    }
+
+    function cancelAppointment(btn) {
+      if (confirm('Bạn có chắc chắn muốn hủy lịch hẹn này? Thao tác này không thể hoàn tác.')) {
+        const row = btn.closest('.appointment-row');
+        row.style.opacity = '0.8';
+        row.style.border = '1px solid #EAECF0';
+        
+        const badge = row.querySelector('.status-badge');
+        if (badge) {
+          badge.className = 'status-badge danger';
+          badge.innerText = 'Đã hủy';
+          badge.style.background = '';
+          badge.style.color = '';
+        }
+
+        const actionsCol = row.querySelector('.appt-col-actions');
+        if (actionsCol) {
+          actionsCol.innerHTML = `
+            <button class="btn-icon-rebook" title="Đặt lại" onclick="switchTab('view-search', document.querySelector('.sidebar-nav a:first-child'))">
+              <i data-lucide="refresh-cw"></i> <span>Đặt lại</span>
+            </button>
+          `;
+          lucide.createIcons({root: actionsCol});
+        }
+        alert('Đã hủy lịch hẹn thành công.');
+      }
+    }
+
+    function rescheduleAppointment(btn) {
+      openWizardModal();
+      currentWizardStep = 2;
+      updateWizardUI();
+      // Optional: highlight that they need to pick a new time
+    }
+
+    function sendDoctorMessage() {
+      const input = document.getElementById('doctor-chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('doctor-chat-container');
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const timeStr = `${hours % 12 || 12}:${minutes} ${ampm}`;
+
+      const msgHTML = `
+        <div style="display: flex; gap: 12px; max-width: 80%; align-self: flex-end; animation: modalFadeIn 0.3s ease;">
+          <div style="background: var(--primary); padding: 16px; border-radius: 16px; border-top-right-radius: 4px; color: #FFFFFF; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
+            <p style="margin: 0; line-height: 1.5;">${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+            <span style="display: block; font-size: 11px; color: #C7D2FE; margin-top: 8px; text-align: right;">${timeStr}</span>
+          </div>
+        </div>
+      `;
+
+      container.insertAdjacentHTML('beforeend', msgHTML);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // === EDIT PATIENT PROFILE FUNCTIONALITY ===
+    function openEditProfileModal() {
+      const fullname = document.getElementById('profile-fullname').innerText;
+      const dob = document.getElementById('profile-dob').innerText;
+      const gender = document.getElementById('profile-gender').innerText;
+      const phone = document.getElementById('profile-phone').innerText;
+      const email = document.getElementById('profile-email').innerText;
+      const address = document.getElementById('profile-address').innerText;
+      const bloodtype = document.getElementById('profile-bloodtype').innerText;
+      const height = document.getElementById('profile-height').innerText;
+      const weight = document.getElementById('profile-weight').innerText;
+
+      // Extract text from badges for allergies
+      const allergySpans = document.querySelectorAll('#profile-allergies-container .allergy-badge');
+      const allergies = Array.from(allergySpans).map(s => s.innerText).join(', ');
+
+      // Extract text from badges for chronic conditions
+      const conditionSpans = document.querySelectorAll('#profile-conditions-container .condition-badge');
+      const conditions = Array.from(conditionSpans).map(s => s.innerText).join(', ');
+
+      // Populate form
+      document.getElementById('edit-fullname').value = fullname;
+      document.getElementById('edit-dob').value = dob;
+      document.getElementById('edit-gender').value = gender;
+      document.getElementById('edit-phone').value = phone;
+      document.getElementById('edit-email').value = email;
+      document.getElementById('edit-address').value = address;
+      document.getElementById('edit-bloodtype').value = bloodtype;
+      document.getElementById('edit-height').value = height;
+      document.getElementById('edit-weight').value = weight;
+      document.getElementById('edit-allergies').value = allergies;
+      document.getElementById('edit-conditions').value = conditions;
+
+      // Open modal
+      document.getElementById('editProfileModal').classList.add('active');
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('editProfileModal').classList.remove('active');
+    }
+
+    function saveProfile(event) {
+      event.preventDefault();
+      
+      const fullname = document.getElementById('edit-fullname').value.trim();
+      const dob = document.getElementById('edit-dob').value.trim();
+      const gender = document.getElementById('edit-gender').value;
+      const phone = document.getElementById('edit-phone').value.trim();
+      const email = document.getElementById('edit-email').value.trim();
+      const address = document.getElementById('edit-address').value.trim();
+      const bloodtype = document.getElementById('edit-bloodtype').value;
+      const height = document.getElementById('edit-height').value;
+      const weight = document.getElementById('edit-weight').value;
+      const allergiesInput = document.getElementById('edit-allergies').value;
+      const conditionsInput = document.getElementById('edit-conditions').value;
+
+      // Save to localStorage
+      const profileData = {
+        fullname, dob, gender, phone, email, address, bloodtype, height, weight, allergiesInput, conditionsInput
+      };
+      localStorage.setItem('patientProfile', JSON.stringify(profileData));
+
+      // Update UI
+      applyProfileData(profileData);
+
+      closeEditProfileModal();
+      alert('Đã cập nhật hồ sơ thành công!');
+    }
+
+    function getInitials(name) {
+      if (!name) return 'NB';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function applyProfileData(data) {
+      document.getElementById('profile-fullname').innerText = data.fullname;
+      document.getElementById('profile-dob').innerText = data.dob;
+      document.getElementById('profile-gender').innerText = data.gender;
+      document.getElementById('profile-phone').innerText = data.phone;
+      document.getElementById('profile-email').innerText = data.email;
+      document.getElementById('profile-address').innerText = data.address;
+      document.getElementById('profile-bloodtype').innerText = data.bloodtype;
+      document.getElementById('profile-height').innerText = data.height;
+      document.getElementById('profile-weight').innerText = data.weight;
+
+      // Update avatar initials
+      const initials = getInitials(data.fullname);
+      const profileAvatar = document.getElementById('profile-avatar');
+      if (profileAvatar) profileAvatar.innerText = initials;
+      
+      // Update top header avatar / role
+      const topAvatar = document.querySelector('#top-header .avatar-initials');
+      if (topAvatar) topAvatar.innerText = initials;
+      const topAvatarParent = document.querySelector('#top-header .user-avatar');
+      if (topAvatarParent) topAvatarParent.title = data.fullname;
+
+      // Update allergies container
+      const allergiesContainer = document.getElementById('profile-allergies-container');
+      if (allergiesContainer) {
+        allergiesContainer.innerHTML = '';
+        if (data.allergiesInput.trim()) {
+          data.allergiesInput.split(',').forEach(item => {
+            const trimmed = item.trim();
+            if (trimmed) {
+              const span = document.createElement('span');
+              span.className = 'allergy-badge';
+              span.style.cssText = 'padding: 6px 12px; background: #FEE2E2; color: #991B1B; border-radius: 20px; font-size: 14px; font-weight: 500;';
+              span.innerText = trimmed;
+              allergiesContainer.appendChild(span);
+            }
+          });
+        } else {
+          allergiesContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 14px; font-style: italic;">Không có tiền sử dị ứng</span>';
+        }
+      }
+
+      // Update chronic conditions container
+      const conditionsContainer = document.getElementById('profile-conditions-container');
+      if (conditionsContainer) {
+        conditionsContainer.innerHTML = '';
+        if (data.conditionsInput.trim()) {
+          data.conditionsInput.split(',').forEach(item => {
+            const trimmed = item.trim();
+            if (trimmed) {
+              const span = document.createElement('span');
+              span.className = 'condition-badge';
+              span.style.cssText = 'padding: 6px 12px; background: white; border: 1px solid #FDBA74; color: #C2410C; border-radius: 20px; font-size: 14px;';
+              span.innerText = trimmed;
+              conditionsContainer.appendChild(span);
+            }
+          });
+        } else {
+          conditionsContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 14px; font-style: italic;">Không có bệnh lý nền</span>';
+        }
+      }
+    }
+
+    const recordsData = {
+      general: {
+        title: "Khám sức khỏe tổng quát",
+        subtitle: "Khoa Nội Tổng Hợp · 15/04/2026",
+        doctor: "BS. Trần Văn A (Khoa Nội Tổng Hợp)",
+        initials: "TA",
+        diagnosis: "Suy nhược cơ thể nhẹ, mỡ máu nhẹ",
+        bp: "120/80 mmHg",
+        hr: "72 bpm",
+        weight: "68 kg / 175 cm",
+        advice: "Ăn nhiều rau xanh, hạn chế đồ dầu mỡ và thức ăn nhiều cholesterol. Tập thể dục 30 phút mỗi ngày.",
+        labs: [
+          { name: "Xét nghiệm máu tổng hợp", result: "Glucose bình thường, Cholesterol hơi cao (5.4 mmol/L)" },
+          { name: "X-quang ngực thẳng", result: "Hình ảnh tim phổi bình thường, không tổn thương tiến triển" }
+        ],
+        prescription: [
+          { name: "Lipitor 10mg", qty: "10 viên", dose: "Uống 1 viên buổi tối sau ăn." },
+          { name: "Vitamin 3B", qty: "30 viên", dose: "Ngày uống 2 lần, mỗi lần 1 viên." }
+        ]
+      },
+      gi: {
+        title: "Khám chuyên khoa Nội Tiêu Hóa",
+        subtitle: "Phòng Khám Tiêu Hóa 02 · 10/01/2026",
+        doctor: "BS. Lê Thị B (Phòng Khám Tiêu Hóa 02)",
+        initials: "LB",
+        diagnosis: "Viêm dạ dày cấp (K29.1)",
+        bp: "115/75 mmHg",
+        hr: "78 bpm",
+        weight: "67.5 kg / 175 cm",
+        advice: "Kiêng đồ cay nóng, chất kích thích (bia, rượu, cà phê). Tránh căng thẳng, thức khuya. Ăn uống đúng giờ.",
+        labs: [
+          { name: "Nội soi dạ dày tá tràng gây mê", result: "Dạ dày sung huyết nhẹ vùng hang vị, HP âm tính" },
+          { name: "Siêu âm bụng tổng quát", result: "Các tạng trong ổ bụng bình thường, không phát hiện khối u" }
+        ],
+        prescription: [
+          { name: "Omeprazole 20mg", qty: "14 viên", dose: "Uống 1 viên sáng trước ăn 30 phút." },
+          { name: "Phosphalugel", qty: "20 gói", dose: "Uống 1 gói khi đau bụng hoặc trào ngược." }
+        ]
+      }
+    };
+
+    function openRecordDetail(type) {
+      const data = recordsData[type];
+      if (!data) return;
+
+      document.getElementById('rec-title').innerText = data.title;
+      document.getElementById('rec-subtitle').innerText = data.subtitle;
+      document.getElementById('rec-doctor').innerText = data.doctor;
+      document.getElementById('rec-diagnosis').innerText = data.diagnosis;
+      document.getElementById('rec-bp').innerText = data.bp;
+      document.getElementById('rec-hr').innerText = data.hr;
+      document.getElementById('rec-weight').innerText = data.weight;
+      document.getElementById('rec-advice').innerText = data.advice;
+
+      // Labs list
+      const labsContainer = document.getElementById('rec-labs');
+      labsContainer.innerHTML = '';
+      data.labs.forEach(lab => {
+        const labEl = document.createElement('div');
+        labEl.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #F8FAFC; border: 1px solid #EAECF0; border-radius: 8px; font-size: 13.5px;';
+        labEl.innerHTML = `
+          <div>
+            <strong style="color: var(--text-dark); display: block;">${lab.name}</strong>
+            <span style="color: var(--text-muted); font-size: 12.5px; display: block; margin-top: 2px;">Kết quả: ${lab.result}</span>
+          </div>
+          <button class="btn-outline" style="padding: 4px 10px; font-size: 11.5px; height: 28px; line-height: 1; border-color: #BFDBFE; color: var(--primary); background: #EFF6FF;" onclick="alert('Đang tải kết quả chi tiết cho ${lab.name}...')">Xem chi tiết</button>
+        `;
+        labsContainer.appendChild(labEl);
+      });
+
+      // Prescription list
+      const rxTbody = document.getElementById('rec-prescription-tbody');
+      rxTbody.innerHTML = '';
+      data.prescription.forEach(item => {
+        const row = document.createElement('tr');
+        row.style.cssText = 'border-bottom: 1px solid #EAECF0;';
+        row.innerHTML = `
+          <td style="padding: 10px 16px; font-weight: 500; color: var(--text-dark);">${item.name}</td>
+          <td style="padding: 10px 16px; text-align: center; color: var(--text-muted);">${item.qty}</td>
+          <td style="padding: 10px 16px; color: var(--text-dark);">${item.dose}</td>
+        `;
+        rxTbody.appendChild(row);
+      });
+
+      // Open Modal
+      document.getElementById('viewRecordModal').classList.add('active');
+      lucide.createIcons({root: document.getElementById('viewRecordModal')});
+    }
+
+    function closeRecordModal() {
+      document.getElementById('viewRecordModal').classList.remove('active');
+    }
+
+    function initProfile() {
+      const saved = localStorage.getItem('patientProfile');
+      if (saved) {
+        applyProfileData(JSON.parse(saved));
+      } else {
+        // Create initial default data
+        const initialData = {
+          fullname: 'Nguyễn Bệnh Nhân',
+          dob: '12/08/1990',
+          gender: 'Nam',
+          phone: '0901 234 567',
+          email: 'nguyenbenhnhan@email.com',
+          address: '123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM',
+          bloodtype: 'O+',
+          height: '175',
+          weight: '68',
+          allergiesInput: 'Dị ứng Penicillin, Dị ứng Hải sản',
+          conditionsInput: 'Tiểu đường type 2, Huyết áp cao'
+        };
+        localStorage.setItem('patientProfile', JSON.stringify(initialData));
+        applyProfileData(initialData);
+      }
+    }
+
+    // Run initially
+    initProfile();
+
   </script>
 
   <!-- ═══ FLOATING AI CHAT ═══ -->
-  <button id="floating-chat-btn" onclick="toggleFloatingChat()">
-    <i data-lucide="bot" id="fab-icon"></i>
-  </button>
+  <div class="floating-chat-widget" id="floating-chat-widget">
+    <div class="fab-hint-bubble" id="fab-hint-bubble" role="status" aria-live="polite">
+      <i data-lucide="sparkles" class="fab-hint-icon"></i>
+      <span>Chào bạn! Tôi là trợ lý AI — bấm vào để được tư vấn sức khỏe nhé</span>
+      <button type="button" class="fab-hint-close" onclick="dismissFabHint()" aria-label="Ẩn gợi ý">&times;</button>
+    </div>
+    <button id="floating-chat-btn" onclick="toggleFloatingChat()" aria-label="Mở trợ lý AI">
+      <i data-lucide="bot" id="fab-icon"></i>
+    </button>
+  </div>
 
   <div class="ai-assistant floating-popover" id="ai-chat-popover">
     <div class="chat-header" style="justify-content: space-between;">

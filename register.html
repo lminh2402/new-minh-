@@ -221,6 +221,15 @@
         registerBtn.classList.add('loading');
         registerBtn.innerHTML = '<span>Đang đăng ký...</span>';
 
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const password = pwInput.value;
+        const fullname = document.getElementById('fullname').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        users.push({ email, phone, password, fullname, role: selectedRole });
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+
         setTimeout(() => {
           alert('Đăng ký thành công! Bạn sẽ được chuyển hướng tới trang đăng nhập.');
           window.location.href = 'login.html';

@@ -11,6 +11,48 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <link rel="stylesheet" href="shared.css" />
   <link rel="stylesheet" href="clinic-dashboard.css" />
+  <style>
+    /* Premium Hover & Combo Chart Styles */
+    .combo-chart-bar:hover {
+      filter: brightness(1.1);
+      transform: scaleX(1.05);
+    }
+    .combo-chart-node:hover {
+      transform: translate(-50%, 50%) scale(1.4) !important;
+      background-color: #D97706 !important; /* darker orange */
+    }
+    
+    /* Premium Floating Tooltip bubble */
+    .chart-tooltip-bubble {
+      position: absolute;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(4px);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: none;
+      white-space: nowrap;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    
+    /* Line draw animation */
+    .chart-line-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLinePath 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes drawLinePath {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -20,10 +62,7 @@
       <div class="logo-icon"><i data-lucide="heart-pulse" class="logo-lucide"></i></div>
       <span class="logo-text">MedTriage<span class="logo-accent">AI</span></span>
     </div>
-    <div class="header-search" id="header-search">
-      <i data-lucide="search" class="search-icon"></i>
-      <input type="text" placeholder="Tìm kiếm bệnh nhân, hóa đơn, lịch hẹn…" id="search-input" />
-    </div>
+
     <div class="header-actions" id="header-actions">
       <button class="icon-btn notification-btn" id="notification-btn" aria-label="Thông báo">
         <i data-lucide="bell"></i><span class="notification-badge">3</span>
@@ -117,56 +156,86 @@
           
           <!-- Left Column: Combo Chart -->
           <div class="card" style="display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-              <h2 class="card-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;"><i data-lucide="bar-chart-2" style="color: var(--primary);"></i> Doanh thu & Lưu lượng bệnh nhân</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+              <h2 class="card-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px; font-size: 16px;"><i data-lucide="bar-chart-2" style="color: var(--primary); width: 20px;"></i> Doanh thu & Lưu lượng bệnh nhân</h2>
               <select style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--gray-200); font-size: 13px; outline: none; background: white;">
                 <option>Tuần này</option>
                 <option>Tháng này</option>
               </select>
             </div>
             
-            <!-- Mock Chart -->
-            <div style="flex: 1; position: relative; min-height: 300px; border-left: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-left: 30px; margin-bottom: 20px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px;">
-              <!-- Gridlines -->
-              <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-              <div style="position: absolute; top: 25%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-              <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
-              <div style="position: absolute; top: 75%; left: 0; right: 0; height: 1px; background: var(--gray-100);"></div>
+            <!-- Mock Chart (Premium Labeled, Animated & Interactive Combo Chart) -->
+            <div style="flex: 1; position: relative; min-height: 300px; border-left: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-left: 45px; margin-right: 40px; margin-bottom: 30px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px;">
+              <!-- Gridlines with Left (Revenue) and Right (Traffic) Y-Axis Labels -->
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+                <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">20M</span>
+                <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">100</span>
+              </div>
+              <div style="position: absolute; top: 25%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+                <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">15M</span>
+                <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">75</span>
+              </div>
+              <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+                <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">10M</span>
+                <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">50</span>
+              </div>
+              <div style="position: absolute; top: 75%; left: 0; right: 0; height: 1px; background: var(--gray-100); display: flex; align-items: center;">
+                <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">5M</span>
+                <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">25</span>
+              </div>
+              <div style="position: absolute; top: 100%; left: 0; right: 0; height: 1px; background: var(--gray-200); display: flex; align-items: center;">
+                <span style="position: absolute; left: -40px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 35px; text-align: right;">0</span>
+                <span style="position: absolute; right: -32px; font-size: 11px; color: var(--gray-400); font-weight: 500; width: 25px; text-align: left;">0</span>
+              </div>
 
-              <!-- SVG Line for Patient Count -->
+              <!-- SVG Line & Area Gradient for Patient Count -->
               <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; overflow: visible;" preserveAspectRatio="none" viewBox="0 0 100 100">
-                <path d="M7.1,70 L21.4,50 L35.7,65 L50,30 L64.3,40 L78.6,10 L92.9,60" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="7.1" cy="70" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="21.4" cy="50" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="35.7" cy="65" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="50" cy="30" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="64.3" cy="40" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="78.6" cy="10" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
-                <circle cx="92.9" cy="60" r="2.5" fill="#F59E0B" stroke="white" stroke-width="1.5"/>
+                <defs>
+                  <linearGradient id="orange-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25" />
+                    <stop offset="100%" stop-color="#F59E0B" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <!-- Gradient Area -->
+                <path class="chart-area" d="M7.1,70 C14.2,60 14.2,50 21.4,50 C28.5,50 28.5,65 35.7,65 C42.8,65 42.8,30 50,30 C57.1,30 57.1,40 64.3,40 C71.4,40 71.4,10 78.6,10 C85.7,10 85.7,60 92.9,60 L92.9,100 L7.1,100 Z" fill="url(#orange-gradient)" style="opacity: 0; transition: opacity 1s ease 1s;" />
+                <!-- Smooth Line Path -->
+                <path class="chart-line-path" d="M7.1,70 C14.2,60 14.2,50 21.4,50 C28.5,50 28.5,65 35.7,65 C42.8,65 42.8,30 50,30 C57.1,30 57.1,40 64.3,40 C71.4,40 71.4,10 78.6,10 C85.7,10 85.7,60 92.9,60" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
               </svg>
 
-              <!-- Bars -->
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 40%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <!-- Circle Nodes for Patient Count (Perfect circles, won't squash) -->
+              <div class="combo-chart-node" style="position: absolute; left: 7.1%; bottom: 30%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 2" data-value="30 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 21.4%; bottom: 50%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 3" data-value="50 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 35.7%; bottom: 35%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 4" data-value="35 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 50%; bottom: 70%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 5" data-value="70 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 64.3%; bottom: 60%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 6" data-value="60 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 78.6%; bottom: 90%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Thứ 7" data-value="90 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+              <div class="combo-chart-node" style="position: absolute; left: 92.9%; bottom: 40%; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2.5px solid white; transform: translate(-50%, 50%) scale(1); z-index: 12; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s;" data-label="Chủ Nhật" data-value="40 ca khám" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()"></div>
+
+              <!-- Bars with slide-up animations on load -->
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="40%" data-label="Thứ 2" data-value="8.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T2</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 60%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="60%" data-label="Thứ 3" data-value="12.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T3</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 45%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="45%" data-label="Thứ 4" data-value="9.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T4</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 80%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="80%" data-label="Thứ 5" data-value="16.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T5</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 65%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="65%" data-label="Thứ 6" data-value="13.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">T6</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, #10B981, #6EE7B7); height: 95%; border-radius: 4px 4px 0 0; position: relative; z-index: 5; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, #10B981, #6EE7B7); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);" data-height="95%" data-label="Thứ 7" data-value="19.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-900); font-weight: 700;">T7</span>
               </div>
-              <div style="width: 12%; max-width: 40px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 35%; border-radius: 4px 4px 0 0; position: relative; z-index: 5;">
+              <div class="combo-chart-bar" style="width: 8%; max-width: 32px; background: linear-gradient(to top, var(--primary), var(--primary-light)); height: 0%; border-radius: 6px 6px 0 0; position: relative; z-index: 5; cursor: pointer; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;" data-height="35%" data-label="Chủ Nhật" data-value="7.0 triệu VNĐ" onmouseover="showComboTooltip(this, event)" onmouseout="hideComboTooltip()">
                 <span style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--gray-500);">CN</span>
               </div>
+
+              <!-- Floating Tooltip Container -->
+              <div id="chart-tooltip" class="chart-tooltip-bubble"></div>
             </div>
             
             <div style="display: flex; justify-content: center; gap: 24px; margin-top: 8px; font-size: 13px; font-weight: 500;">
@@ -220,7 +289,7 @@
                 <div style="position: relative; margin-bottom: 24px;">
                   <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
                   <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">1 giờ trước</div>
-                  <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> hoàn tất thanh toán hóa đơn 4.500.000đ (Gói khám tổng quát).</div>
+                  <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #8B5CF6;">👤 Bệnh nhân Nguyễn Thu A</strong> hoàn tất thanh toán hóa đơn 4.500.000đ (Gói khám tổng quát).</div>
                 </div>
                 
                 <div style="position: relative; margin-bottom: 24px;">
@@ -232,7 +301,7 @@
                 <div style="position: relative; margin-bottom: 24px;">
                   <div style="position: absolute; left: -24px; top: 2px; width: 12px; height: 12px; background: white; border: 2px solid #10B981; border-radius: 50%; box-sizing: border-box;"></div>
                   <div style="font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 4px;">2 giờ trước</div>
-                  <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #10B981;">👩‍💼 Lễ tân Nguyễn Thu A</strong> tiếp nhận thành công 5 bệnh nhân mới đặt lịch qua App.</div>
+                  <div style="font-size: 13px; color: var(--gray-800); line-height: 1.5;"><strong style="color: #8B5CF6;">👤 Bệnh nhân Nguyễn Thu A</strong> đăng ký lịch khám mới thành công qua App.</div>
                 </div>
 
                 <div style="position: relative;">
@@ -766,7 +835,7 @@
               newCard.style.cssText = 'background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; gap: 12px; align-items: flex-start;';
               newCard.ondragstart = drag;
               
-              const badge = isUrgent ? '<span style="font-size: 10px; background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Khẩn cấp (AI)</span>' : '<span style="font-size: 10px; background: #E0E7FF; color: #4F46E5; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Từ Lễ Tân</span>';
+              const badge = isUrgent ? '<span style="font-size: 10px; background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Khẩn cấp (AI)</span>' : '<span style="font-size: 10px; background: #F3E8FF; color: #6B21A8; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Từ Bệnh nhân</span>';
               const symptomIcon = isUrgent ? '<i data-lucide="alert-circle" style="width: 12px; display: inline; margin-right: 4px; color: #F59E0B;"></i>' : '<i data-lucide="stethoscope" style="width: 12px; display: inline; margin-right: 4px;"></i>';
               
               newCard.innerHTML = `
@@ -936,6 +1005,69 @@
                   <td>0912.345.678</td>
                   <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">12 lượt</a></td>
                   <td style="color: var(--gray-500);">02/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10027</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Lê Thu Trang</td>
+                  <td><span style="background: #FCE7F3; color: #DB2777; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nữ</span> <span style="color: var(--gray-600); font-size: 13px;">24t</span></td>
+                  <td>0934.567.890</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">1 lượt</a></td>
+                  <td style="color: var(--gray-500);">28/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10028</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Phạm Quốc Khánh</td>
+                  <td><span style="background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nam</span> <span style="color: var(--gray-600); font-size: 13px;">31t</span></td>
+                  <td>0977.654.321</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">4 lượt</a></td>
+                  <td style="color: var(--gray-500);">25/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10029</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Đỗ Thùy Linh</td>
+                  <td><span style="background: #FCE7F3; color: #DB2777; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nữ</span> <span style="color: var(--gray-600); font-size: 13px;">42t</span></td>
+                  <td>0945.123.789</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">7 lượt</a></td>
+                  <td style="color: var(--gray-500);">22/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10030</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Ngô Tiến Dũng</td>
+                  <td><span style="background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nam</span> <span style="color: var(--gray-600); font-size: 13px;">55t</span></td>
+                  <td>0903.987.654</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">9 lượt</a></td>
+                  <td style="color: var(--gray-500);">19/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10031</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Vũ Hoàng Long</td>
+                  <td><span style="background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nam</span> <span style="color: var(--gray-600); font-size: 13px;">19t</span></td>
+                  <td>0982.555.666</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">3 lượt</a></td>
+                  <td style="color: var(--gray-500);">14/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10032</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Nguyễn Minh Thư</td>
+                  <td><span style="background: #FCE7F3; color: #DB2777; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nữ</span> <span style="color: var(--gray-600); font-size: 13px;">33t</span></td>
+                  <td>0966.111.222</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">6 lượt</a></td>
+                  <td style="color: var(--gray-500);">08/05/2026</td>
+                  <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--gray-700);">#BN-10033</strong></td>
+                  <td style="font-weight: 700; color: var(--gray-900);">Bùi Tuấn Anh</td>
+                  <td><span style="background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px;">Nam</span> <span style="color: var(--gray-600); font-size: 13px;">27t</span></td>
+                  <td>0914.888.999</td>
+                  <td><a href="#" style="color: #2563EB; font-weight: 600; text-decoration: none;">2 lượt</a></td>
+                  <td style="color: var(--gray-500);">05/05/2026</td>
                   <td><button class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 12px; height: auto;" onclick="openPatientDetail()">Xem HS</button></td>
                 </tr>
               </tbody>
@@ -1573,7 +1705,7 @@
 
             <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
               Chi tiết Thuốc nhập
-              <button class="btn-outline" style="font-size: 12px; height: 32px;"><i data-lucide="plus"></i> Thêm dòng</button>
+              <button class="btn-outline" onclick="addInboundRow()" style="font-size: 12px; height: 32px;"><i data-lucide="plus"></i> Thêm dòng</button>
             </h3>
             <div style="border: 1px solid var(--gray-200); border-radius: 8px; overflow: hidden; margin-bottom: 24px;">
               <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
@@ -1587,21 +1719,28 @@
                     <th style="padding: 12px; text-align: center; width: 50px;"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="inbound-table-body">
                   <tr style="border-bottom: 1px solid var(--gray-100);">
-                    <td style="padding: 8px;"><select class="form-control" style="height: 32px; font-size: 13px;"><option>Amoxicillin 500mg</option></select></td>
+                    <td style="padding: 8px;">
+                      <select class="form-control" style="height: 32px; font-size: 13px;" onchange="handleInboundSelectChange(this)" data-prev-val="MED-002">
+                        <option value="MED-001">Paracetamol 500mg</option>
+                        <option value="MED-002" selected>Amoxicillin 500mg</option>
+                        <option value="MED-003">Lisinopril 10mg</option>
+                        <option value="NEW_MED">+ Thêm thuốc mới...</option>
+                      </select>
+                    </td>
                     <td style="padding: 8px;"><input type="number" class="form-control" value="500" style="height: 32px; font-size: 13px;"></td>
                     <td style="padding: 8px;"><input type="number" class="form-control" value="4000" style="height: 32px; font-size: 13px;"></td>
                     <td style="padding: 8px;"><input type="text" class="form-control" value="B-2026-X" style="height: 32px; font-size: 13px;"></td>
                     <td style="padding: 8px;"><input type="date" class="form-control" value="2028-12-31" style="height: 32px; font-size: 13px;"></td>
-                    <td style="padding: 8px; text-align: center;"><i data-lucide="trash-2" style="color: #EF4444; cursor: pointer; width: 16px;"></i></td>
+                    <td style="padding: 8px; text-align: center;"><i data-lucide="trash-2" onclick="deleteInboundRow(this)" style="color: #EF4444; cursor: pointer; width: 16px;"></i></td>
                   </tr>
                 </tbody>
               </table>
             </div>
             
             <div style="text-align: right;">
-              <button class="btn-primary"><i data-lucide="check-circle"></i> Hoàn tất Nhập kho</button>
+              <button class="btn-primary" id="btn-submit-inbound" onclick="submitInbound()"><i data-lucide="check-circle"></i> Hoàn tất Nhập kho</button>
             </div>
           </div>
         </div>
@@ -1627,7 +1766,7 @@
                   <td><span style="background: #E0E7FF; color: #4F46E5; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Đơn thuốc BS</span></td>
                   <td>Bệnh nhân: Lê Thủy (#TX-9283)</td>
                   <td style="font-weight: 700;">120,000 đ</td>
-                  <td style="text-align: center;"><button style="border:none; background:transparent; cursor:pointer; color:var(--primary);"><i data-lucide="eye" style="width: 16px;"></i></button></td>
+                  <td style="text-align: center;"><button onclick="viewOutboundDetail('XK-2605-881')" style="border:none; background:transparent; cursor:pointer; color:var(--primary);"><i data-lucide="eye" style="width: 16px;"></i></button></td>
                 </tr>
                 <tr>
                   <td><strong>XK-2605-882</strong></td>
@@ -1635,14 +1774,104 @@
                   <td><span style="background: #FCE7F3; color: #DB2777; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Bán lẻ quầy</span></td>
                   <td>Khách vãng lai</td>
                   <td style="font-weight: 700;">45,000 đ</td>
-                  <td style="text-align: center;"><button style="border:none; background:transparent; cursor:pointer; color:var(--primary);"><i data-lucide="eye" style="width: 16px;"></i></button></td>
+                  <td style="text-align: center;"><button onclick="viewOutboundDetail('XK-2605-882')" style="border:none; background:transparent; cursor:pointer; color:var(--primary);"><i data-lucide="eye" style="width: 16px;"></i></button></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
+        <!-- Modal: Đăng ký Thuốc Mới -->
+        <div id="modal-add-medicine" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1300; justify-content: center; align-items: center;">
+          <div style="background: white; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; animation: modalFadeIn 0.3s ease;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--gray-900);">Đăng ký thuốc mới</h3>
+              <button onclick="closeNewMedicineModal()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
+            </div>
+            <div style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Tên thuốc (Hàm lượng) <span style="color: #EF4444;">*</span></label>
+                <input type="text" id="new-med-name" placeholder="VD: Decolgen 500mg" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Nhóm thuốc <span style="color: #EF4444;">*</span></label>
+                <select id="new-med-category" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; background: white;">
+                  <option value="Kháng sinh">Kháng sinh</option>
+                  <option value="Giảm đau, hạ sốt">Giảm đau, hạ sốt</option>
+                  <option value="Tim mạch">Tim mạch</option>
+                  <option value="Khác">Khác</option>
+                </select>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Đơn vị tính <span style="color: #EF4444;">*</span></label>
+                <input type="text" id="new-med-unit" placeholder="VD: Viên, Hộp, Chai" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; outline: none;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Giá bán lẻ (đ) <span style="color: #EF4444;">*</span></label>
+                <input type="number" id="new-med-price" placeholder="VD: 3000" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; outline: none;">
+              </div>
+            </div>
+            <div style="padding: 16px 20px; background: #FAFAFA; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 12px;">
+              <button onclick="closeNewMedicineModal()" style="padding: 8px 16px; border: 1px solid var(--gray-300); background: white; border-radius: 8px; font-weight: 600; color: var(--gray-700); font-size: 13px; cursor: pointer;">Hủy</button>
+              <button onclick="submitNewMedicine()" style="padding: 8px 16px; border: none; background: #4F46E5; color: white; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer;">Đăng ký</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal: Chi Tiết Xuất Kho -->
+        <div id="modal-outbound-detail" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1200; justify-content: center; align-items: center;">
+          <div style="background: white; width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; animation: modalFadeIn 0.3s ease;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--gray-900);">Chi tiết Phiếu xuất kho</h3>
+              <button onclick="closeOutboundDetailModal()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
+            </div>
+            <div style="padding: 20px; display: flex; flex-direction: column; gap: 16px;" id="outbound-detail-body">
+              <!-- Content injected dynamically -->
+            </div>
+            <div style="padding: 16px 20px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end;">
+              <button onclick="closeOutboundDetailModal()" style="padding: 8px 16px; border: 1px solid var(--gray-300); background: white; border-radius: 8px; font-weight: 600; color: var(--gray-700); font-size: 13px; cursor: pointer;">Đóng</button>
+            </div>
+          </div>
+        </div>
+
         <script>
+          // Registered medicines data system
+          let registeredMedicines = [
+            { id: "MED-001", name: "Paracetamol 500mg", category: "Giảm đau, hạ sốt", unit: "Viên", price: 2000 },
+            { id: "MED-002", name: "Amoxicillin 500mg", category: "Kháng sinh", unit: "Viên", price: 5000 },
+            { id: "MED-003", name: "Lisinopril 10mg", category: "Tim mạch", unit: "Hộp", price: 120000 }
+          ];
+
+          // Outbound records data system
+          const outboundDetails = {
+            'XK-2605-881': {
+              code: 'XK-2605-881',
+              datetime: '13/05/2026 09:50',
+              source: 'Đơn thuốc BS',
+              sourceBg: '#E0E7FF',
+              sourceColor: '#4F46E5',
+              receiver: 'Bệnh nhân: Lê Thủy (#TX-9283)',
+              items: [
+                { name: 'Paracetamol 500mg', qty: 10, unit: 'Viên', price: 2000, total: 20000 },
+                { name: 'Amoxicillin 500mg', qty: 20, unit: 'Viên', price: 5000, total: 100000 }
+              ],
+              totalAmount: 120000
+            },
+            'XK-2605-882': {
+              code: 'XK-2605-882',
+              datetime: '13/05/2026 10:20',
+              source: 'Bán lẻ quầy',
+              sourceBg: '#FCE7F3',
+              sourceColor: '#DB2777',
+              receiver: 'Khách vãng lai',
+              items: [
+                { name: 'Paracetamol 500mg', qty: 10, unit: 'Viên', price: 2000, total: 20000 },
+                { name: 'Amoxicillin 500mg', qty: 5, unit: 'Viên', price: 5000, total: 25000 }
+              ],
+              totalAmount: 45000
+            }
+          };
+
           function switchInventoryTab(tabId) {
             document.getElementById('inv-master').style.display = 'none';
             document.getElementById('inv-inbound').style.display = 'none';
@@ -1653,15 +1882,342 @@
             var btns = ['btn-inv-master', 'btn-inv-inbound', 'btn-inv-outbound'];
             btns.forEach(function(id) {
               var btn = document.getElementById(id);
-              btn.style.color = 'var(--gray-500)';
-              btn.style.fontWeight = '500';
-              btn.style.borderBottomColor = 'transparent';
+              if (btn) {
+                btn.style.color = 'var(--gray-500)';
+                btn.style.fontWeight = '500';
+                btn.style.borderBottomColor = 'transparent';
+              }
             });
 
             var activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.style.color = 'var(--primary)';
-            activeBtn.style.fontWeight = '600';
-            activeBtn.style.borderBottomColor = 'var(--primary)';
+            if (activeBtn) {
+              activeBtn.style.color = 'var(--primary)';
+              activeBtn.style.fontWeight = '600';
+              activeBtn.style.borderBottomColor = 'var(--primary)';
+            }
+          }
+
+          function populateMedSelect(selectElement, selectedValue) {
+            if (!selectElement) return;
+            selectElement.innerHTML = '';
+            registeredMedicines.forEach(med => {
+              const opt = document.createElement('option');
+              opt.value = med.id;
+              opt.textContent = med.name;
+              if (med.id === selectedValue) {
+                opt.selected = true;
+              }
+              selectElement.appendChild(opt);
+            });
+            
+            const separator = document.createElement('option');
+            separator.disabled = true;
+            separator.textContent = "──────────";
+            selectElement.appendChild(separator);
+            
+            const newOpt = document.createElement('option');
+            newOpt.value = "NEW_MED";
+            newOpt.textContent = "+ Thêm thuốc mới...";
+            if (selectedValue === "NEW_MED") {
+              newOpt.selected = true;
+            }
+            selectElement.appendChild(newOpt);
+          }
+
+          let currentSelectElement = null;
+
+          function handleInboundSelectChange(select) {
+            if (select.value === "NEW_MED") {
+              currentSelectElement = select;
+              document.getElementById('modal-add-medicine').style.display = 'flex';
+              document.getElementById('new-med-name').value = '';
+              document.getElementById('new-med-category').value = 'Giảm đau, hạ sốt';
+              document.getElementById('new-med-unit').value = 'Viên';
+              document.getElementById('new-med-price').value = '';
+            } else {
+              select.setAttribute('data-prev-val', select.value);
+            }
+          }
+
+          function closeNewMedicineModal() {
+            document.getElementById('modal-add-medicine').style.display = 'none';
+            if (currentSelectElement) {
+              currentSelectElement.value = currentSelectElement.getAttribute('data-prev-val');
+              currentSelectElement = null;
+            }
+          }
+
+          function submitNewMedicine() {
+            const name = document.getElementById('new-med-name').value.trim();
+            const category = document.getElementById('new-med-category').value;
+            const unit = document.getElementById('new-med-unit').value.trim() || 'Viên';
+            const priceInput = document.getElementById('new-med-price').value.trim();
+
+            if (!name || !priceInput) {
+              alert("Vui lòng điền đầy đủ các trường thông tin bắt buộc!");
+              return;
+            }
+
+            const price = parseInt(priceInput, 10);
+            if (isNaN(price) || price < 0) {
+              alert("Đơn giá bán lẻ không hợp lệ!");
+              return;
+            }
+
+            const nextIdNum = registeredMedicines.length + 1;
+            const newId = "MED-" + String(nextIdNum).padStart(3, '0');
+
+            const newMed = { id: newId, name: name, category: category, unit: unit, price: price };
+            registeredMedicines.push(newMed);
+
+            document.querySelectorAll('#inbound-table-body select').forEach(select => {
+              const currentVal = select.value;
+              populateMedSelect(select, currentVal === "NEW_MED" ? newId : currentVal);
+            });
+
+            if (currentSelectElement) {
+              currentSelectElement.value = newId;
+              currentSelectElement.setAttribute('data-prev-val', newId);
+              currentSelectElement = null;
+            }
+
+            document.getElementById('modal-add-medicine').style.display = 'none';
+            showSuccessToast("Đăng ký thuốc '" + name + "' thành công!");
+          }
+
+          function addInboundRow() {
+            const tbody = document.getElementById('inbound-table-body');
+            const tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid var(--gray-100)';
+            
+            const tdSelect = document.createElement('td');
+            tdSelect.style.padding = '8px';
+            const select = document.createElement('select');
+            select.className = 'form-control';
+            select.style.cssText = 'height: 32px; font-size: 13px;';
+            populateMedSelect(select, "MED-001");
+            select.setAttribute('data-prev-val', 'MED-001');
+            select.onchange = function() { handleInboundSelectChange(select); };
+            tdSelect.appendChild(select);
+            tr.appendChild(tdSelect);
+            
+            const tdQty = document.createElement('td');
+            tdQty.style.padding = '8px';
+            tdQty.innerHTML = '<input type="number" class="form-control" value="100" style="height: 32px; font-size: 13px;">';
+            tr.appendChild(tdQty);
+            
+            const tdPrice = document.createElement('td');
+            tdPrice.style.padding = '8px';
+            tdPrice.innerHTML = '<input type="number" class="form-control" value="2000" style="height: 32px; font-size: 13px;">';
+            tr.appendChild(tdPrice);
+            
+            const tdBatch = document.createElement('td');
+            tdBatch.style.padding = '8px';
+            tdBatch.innerHTML = '<input type="text" class="form-control" value="B-2026-X" style="height: 32px; font-size: 13px;">';
+            tr.appendChild(tdBatch);
+            
+            const tdExpiry = document.createElement('td');
+            tdExpiry.style.padding = '8px';
+            const expDate = new Date();
+            expDate.setFullYear(expDate.getFullYear() + 2);
+            const expStr = expDate.toISOString().split('T')[0];
+            tdExpiry.innerHTML = '<input type="date" class="form-control" value="' + expStr + '" style="height: 32px; font-size: 13px;">';
+            tr.appendChild(tdExpiry);
+            
+            const tdAction = document.createElement('td');
+            tdAction.style.cssText = 'padding: 8px; text-align: center;';
+            tdAction.innerHTML = '<i data-lucide="trash-2" style="color: #EF4444; cursor: pointer; width: 16px;"></i>';
+            tdAction.querySelector('i').addEventListener('click', function() {
+              tr.remove();
+            });
+            tr.appendChild(tdAction);
+            
+            tbody.appendChild(tr);
+            if (window.lucide) window.lucide.createIcons();
+          }
+
+          function deleteInboundRow(element) {
+            const row = element.closest('tr');
+            if (row) {
+              row.remove();
+            }
+          }
+
+          function submitInbound() {
+            const tbody = document.getElementById('inbound-table-body');
+            const rows = tbody.querySelectorAll('tr');
+            if (rows.length === 0) {
+              alert("Phiếu nhập chưa có thuốc nào!");
+              return;
+            }
+
+            let itemsProcessed = [];
+            for (let i = 0; i < rows.length; i++) {
+              const row = rows[i];
+              const select = row.querySelector('select');
+              const inputs = row.querySelectorAll('input');
+              const qty = parseInt(inputs[0].value, 10);
+              const importPrice = parseInt(inputs[1].value, 10);
+              const batch = inputs[2].value.trim();
+              const expiry = inputs[3].value;
+
+              if (isNaN(qty) || qty <= 0) {
+                alert("Số lượng ở dòng thứ " + (i + 1) + " không hợp lệ!");
+                return;
+              }
+              if (isNaN(importPrice) || importPrice < 0) {
+                alert("Giá nhập ở dòng thứ " + (i + 1) + " không hợp lệ!");
+                return;
+              }
+
+              const medId = select.value;
+              const medInfo = registeredMedicines.find(m => m.id === medId);
+              if (!medInfo) continue;
+
+              itemsProcessed.push({
+                id: medId,
+                name: medInfo.name,
+                qty: qty,
+                category: medInfo.category,
+                unit: medInfo.unit,
+                salePrice: medInfo.price
+              });
+            }
+
+            itemsProcessed.forEach(item => {
+              const masterTbody = document.querySelector('#inv-master table tbody');
+              const masterRows = masterTbody.querySelectorAll('tr');
+              let foundRow = null;
+
+              for (let r = 0; r < masterRows.length; r++) {
+                const idCell = masterRows[r].querySelector('td:first-child');
+                if (idCell && idCell.innerText.trim() === item.id) {
+                  foundRow = masterRows[r];
+                  break;
+                }
+              }
+
+              if (foundRow) {
+                const stockCell = foundRow.cells[foundRow.cells.length - 1];
+                const span = stockCell.querySelector('span');
+                let currentStock = 0;
+                if (span) {
+                  currentStock = parseInt(span.innerText.trim(), 10) || 0;
+                } else {
+                  currentStock = parseInt(stockCell.innerText.trim(), 10) || 0;
+                }
+
+                const newStock = currentStock + item.qty;
+
+                if (newStock >= 50) {
+                  stockCell.innerHTML = `<span style="font-weight: 800; color: #059669; font-size: 15px;">${newStock}</span>`;
+                } else {
+                  stockCell.innerHTML = `<span style="font-weight: 800; color: #DC2626; font-size: 15px; display: flex; align-items: center; gap: 4px;">${newStock} <i data-lucide="alert-triangle" style="width: 14px; color: #DC2626;"></i></span>`;
+                }
+
+                foundRow.style.animation = 'none';
+                foundRow.offsetHeight;
+                foundRow.style.animation = 'highlightRow 2s ease forwards';
+
+                if (item.id === "MED-002" && newStock >= 50) {
+                  const alertBanner = document.querySelector('.clinic-main div[style*="background: #FEF2F2"]');
+                  if (alertBanner) {
+                    alertBanner.style.display = 'none';
+                  }
+                }
+              } else {
+                const newTr = document.createElement('tr');
+                newTr.style.animation = 'highlightRow 2s ease forwards';
+                newTr.innerHTML = `
+                  <td><strong>${item.id}</strong></td>
+                  <td style="font-weight: 600;">${item.name}</td>
+                  <td>${item.category}</td>
+                  <td>${item.unit}</td>
+                  <td>${item.salePrice.toLocaleString('vi-VN')} đ</td>
+                  <td><span style="font-weight: 800; color: #059669; font-size: 15px;">${item.qty}</span></td>
+                `;
+                masterTbody.appendChild(newTr);
+              }
+            });
+
+            tbody.innerHTML = '';
+            addInboundRow();
+
+            const receiptInput = document.querySelector('#inv-inbound input[value^="NK-"]');
+            if (receiptInput) {
+              const randCode = Math.floor(100 + Math.random() * 900);
+              const now = new Date();
+              receiptInput.value = "NK-" + now.getDate() + String(now.getMonth() + 1).padStart(2, '0') + "-" + randCode;
+            }
+
+            if (window.lucide) window.lucide.createIcons();
+            switchInventoryTab('inv-master');
+            showSuccessToast("Nhập kho hoàn tất thành công!");
+          }
+
+          function viewOutboundDetail(code) {
+            const data = outboundDetails[code];
+            if (!data) return;
+
+            const modal = document.getElementById('modal-outbound-detail');
+            const body = document.getElementById('outbound-detail-body');
+            
+            let rowsHtml = '';
+            data.items.forEach(item => {
+              rowsHtml += `
+                <tr style="border-bottom: 1px solid var(--gray-100);">
+                  <td style="padding: 10px 8px; font-weight: 600; color: var(--gray-800);">${item.name}</td>
+                  <td style="padding: 10px 8px; text-align: center; color: var(--gray-700);">${item.qty} ${item.unit}</td>
+                  <td style="padding: 10px 8px; text-align: right; color: var(--gray-600);">${item.price.toLocaleString('vi-VN')} đ</td>
+                  <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: var(--gray-900);">${item.total.toLocaleString('vi-VN')} đ</td>
+                </tr>
+              `;
+            });
+
+            body.innerHTML = `
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13.5px; border-bottom: 1px dashed var(--gray-200); padding-bottom: 12px;">
+                  <div><span style="color: var(--gray-500);">Mã phiếu:</span> <strong style="color: var(--gray-800); font-size: 14px;">${data.code}</strong></div>
+                  <div><span style="color: var(--gray-500);">Ngày giờ:</span> <strong style="color: var(--gray-800);">${data.datetime}</strong></div>
+                  <div><span style="color: var(--gray-500);">Nguồn xuất:</span> <span style="background: ${data.sourceBg}; color: ${data.sourceColor}; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${data.source}</span></div>
+                  <div><span style="color: var(--gray-500);">Người nhận:</span> <strong style="color: var(--gray-800);">${data.receiver}</strong></div>
+                </div>
+                
+                <div>
+                  <h4 style="font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">Danh sách thuốc xuất:</h4>
+                  <div style="border: 1px solid var(--gray-200); border-radius: 8px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                      <thead style="background: var(--gray-50); border-bottom: 1px solid var(--gray-200);">
+                        <tr>
+                          <th style="padding: 8px; text-align: left; font-weight: 600; color: var(--gray-600);">Tên thuốc</th>
+                          <th style="padding: 8px; text-align: center; font-weight: 600; color: var(--gray-600); width: 80px;">Số lượng</th>
+                          <th style="padding: 8px; text-align: right; font-weight: 600; color: var(--gray-600); width: 100px;">Đơn giá</th>
+                          <th style="padding: 8px; text-align: right; font-weight: 600; color: var(--gray-600); width: 110px;">Thành tiền</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${rowsHtml}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-200); padding-top: 12px; margin-top: 8px;">
+                  <strong style="font-size: 14px; color: var(--gray-800);">Tổng giá trị phiếu xuất:</strong>
+                  <strong style="font-size: 16px; color: var(--accent);">${data.totalAmount.toLocaleString('vi-VN')} đ</strong>
+                </div>
+              </div>
+            `;
+
+            modal.style.display = 'flex';
+          }
+
+          function closeOutboundDetailModal() {
+            document.getElementById('modal-outbound-detail').style.display = 'none';
+          }
+          
+          function showSuccessToast(message) {
+            showPatientToast(message);
           }
         </script>
       </div>
@@ -1698,7 +2254,7 @@
                     <span class="slider"></span>
                   </label>
                 </td>
-                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
+                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;" onclick="openEditServiceModal(this)"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
               </tr>
               <tr>
                 <td style="font-weight: 700;">Tư vấn Chuyên gia (Online)</td>
@@ -1710,7 +2266,7 @@
                     <span class="slider"></span>
                   </label>
                 </td>
-                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
+                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;" onclick="openEditServiceModal(this)"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
               </tr>
               <tr>
                 <td style="font-weight: 700;">Nội soi dạ dày tiền mê</td>
@@ -1722,7 +2278,7 @@
                     <span class="slider"></span>
                   </label>
                 </td>
-                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
+                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;" onclick="openEditServiceModal(this)"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
               </tr>
             </tbody>
           </table>
@@ -1786,19 +2342,216 @@
           </div>
         </div>
 
+        <!-- Modal: Chỉnh sửa Dịch vụ -->
+        <div id="modal-edit-service" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1100; justify-content: center; align-items: center;">
+          <div style="background: white; border-radius: 12px; width: 100%; max-width: 512px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Header -->
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--gray-900);">Chỉnh sửa Dịch vụ</h3>
+              <button onclick="closeEditServiceModal()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
+            </div>
+            
+            <!-- Body -->
+            <div style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Tên dịch vụ <span style="color: #EF4444;">*</span></label>
+                <input type="text" id="edit-svc-name" placeholder="VD: Khám tổng quát" oninput="validateEditServiceForm()" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s;">
+              </div>
+              
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Nhóm dịch vụ</label>
+                <select id="edit-svc-group" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; background: white;">
+                  <option value="Khám bệnh">Khám bệnh</option>
+                  <option value="Xét nghiệm">Xét nghiệm</option>
+                  <option value="Chẩn đoán hình ảnh">Chẩn đoán hình ảnh</option>
+                  <option value="Thủ thuật">Thủ thuật</option>
+                </select>
+              </div>
+              
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Mô tả ngắn</label>
+                <textarea id="edit-svc-desc" placeholder="VD: Nội soi bằng ống mềm..." rows="3" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; resize: vertical;"></textarea>
+              </div>
+              
+              <div>
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px;">Đơn giá (VNĐ) <span style="color: #EF4444;">*</span></label>
+                <input type="text" id="edit-svc-price" placeholder="VD: 350,000" oninput="formatPriceInput(this); validateEditServiceForm()" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none;">
+                <div id="edit-svc-price-warning" style="display: none; color: #EF4444; font-size: 12px; margin-top: 4px;"><i data-lucide="alert-circle" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Đơn giá không hợp lệ (Phải lớn hơn hoặc bằng 0).</div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                <span style="font-size: 13px; font-weight: 600; color: var(--gray-700);">Trạng thái hoạt động</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="edit-svc-status" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="padding: 16px 20px; background: #FAFAFA; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 12px;">
+              <button onclick="closeEditServiceModal()" style="padding: 8px 16px; border: 1px solid var(--gray-300); background: white; border-radius: 6px; font-weight: 600; color: var(--gray-700); font-size: 13px; cursor: pointer;">Hủy</button>
+              <button id="btn-save-edit-service" onclick="submitEditService()" style="padding: 8px 16px; border: none; background: var(--primary); color: white; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; min-width: 120px; justify-content: center; transition: all 0.2s;">
+                Lưu thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+
         <script>
+          // === LOCALSTORAGE DATA INITIALIZATION FOR CLINICS ===
+          const defaultServices = [
+            {
+              name: "Gói Tầm Soát Ung Thư",
+              desc: "Xét nghiệm máu, siêu âm toàn diện, tầm soát dấu ấn ung thư",
+              price: "2,500,000",
+              duration: "120 phút",
+              image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Khám Tim Mạch Chuyên Sâu",
+              desc: "Điện tim, siêu âm tim, đo huyết áp 24h và khám với BS chuyên khoa",
+              price: "1,200,000",
+              duration: "60 phút",
+              image: "https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Khám Tổng Quát Premium",
+              desc: "Xét nghiệm máu, siêu âm, điện tâm đồ, nội soi tiêu hóa không đau",
+              price: "3,200,000",
+              duration: "180 phút",
+              image: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Tầm Soát Đột Quỵ",
+              desc: "Chụp MRI não, siêu âm động mạch cảnh tầm soát nguy cơ xơ vữa",
+              price: "4,500,000",
+              duration: "150 phút",
+              image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=400&q=80",
+              isActive: true
+            },
+            {
+              name: "Gói Chăm Sóc Sức Khỏe Mẹ & Bé",
+              desc: "Khám nhi khoa, tư vấn dinh dưỡng cho bé và tiêm chủng định kỳ",
+              price: "1,800,000",
+              duration: "90 phút",
+              image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Khám Xương Khớp Chuyên Sâu",
+              desc: "Chụp X-quang cột sống, đo mật độ xương và siêu âm khớp gối",
+              price: "1,500,000",
+              duration: "75 phút",
+              image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Khám Phụ Khoa Toàn Diện",
+              desc: "Khám phụ sản, siêu âm đầu dò, tầm soát ung thư cổ tử cung HPV",
+              price: "1,600,000",
+              duration: "90 phút",
+              image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Tầm Soát Đái Tháo Đường",
+              desc: "Đường huyết đói, chỉ số HbA1c, chức năng thận và tư vấn dinh dưỡng",
+              price: "950,000",
+              duration: "60 phút",
+              image: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Gói Khám Da Liễu Thẩm Mỹ",
+              desc: "Soi da, phân tích mụn, sắc tố và tư vấn liệu trình chăm sóc da khoa học",
+              price: "850,000",
+              duration: "45 phút",
+              image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Khám Nội tổng quát",
+              desc: "Khám lâm sàng với BS chuyên khoa",
+              price: "350,000",
+              duration: "30 phút",
+              image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&auto=format&fit=crop",
+              isActive: true
+            },
+            {
+              name: "Tư vấn Chuyên gia (Online)",
+              desc: "Chat/Video call với BS trong 30 phút",
+              price: "200,000",
+              duration: "30 phút",
+              image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=400&q=80",
+              isActive: true
+            },
+            {
+              name: "Nội soi dạ dày tiền mê",
+              desc: "Nội soi không đau, áp dụng công nghệ NBI",
+              price: "1,200,000",
+              duration: "45 phút",
+              image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop",
+              isActive: false
+            }
+          ];
+
+          if (!localStorage.getItem('hospitalServices')) {
+            localStorage.setItem('hospitalServices', JSON.stringify(defaultServices));
+          }
+
+          function renderServicesTable() {
+            const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+            const tbody = document.querySelector('#tab-services .appt-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            services.forEach((svc, index) => {
+              const toggleChecked = svc.isActive ? 'checked' : '';
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td style="font-weight: 700;">${svc.name}</td>
+                <td style="color: var(--gray-500);">${svc.desc}</td>
+                <td style="font-weight: 700; color: #0284c7;">${svc.price}</td>
+                <td>
+                  <label class="toggle-switch">
+                    <input type="checkbox" ${toggleChecked} onchange="toggleServiceActiveState(${index}, this)">
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;" onclick="openEditServiceModal(${index})"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
+              `;
+              tbody.appendChild(tr);
+            });
+            if(window.lucide) window.lucide.createIcons();
+          }
+
+          function toggleServiceActiveState(index, checkbox) {
+            const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+            if (services[index]) {
+              services[index].isActive = checkbox.checked;
+              localStorage.setItem('hospitalServices', JSON.stringify(services));
+              showServiceToast(`Đã ${checkbox.checked ? 'bật' : 'tắt'} hoạt động dịch vụ: ${services[index].name}`);
+            }
+          }
+
+          // Initial Render Call
+          document.addEventListener('DOMContentLoaded', () => {
+             // Migrate/fix broken images in localStorage
+             let services = localStorage.getItem('hospitalServices');
+             if (services && services.includes('photo-1594824813573-246434de83fb')) {
+               services = services.replaceAll('photo-1594824813573-246434de83fb', 'photo-1576091160550-2173dba999ef');
+               localStorage.setItem('hospitalServices', services);
+             }
+             renderServicesTable();
+          });
+
           // Lấy danh sách tên dịch vụ hiện có để kiểm tra trùng lặp
           function getExistingServiceNames() {
-            const table = document.querySelector('#tab-services .appt-table tbody');
-            const rows = table.querySelectorAll('tr');
-            let names = [];
-            rows.forEach(row => {
-              const nameCell = row.querySelector('td:first-child');
-              if (nameCell) {
-                names.push(nameCell.innerText.trim().toLowerCase());
-              }
-            });
-            return names;
+            const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+            return services.map(svc => svc.name.toLowerCase());
           }
 
           function formatPriceInput(input) {
@@ -1886,28 +2639,18 @@
               const price = document.getElementById('svc-price').value;
               const isActive = document.getElementById('svc-status').checked;
               
-              // Thêm vào bảng
-              const tbody = document.querySelector('#tab-services .appt-table tbody');
-              const newRow = document.createElement('tr');
-              newRow.style.animation = 'highlightRow 2s ease forwards';
-              
-              const toggleChecked = isActive ? 'checked' : '';
-              
-              newRow.innerHTML = `
-                <td style="font-weight: 700;">${name}</td>
-                <td style="color: var(--gray-500);">${desc}</td>
-                <td style="font-weight: 700; color: #0284c7;">${price}</td>
-                <td>
-                  <label class="toggle-switch">
-                    <input type="checkbox" ${toggleChecked}>
-                    <span class="slider"></span>
-                  </label>
-                </td>
-                <td><button class="btn-outline" style="height: 32px; font-size: 12px; border-radius: 6px;"><i data-lucide="edit-3" style="width:14px;"></i> Sửa</button></td>
-              `;
-              
-              tbody.insertBefore(newRow, tbody.firstChild); 
-              if(window.lucide) window.lucide.createIcons();
+              const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+              services.unshift({
+                name: name,
+                desc: desc,
+                price: price,
+                duration: "60 phút",
+                image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&auto=format&fit=crop",
+                isActive: isActive
+              });
+              localStorage.setItem('hospitalServices', JSON.stringify(services));
+
+              renderServicesTable();
 
               // Đóng Modal và Reset Button
               closeAddServiceModal();
@@ -1915,7 +2658,7 @@
               btn.disabled = false;
               
               // Hiện Toast Notification xanh dương
-              showServiceToast(`Dịch vụ '${name}' đã được thêm vào bảng giá.`);
+              showServiceToast(`Dịch vụ '${name}' đã được thêm thành công.`);
 
             }, 1000);
           }
@@ -1941,6 +2684,95 @@
                  }
              }, 3500);
           }
+
+          let editingIndex = null;
+
+          function openEditServiceModal(index) {
+            editingIndex = index;
+            const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+            const svc = services[index];
+            if (!svc) return;
+
+            document.getElementById('edit-svc-name').value = svc.name;
+            document.getElementById('edit-svc-desc').value = svc.desc;
+            document.getElementById('edit-svc-price').value = svc.price;
+            document.getElementById('edit-svc-status').checked = svc.isActive;
+            document.getElementById('edit-svc-group').value = 'Khám bệnh';
+            document.getElementById('edit-svc-price-warning').style.display = 'none';
+
+            document.getElementById('modal-edit-service').style.display = 'flex';
+            validateEditServiceForm();
+          }
+
+          function closeEditServiceModal() {
+            document.getElementById('modal-edit-service').style.display = 'none';
+            editingIndex = null;
+          }
+
+          function validateEditServiceForm() {
+            const nameInput = document.getElementById('edit-svc-name').value.trim();
+            const priceStr = document.getElementById('edit-svc-price').value.replace(/,/g, '');
+            const btn = document.getElementById('btn-save-edit-service');
+            
+            let isNameValid = nameInput !== '';
+            
+            let isPriceValid = false;
+            if (priceStr !== '') {
+              const priceNum = parseInt(priceStr, 10);
+              if (!isNaN(priceNum) && priceNum >= 0) {
+                isPriceValid = true;
+                document.getElementById('edit-svc-price-warning').style.display = 'none';
+              } else {
+                document.getElementById('edit-svc-price-warning').style.display = 'block';
+              }
+            } else {
+              document.getElementById('edit-svc-price-warning').style.display = 'block';
+            }
+
+            if (isNameValid && isPriceValid) {
+              btn.disabled = false;
+              btn.style.opacity = '1';
+              btn.style.cursor = 'pointer';
+            } else {
+              btn.disabled = true;
+              btn.style.opacity = '0.5';
+              btn.style.cursor = 'not-allowed';
+            }
+          }
+
+          function submitEditService() {
+            if (editingIndex === null) return;
+            const btn = document.getElementById('btn-save-edit-service');
+            
+            btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Đang lưu...';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            if(window.lucide) window.lucide.createIcons();
+            
+            setTimeout(() => {
+              const name = document.getElementById('edit-svc-name').value.trim();
+              const desc = document.getElementById('edit-svc-desc').value.trim();
+              const price = document.getElementById('edit-svc-price').value.trim();
+              const isActive = document.getElementById('edit-svc-status').checked;
+              
+              const services = JSON.parse(localStorage.getItem('hospitalServices') || '[]');
+              if (services[editingIndex]) {
+                services[editingIndex].name = name;
+                services[editingIndex].desc = desc;
+                services[editingIndex].price = price;
+                services[editingIndex].isActive = isActive;
+                localStorage.setItem('hospitalServices', JSON.stringify(services));
+              }
+
+              renderServicesTable();
+              
+              closeEditServiceModal();
+              btn.innerHTML = 'Lưu thay đổi';
+              btn.disabled = false;
+              
+              showServiceToast(`Dịch vụ '${name}' đã được cập nhật thành công.`);
+            }, 1000);
+          }
         </script>
         <style>
             @keyframes highlightRow {
@@ -1956,67 +2788,338 @@
           <!-- Feedback Sidebar -->
           <div class="chat-sidebar" style="width: 320px;">
             <div class="chat-search">
-              <select class="form-control" style="font-size: 13px; height: 36px; margin-bottom: 8px;">
-                <option>Tất cả phản hồi</option>
+              <select class="form-control" id="feedback-filter-rating" onchange="filterFeedback()" style="font-size: 13px; height: 36px; margin-bottom: 8px;">
+                <option value="all">Tất cả phản hồi</option>
                 <option value="1">1 Sao (Khiếu nại)</option>
               </select>
-              <input type="text" placeholder="Tìm kiếm nội dung...">
+              <input type="text" id="feedback-search-input" oninput="filterFeedback()" placeholder="Tìm kiếm nội dung...">
             </div>
-            <div class="chat-list">
-              <div class="chat-item unread active" style="background: #fef2f2; border-left: 4px solid #ef4444;">
-                <div class="patient-avatar" style="background:#fee2e2;color:#dc2626">HT</div>
-                <div class="chat-info">
-                  <div class="chat-header-row">
-                    <span class="chat-name" style="color: #991b1b; font-weight: 800;">Hữu Thắng</span>
-                    <span class="chat-time" style="color: #ef4444;">1 Sao</span>
-                  </div>
-                  <div class="chat-preview">Bác sĩ tư vấn quá hời hợt, không giải thích rõ...</div>
-                </div>
-              </div>
-              <div class="chat-item">
-                <div class="patient-avatar" style="background:#e0f2fe;color:#0284c7">MA</div>
-                <div class="chat-info">
-                  <div class="chat-header-row">
-                    <span class="chat-name">Mai Anh</span>
-                    <span class="chat-time" style="color: #10b981;">5 Sao</span>
-                  </div>
-                  <div class="chat-preview">Dịch vụ tốt, chatbot trả lời rất nhanh.</div>
-                </div>
-              </div>
+            <div class="chat-list" id="feedback-list-container">
+              <!-- Rendered dynamically -->
             </div>
           </div>
           <!-- Feedback Main -->
-          <div class="chat-main" style="background: #fff;">
-            <div class="chat-header" style="background: #fef2f2; border-bottom: 1px solid #fecaca;">
-              <div class="patient-info">
-                <div>
-                  <div class="patient-name" style="color: #991b1b;"><i data-lucide="alert-triangle" style="width:16px; margin-right:4px;"></i> Xử lý khiếu nại (1 Sao)</div>
-                  <div class="patient-phone" style="color: #b91c1c;">Mã GD: #TX-9201 - Khách hàng: Hữu Thắng</div>
-                </div>
-              </div>
-              <button class="btn-save" style="height:36px; background: #ef4444; border-color: #ef4444;">Đóng khiếu nại</button>
-            </div>
-            <div style="padding: 24px; flex: 1; overflow-y: auto;">
-              <h3 style="font-size: 16px; margin-bottom: 12px;">Nội dung phản hồi:</h3>
-              <div style="padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #ef4444; color: #334155; line-height: 1.5; margin-bottom: 24px;">
-                "Hôm qua tôi có đăng ký tư vấn online qua chatbot. Bot thì nhanh nhưng đến lúc gặp bác sĩ thì tư vấn quá hời hợt, không giải thích rõ đơn thuốc, tôi hỏi lại thì ngắt kết nối. Yêu cầu phòng khám giải quyết!"
-              </div>
-
-              <h3 style="font-size: 16px; margin-bottom: 12px;">Tóm tắt từ Chatbot AI:</h3>
-              <div style="padding: 16px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981; color: #065f46; margin-bottom: 24px;">
-                <strong>Nguyên nhân gốc rễ (Root Cause Analysis):</strong> Thái độ phục vụ của BS. Lê Thị C trong ca trực 14:00 ngày 12/05.<br>
-                <strong>Đề xuất xử lý:</strong> Xin lỗi khách hàng, hoàn 50% phí dịch vụ (#TX-9201), và nhắc nhở BS phụ trách.
-              </div>
-            </div>
-            
-            <div class="chat-input-area" style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
-              <div class="chat-input-wrapper">
-                <textarea class="chat-input" placeholder="Soạn tin nhắn xin lỗi và giải quyết cho bệnh nhân..." style="background: #fff;"></textarea>
-                <button class="btn-send"><i data-lucide="send"></i></button>
-              </div>
-            </div>
+          <div class="chat-main" id="feedback-detail-container" style="background: #fff; display: flex; flex-direction: column;">
+            <!-- Rendered dynamically -->
           </div>
         </div>
+
+        <script>
+          const feedbackData = {
+            1: {
+              id: 1,
+              name: "Hữu Thắng",
+              avatar: "HT",
+              avatarBg: "#fee2e2",
+              avatarColor: "#dc2626",
+              rating: 1,
+              ratingText: "1 Sao",
+              preview: "Bác sĩ tư vấn quá hời hợt, không giải thích rõ...",
+              transaction: "#TX-9201",
+              resolved: false,
+              content: "Hôm qua tôi có đăng ký tư vấn online qua chatbot. Bot thì nhanh nhưng đến lúc gặp bác sĩ thì tư vấn quá hời hợt, không giải thích rõ đơn thuốc, tôi hỏi lại thì ngắt kết nối. Yêu cầu phòng khám giải quyết!",
+              rootCause: "Thái độ phục vụ của BS. Lê Thị C trong ca trực 14:00 ngày 12/05.",
+              proposal: "Xin lỗi khách hàng, hoàn 50% phí dịch vụ (#TX-9201), và nhắc nhở BS phụ trách.",
+              messages: [
+                { sender: "Phòng Khám (Bạn)", time: "11:28", text: "đãssda" }
+              ]
+            },
+            2: {
+              id: 2,
+              name: "Mai Anh",
+              avatar: "MA",
+              avatarBg: "#e0f2fe",
+              avatarColor: "#0284c7",
+              rating: 5,
+              ratingText: "5 Sao",
+              preview: "Dịch vụ tốt, chatbot trả lời rất nhanh.",
+              transaction: "#TX-8802",
+              resolved: true,
+              content: "Tôi rất hài lòng với quy trình khám nhanh và hệ thống hỗ trợ AI định vị phòng khám chính xác. Bác sĩ Nội tiêu hóa siêu nhiệt tình giải đáp thắc mắc.",
+              rootCause: "Hệ thống tiếp nhận thông tin tự động hoạt động tối ưu. Trải nghiệm khách hàng xuất sắc.",
+              proposal: "Tuyên dương bộ phận trực ca và tiếp tục duy trì dịch vụ.",
+              messages: []
+            },
+            3: {
+              id: 3,
+              name: "Trần Thị Đau",
+              avatar: "TĐ",
+              avatarBg: "#fee2e2",
+              avatarColor: "#dc2626",
+              rating: 1,
+              ratingText: "1 Sao",
+              preview: "Chờ đợi quá lâu tại phòng siêu âm mặc dù đã đặt lịch...",
+              transaction: "#TX-7644",
+              resolved: false,
+              content: "Tôi đặt lịch hẹn lúc 9h sáng qua ứng dụng nhưng phải chờ đến tận 11h mới được vào phòng siêu âm. Việc xếp hàng quá lộn xộn, không có sự ưu tiên theo giờ hẹn sẵn.",
+              rootCause: "Lượng bệnh nhân dồn toa tại phòng siêu âm 2 do thiết bị gặp sự cố kỹ thuật 30 phút buổi sáng.",
+              proposal: "Nhắn tin xin lỗi bệnh nhân, tặng voucher giảm giá 20% cho lần khám sau, và kiểm tra bảo dưỡng thiết bị định kỳ.",
+              messages: []
+            },
+            4: {
+              id: 4,
+              name: "Lê Minh",
+              avatar: "LM",
+              avatarBg: "#fef3c7",
+              avatarColor: "#d97706",
+              rating: 3,
+              ratingText: "3 Sao",
+              preview: "Bác sĩ giỏi nhưng ứng dụng thỉnh thoảng bị lag...",
+              transaction: "#TX-4521",
+              resolved: false,
+              content: "Chất lượng chuyên môn bác sĩ rất tốt. Tuy nhiên ứng dụng đặt lịch thỉnh thoảng bị đơ không chọn được ngày khám chuyên khoa. Mong phòng khám sớm nâng cấp app.",
+              rootCause: "Lỗi bộ nhớ đệm (caching) ở API kiểm tra lịch trống của bác sĩ khi lượt truy cập cao.",
+              proposal: "Gửi phản hồi cho team kỹ thuật để tối ưu hóa truy vấn API và cập nhật bản vá ứng dụng mới.",
+              messages: []
+            },
+            5: {
+              id: 5,
+              name: "Hoàng Yến",
+              avatar: "HY",
+              avatarBg: "#e0f2fe",
+              avatarColor: "#0284c7",
+              rating: 4,
+              ratingText: "4 Sao",
+              preview: "Phòng khám sạch sẽ, trang thiết bị rất hiện đại.",
+              transaction: "#TX-3298",
+              resolved: true,
+              content: "Phòng khám sạch sẽ, nhân viên thân thiện. Chỉ có một điểm trừ nhỏ là chỗ gửi xe ô tô hơi chật chội vào giờ cao điểm.",
+              rootCause: "Thiết kế hầm xe tối ưu 90% diện tích nhưng nhu cầu khách hàng đi xe cá nhân tăng cao.",
+              proposal: "Hợp tác với bãi giữ xe kế bên để hướng dẫn khách đỗ xe khi hầm đầy.",
+              messages: []
+            }
+          };
+
+          let activeFeedbackId = 1;
+
+          function initFeedback() {
+            filterFeedback();
+          }
+
+          function filterFeedback() {
+            const ratingFilter = document.getElementById('feedback-filter-rating').value;
+            const searchInput = document.getElementById('feedback-search-input').value.trim().toLowerCase();
+            const listContainer = document.getElementById('feedback-list-container');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = '';
+            let filtered = Object.values(feedbackData);
+
+            if (ratingFilter === '1') {
+              filtered = filtered.filter(item => item.rating === 1);
+            }
+
+            if (searchInput !== '') {
+              filtered = filtered.filter(item => 
+                item.name.toLowerCase().includes(searchInput) || 
+                item.preview.toLowerCase().includes(searchInput) ||
+                item.content.toLowerCase().includes(searchInput)
+              );
+            }
+
+            filtered.forEach(item => {
+              const activeClass = item.id === activeFeedbackId ? 'active' : '';
+              let resolvedBadge = '';
+              let badgeColor = '';
+              let badgeBg = '';
+
+              if (item.resolved) {
+                resolvedBadge = `<span style="font-size: 10px; color: #10b981; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i data-lucide="check-circle" style="width:10px;height:10px;"></i> Đã giải quyết</span>`;
+                badgeBg = '#f0fdf4';
+              } else {
+                resolvedBadge = item.rating === 1 ? '1 Sao' : `${item.rating} Sao`;
+                badgeBg = item.rating === 1 ? '#fef2f2' : '';
+              }
+
+              const itemHtml = `
+                <div class="chat-item ${activeClass}" onclick="selectFeedbackItem(${item.id})" style="${item.resolved ? 'background: #f0fdf4; border-left: 4px solid #10b981;' : (item.rating === 1 ? 'background: #fef2f2; border-left: 4px solid #ef4444;' : '')}">
+                  <div class="patient-avatar" style="background:${item.avatarBg};color:${item.avatarColor}">${item.avatar}</div>
+                  <div class="chat-info">
+                    <div class="chat-header-row">
+                      <span class="chat-name" style="${item.rating === 1 && !item.resolved ? 'color: #991b1b; font-weight: 800;' : ''}">${item.name}</span>
+                      <span class="chat-time">${resolvedBadge}</span>
+                    </div>
+                    <div class="chat-preview">${item.preview}</div>
+                  </div>
+                </div>
+              `;
+              listContainer.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            if (window.lucide) window.lucide.createIcons();
+
+            // Load the details of active item if it exists in filtered, otherwise the first in filtered
+            if (filtered.length > 0) {
+              const hasActive = filtered.some(item => item.id === activeFeedbackId);
+              if (!hasActive) {
+                activeFeedbackId = filtered[0].id;
+              }
+              renderFeedbackDetail(activeFeedbackId);
+            } else {
+              const detailContainer = document.getElementById('feedback-detail-container');
+              if (detailContainer) {
+                detailContainer.innerHTML = `
+                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--gray-400); padding: 40px; text-align: center;">
+                    <i data-lucide="message-square-off" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;"></i>
+                    <p>Không tìm thấy phản hồi nào phù hợp</p>
+                  </div>
+                `;
+              }
+              if (window.lucide) window.lucide.createIcons();
+            }
+          }
+
+          function selectFeedbackItem(id) {
+            activeFeedbackId = id;
+            
+            // Set active class in sidebar items
+            const items = document.querySelectorAll('#feedback-list-container .chat-item');
+            items.forEach((item, idx) => {
+              item.classList.remove('active');
+            });
+            
+            filterFeedback();
+          }
+
+          function renderFeedbackDetail(id) {
+            const item = feedbackData[id];
+            const container = document.getElementById('feedback-detail-container');
+            if (!item || !container) return;
+
+            const headerBg = item.resolved ? '#f0fdf4' : (item.rating === 1 ? '#fef2f2' : '#f8fafc');
+            const headerBorder = item.resolved ? '#bbf7d0' : (item.rating === 1 ? '#fecaca' : '#e2e8f0');
+            const titleColor = item.resolved ? '#065f46' : (item.rating === 1 ? '#991b1b' : 'var(--gray-900)');
+            const iconColor = item.resolved ? '#10b981' : (item.rating === 1 ? '#ef4444' : 'var(--primary)');
+            const metaColor = item.resolved ? '#065f46' : (item.rating === 1 ? '#b91c1c' : 'var(--gray-500)');
+            const borderLeftColor = item.rating === 1 ? '#ef4444' : 'var(--primary)';
+
+            let buttonHtml = '';
+            if (item.resolved) {
+              buttonHtml = `<button class="btn-save" disabled style="height:36px; background: #10b981; border-color: #10b981; cursor: default;">Đã giải quyết</button>`;
+            } else {
+              buttonHtml = `<button class="btn-save" onclick="closeComplaint()" style="height:36px; background: #ef4444; border-color: #ef4444;">Đóng khiếu nại</button>`;
+            }
+
+            let messagesHtml = '';
+            item.messages.forEach(msg => {
+              messagesHtml += `
+                <div style="margin-top: 16px; margin-bottom: 24px; padding-left: 20px; border-left: 4px solid var(--primary);">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <strong style="color: var(--primary);">${msg.sender}</strong>
+                    <span style="font-size: 12px; color: var(--gray-500);">${msg.time}</span>
+                  </div>
+                  <div style="color: var(--gray-800); line-height: 1.5; white-space: pre-wrap;">${msg.text}</div>
+                </div>
+              `;
+            });
+
+            container.innerHTML = `
+              <div class="chat-header" style="background: ${headerBg}; border-bottom: 1px solid ${headerBorder};" id="complaint-header">
+                <div class="patient-info">
+                  <div>
+                    <div class="patient-name" style="color: ${titleColor}; display: flex; align-items: center; gap: 4px;">
+                      <i data-lucide="${item.rating === 1 ? 'alert-triangle' : 'star'}" style="width:16px; color: ${iconColor};"></i> 
+                      <span id="complaint-title-text">${item.resolved ? 'Khiếu nại đã được giải quyết' : 'Xử lý phản hồi'} (${item.ratingText})</span>
+                    </div>
+                    <div class="patient-phone" style="color: ${metaColor};" id="complaint-meta-text">Mã GD: ${item.transaction} - Khách hàng: ${item.name}</div>
+                  </div>
+                </div>
+                ${buttonHtml}
+              </div>
+              <div id="complaint-history" style="padding: 24px; flex: 1; overflow-y: auto;">
+                <h3 style="font-size: 16px; margin-bottom: 12px;">Nội dung phản hồi:</h3>
+                <div style="padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid ${borderLeftColor}; color: #334155; line-height: 1.5; margin-bottom: 24px;">
+                  "${item.content}"
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 12px;">Tóm tắt từ Chatbot AI:</h3>
+                <div style="padding: 16px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981; color: #065f46; margin-bottom: 24px;">
+                  <strong>Nguyên nhân gốc rễ (Root Cause Analysis):</strong> ${item.rootCause}<br>
+                  <strong>Đề xuất xử lý:</strong> ${item.proposal}
+                </div>
+                
+                <div id="complaint-chat-history-inner">
+                  ${messagesHtml}
+                </div>
+              </div>
+              
+              <div class="chat-input-area" style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                <div class="chat-input-wrapper">
+                  <textarea id="complaint-input" class="chat-input" placeholder="Soạn tin nhắn xin lỗi và giải quyết cho bệnh nhân..." onkeypress="handleComplaintKeypress(event)" style="background: #fff;"></textarea>
+                  <button class="btn-send" onclick="sendComplaintMessage()"><i data-lucide="send"></i></button>
+                </div>
+              </div>
+            `;
+
+            if (window.lucide) window.lucide.createIcons();
+            const historyContainer = document.getElementById('complaint-history');
+            if (historyContainer) {
+              historyContainer.scrollTop = historyContainer.scrollHeight;
+            }
+          }
+
+          function closeComplaint() {
+            const item = feedbackData[activeFeedbackId];
+            if (!item) return;
+
+            if(confirm("Bạn có chắc chắn muốn đóng khiếu nại này? Hệ thống sẽ ghi nhận khiếu nại đã được giải quyết.")) {
+              item.resolved = true;
+              
+              // Refresh details and list
+              filterFeedback();
+              
+              // Update success toast
+              showServiceToast(`Đã đóng khiếu nại của khách hàng ${item.name}.`);
+            }
+          }
+
+          function handleComplaintKeypress(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              sendComplaintMessage();
+            }
+          }
+
+          function sendComplaintMessage() {
+            const item = feedbackData[activeFeedbackId];
+            if (!item) return;
+
+            const input = document.getElementById('complaint-input');
+            const message = input ? input.value.trim() : '';
+            
+            if (message !== '') {
+              const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+              
+              // Add to data
+              item.messages.push({
+                sender: "Phòng Khám (Bạn)",
+                time: time,
+                text: message
+              });
+
+              // Add dynamically to inner chat container
+              const chatInner = document.getElementById('complaint-chat-history-inner');
+              if (chatInner) {
+                const msgHtml = `
+                  <div style="margin-top: 16px; margin-bottom: 24px; padding-left: 20px; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                      <strong style="color: var(--primary);">Phòng Khám (Bạn)</strong>
+                      <span style="font-size: 12px; color: var(--gray-500);">${time}</span>
+                    </div>
+                    <div style="color: var(--gray-800); line-height: 1.5; white-space: pre-wrap;">${message}</div>
+                  </div>
+                `;
+                chatInner.insertAdjacentHTML('beforeend', msgHtml);
+              }
+              
+              if (input) input.value = '';
+              const historyContainer = document.getElementById('complaint-history');
+              if (historyContainer) {
+                historyContainer.scrollTop = historyContainer.scrollHeight;
+              }
+            }
+          }
+        </script>
       </div>
 
       <!-- 7. PHÂN QUYỀN & BẢO MẬT -->
@@ -2106,14 +3209,14 @@
                 <tr>
                   <td>
                     <div style="display: flex; align-items: center; gap: 12px;">
-                      <div style="width: 36px; height: 36px; border-radius: 50%; background: #D1FAE5; color: #059669; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">TA</div>
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: #F3E8FF; color: #6B21A8; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">TA</div>
                       <div>
                         <div style="font-weight: 700; font-size: 14px; color: var(--gray-900);">Nguyễn Thu A</div>
                         <div style="font-size: 12px; color: var(--gray-500);">thua@clinic.com</div>
                       </div>
                     </div>
                   </td>
-                  <td><span style="font-size: 11px; background: #ECFDF5; color: #047857; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Lễ tân</span></td>
+                  <td><span style="font-size: 11px; background: #F3E8FF; color: #6B21A8; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Bệnh nhân</span></td>
                   <td style="color: var(--gray-400);">-</td>
                   <td>
                     <label class="toggle-switch">
@@ -2126,29 +3229,7 @@
                     <button style="border: none; background: transparent; cursor: pointer; color: var(--primary); padding: 4px; margin-left: 8px;"><i data-lucide="key" style="width: 16px;"></i></button>
                   </td>
                 </tr>
-                <tr style="background: #F8FAFC; opacity: 0.7;">
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                      <div style="width: 36px; height: 36px; border-radius: 50%; background: #F1F5F9; color: #64748B; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">HT</div>
-                      <div>
-                        <div style="font-weight: 700; font-size: 14px; color: var(--gray-900); text-decoration: line-through;">Trần Hữu Thắng</div>
-                        <div style="font-size: 12px; color: var(--gray-500);">thangt@clinic.com</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><span style="font-size: 11px; background: #F1F5F9; color: #475569; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Lễ tân</span></td>
-                  <td style="color: var(--gray-400);">-</td>
-                  <td>
-                    <label class="toggle-switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </td>
-                  <td style="text-align: right;">
-                    <button style="border: none; background: transparent; cursor: pointer; color: var(--gray-400); padding: 4px;"><i data-lucide="edit-3" style="width: 16px;"></i></button>
-                    <button style="border: none; background: transparent; cursor: pointer; color: var(--gray-400); padding: 4px; margin-left: 8px;"><i data-lucide="key" style="width: 16px;"></i></button>
-                  </td>
-                </tr>
+
               </tbody>
             </table>
           </div>
@@ -2201,7 +3282,7 @@
                   <td style="text-align:center;"><input type="checkbox"></td>
                 </tr>
                 <tr>
-                  <td><strong>Nhân viên Lễ tân</strong></td>
+                  <td><strong>Bệnh nhân</strong></td>
                   <td style="text-align:center;"><input type="checkbox" checked></td>
                   <td style="text-align:center;"><input type="checkbox" checked></td>
                   <td style="text-align:center;"><input type="checkbox"></td>
@@ -2245,7 +3326,7 @@
                 <select id="acc-role" onchange="handleRoleChange()" style="width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 14px; outline: none; background: white;">
                   <option value="Quản lý">Quản lý</option>
                   <option value="Bác sĩ">Bác sĩ</option>
-                  <option value="Lễ tân">Lễ tân</option>
+                  <option value="Bệnh nhân">Bệnh nhân</option>
                 </select>
               </div>
 
@@ -2354,8 +3435,8 @@
                 roleBadge = '<span style="font-size: 11px; background: #DBEAFE; color: #1E40AF; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Bác sĩ</span>';
                 avatarBg = '#EFF6FF'; avatarColor = '#2563EB';
               } else {
-                roleBadge = '<span style="font-size: 11px; background: #ECFDF5; color: #047857; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Lễ tân</span>';
-                avatarBg = '#D1FAE5'; avatarColor = '#059669';
+                roleBadge = '<span style="font-size: 11px; background: #F3E8FF; color: #6B21A8; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Bệnh nhân</span>';
+                avatarBg = '#F3E8FF'; avatarColor = '#6B21A8';
               }
 
               // 2. Thêm vào bảng
@@ -2481,6 +3562,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      animateComboChart();
+      if (typeof initFeedback === 'function') initFeedback();
     });
 
     function switchTab(e, tabId) {
@@ -2494,6 +3577,74 @@
 
       document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
+
+      if (tabId === 'tab-dashboard') {
+        animateComboChart();
+      }
+    }
+
+    // Chart Animations & Interaction Functions
+    function animateComboChart() {
+      // Reset heights first for smooth animation
+      document.querySelectorAll('.combo-chart-bar').forEach(bar => {
+        bar.style.height = '0%';
+      });
+      
+      const area = document.querySelector('.chart-area');
+      if (area) {
+        area.style.opacity = '0';
+      }
+
+      // Re-trigger SVG line animation by resetting the offset
+      const linePath = document.querySelector('.chart-line-path');
+      if (linePath) {
+        linePath.style.animation = 'none';
+        linePath.offsetHeight; /* trigger reflow */
+        linePath.style.animation = 'drawLinePath 2s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+      }
+
+      // Slide up bars
+      setTimeout(() => {
+        document.querySelectorAll('.combo-chart-bar').forEach(bar => {
+          const targetHeight = bar.getAttribute('data-height');
+          if (targetHeight) {
+            bar.style.height = targetHeight;
+          }
+        });
+        if (area) {
+          area.style.opacity = '0.25';
+        }
+      }, 150);
+    }
+
+    function showComboTooltip(element, event) {
+      const tooltip = document.getElementById('chart-tooltip');
+      if (!tooltip) return;
+      
+      const label = element.getAttribute('data-label');
+      const value = element.getAttribute('data-value');
+      
+      tooltip.innerHTML = `<strong style="color: #F59E0B; font-weight:700;">${label}</strong><br/>${value}`;
+      tooltip.style.display = 'block';
+      tooltip.style.opacity = '1';
+      
+      const chartContainer = element.parentElement;
+      const rect = chartContainer.getBoundingClientRect();
+      
+      // Calculate coordinates relative to the chart container
+      const x = event.clientX - rect.left + 12;
+      const y = event.clientY - rect.top - 45;
+      
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+    }
+    
+    function hideComboTooltip() {
+      const tooltip = document.getElementById('chart-tooltip');
+      if (tooltip) {
+        tooltip.style.opacity = '0';
+        tooltip.style.display = 'none';
+      }
     }
   </script>
 </body>
