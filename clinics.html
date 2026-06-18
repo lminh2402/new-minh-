@@ -1822,9 +1822,38 @@
                 <option>Đang xử lý</option>
                 <option>Đã hủy</option>
               </select>
+              <select class="form-control" style="width: auto;">
+                <option>Tất cả BHYT</option>
+                <option>Có BHYT hợp lệ</option>
+                <option>Chờ duyệt BHYT</option>
+                <option>Không dùng BHYT</option>
+              </select>
               <input type="month" class="form-control" value="2026-05" style="width: auto;" />
               <button class="btn-outline" style="color: #0284c7; border-color: #0284c7; height: 36px;"><i data-lucide="download"></i> Xuất Excel</button>
             </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px;">
+          <div style="background:#FFFFFF;border:1px solid var(--gray-200);border-radius:14px;padding:16px;box-shadow:0 8px 18px rgba(15,23,42,0.04);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:#0369A1;font-size:13px;font-weight:800;"><i data-lucide="receipt" style="width:18px;"></i> Tổng chi phí</div>
+            <strong style="font-size:22px;color:var(--gray-900);">2,000,000</strong>
+            <span style="display:block;font-size:12px;color:var(--gray-500);margin-top:4px;">Trước BHYT & giảm trừ</span>
+          </div>
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:14px;padding:16px;box-shadow:0 8px 18px rgba(22,163,74,0.06);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:#047857;font-size:13px;font-weight:800;"><i data-lucide="shield-check" style="width:18px;"></i> BHYT chi trả</div>
+            <strong style="font-size:22px;color:#047857;">590,000</strong>
+            <span style="display:block;font-size:12px;color:#047857;margin-top:4px;">2 hồ sơ có BHYT</span>
+          </div>
+          <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:14px;padding:16px;box-shadow:0 8px 18px rgba(37,99,235,0.06);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:#1D4ED8;font-size:13px;font-weight:800;"><i data-lucide="wallet" style="width:18px;"></i> Người bệnh trả</div>
+            <strong style="font-size:22px;color:#1D4ED8;">1,412,500</strong>
+            <span style="display:block;font-size:12px;color:#2563EB;margin-top:4px;">Bao gồm phí cổng VNPay</span>
+          </div>
+          <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:14px;padding:16px;box-shadow:0 8px 18px rgba(245,158,11,0.06);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:#B45309;font-size:13px;font-weight:800;"><i data-lucide="clock-3" style="width:18px;"></i> Chờ duyệt</div>
+            <strong style="font-size:22px;color:#B45309;">0</strong>
+            <span style="display:block;font-size:12px;color:#92400E;margin-top:4px;">BHYT đang đối soát</span>
           </div>
         </div>
 
@@ -1836,7 +1865,8 @@
                 <th>Ngày giờ</th>
                 <th>Khách hàng</th>
                 <th>Loại Dịch vụ</th>
-                <th>Số tiền (VNĐ)</th>
+                <th>BHYT</th>
+                <th>BN trả (VNĐ)</th>
                 <th>Phương thức TT</th>
                 <th>Trạng thái</th>
                 <th>Hóa đơn</th>
@@ -1848,7 +1878,8 @@
                 <td>13/05 09:45</td>
                 <td>Lê Thủy</td>
                 <td>Khám Nội tổng quát</td>
-                <td style="font-weight: 700;">350,000</td>
+                <td><span style="font-size:11px;background:#DCFCE7;color:#047857;padding:4px 8px;border-radius:999px;font-weight:800;">BHYT 80%</span></td>
+                <td style="font-weight: 700;">70,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="banknote" style="width:14px; color:var(--success);"></i> Tiền mặt</div></td>
                 <td><span style="font-size: 11px; background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Thành công</span></td>
                 <td><a href="#" onclick="openRevenueDetail(event, 'TX-9283')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
@@ -1858,7 +1889,8 @@
                 <td>13/05 10:15</td>
                 <td>Vũ Khoa</td>
                 <td>Nội soi dạ dày</td>
-                <td style="font-weight: 700;">1,200,000</td>
+                <td><span style="font-size:11px;background:#E0F2FE;color:#0369A1;padding:4px 8px;border-radius:999px;font-weight:800;">BHYT một phần</span></td>
+                <td style="font-weight: 700;">890,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="credit-card" style="width:14px; color:#3B82F6;"></i> Chuyển khoản</div></td>
                 <td><span style="font-size: 11px; background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Thành công</span></td>
                 <td><a href="#" onclick="openRevenueDetail(event, 'TX-9284')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
@@ -1868,7 +1900,8 @@
                 <td>13/05 14:00</td>
                 <td>Nguyễn Nam</td>
                 <td>Tư vấn AI Online (Premium)</td>
-                <td style="font-weight: 700;">100,000</td>
+                <td><span style="font-size:11px;background:#F1F5F9;color:#475569;padding:4px 8px;border-radius:999px;font-weight:800;">Không áp dụng</span></td>
+                <td style="font-weight: 700;">102,500</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="smartphone" style="width:14px; color:#8B5CF6;"></i> VNPay</div></td>
                 <td><span style="font-size: 11px; background: #FEF3C7; color: #B45309; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Đang xử lý</span></td>
                 <td><a href="#" onclick="openRevenueDetail(event, 'TX-9285')" style="color: #2563EB; font-size: 13px; font-weight: 500; text-decoration: none;">Xem chi tiết</a></td>
@@ -1878,6 +1911,7 @@
                 <td>13/05 15:30</td>
                 <td>Trần Đau</td>
                 <td>Khám Cơ xương khớp</td>
+                <td><span style="font-size:11px;background:#F1F5F9;color:#475569;padding:4px 8px;border-radius:999px;font-weight:800;">Không dùng</span></td>
                 <td style="font-weight: 700;">350,000</td>
                 <td><div style="display:flex;align-items:center;gap:4px;"><i data-lucide="credit-card" style="width:14px; color:#3B82F6;"></i> Chuyển khoản</div></td>
                 <td><span style="font-size: 11px; background: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Hoàn tiền / Đã hủy</span></td>
@@ -1900,8 +1934,9 @@
             
             <div style="text-align: right;">
               <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">Tổng thu: <span style="font-weight: 700; color: var(--gray-900); font-size: 14px;">2,000,000 VNĐ</span></div>
-              <div style="font-size: 14px; font-weight: 800; color: var(--success); margin-bottom: 4px;">Thực nhận (Thành công): 1,550,000 VNĐ</div>
-              <div style="font-size: 13px; color: #D97706; margin-bottom: 4px;">Đang xử lý: 100,000 VNĐ</div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--success); margin-bottom: 4px;">BHYT đã duyệt: 590,000 VNĐ</div>
+              <div style="font-size: 14px; font-weight: 800; color: #2563EB; margin-bottom: 4px;">Người bệnh thực trả: 1,412,500 VNĐ</div>
+              <div style="font-size: 13px; color: #D97706; margin-bottom: 4px;">Đang xử lý: 102,500 VNĐ</div>
               <div style="font-size: 13px; color: #DC2626;">Đã hủy/Hoàn tiền: 350,000 VNĐ</div>
             </div>
           </div>
@@ -1910,7 +1945,7 @@
 
       <!-- Modal: Chi tiết giao dịch thanh toán -->
       <div id="modal-revenue-detail" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 1300; justify-content: center; align-items: center; padding: 20px;">
-        <div style="background: white; width: 100%; max-width: 620px; border-radius: 14px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden;">
+        <div style="background: white; width: 100%; max-width: 760px; max-height: 92vh; border-radius: 18px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column;">
           <div style="padding: 18px 22px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
             <div>
               <h3 style="font-size: 18px; font-weight: 800; color: var(--gray-900); margin: 0;">Chi tiết giao dịch</h3>
@@ -1918,7 +1953,7 @@
             </div>
             <button onclick="closeRevenueDetail()" style="border: none; background: transparent; cursor: pointer; color: var(--gray-500); padding: 4px;"><i data-lucide="x" style="width: 20px; height: 20px;"></i></button>
           </div>
-          <div id="revenue-detail-body" style="padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div id="revenue-detail-body" style="padding: 22px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto;">
             <!-- Rendered by openRevenueDetail() -->
           </div>
           <div style="padding: 16px 22px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px;">
@@ -1945,7 +1980,16 @@
             subtotal: 350000,
             discount: 0,
             fee: 0,
-            total: 350000,
+            insurance: {
+              status: 'Có BHYT hợp lệ',
+              cardNo: 'DN4-01-0123456789',
+              route: 'Đúng tuyến',
+              coverageRate: 80,
+              coveredAmount: 280000,
+              patientPay: 70000,
+              note: 'Khám Nội tổng quát thuộc danh mục BHYT chi trả.'
+            },
+            total: 70000,
             note: 'Thu tại quầy sau khi hoàn tất khám.'
           },
           'TX-9284': {
@@ -1963,7 +2007,16 @@
             subtotal: 1200000,
             discount: 0,
             fee: 0,
-            total: 1200000,
+            insurance: {
+              status: 'BHYT chi trả một phần',
+              cardNo: 'DN4-01-9876543210',
+              route: 'Đúng tuyến',
+              coverageRate: 70,
+              coveredAmount: 310000,
+              patientPay: 890000,
+              note: 'BHYT chỉ chi trả phần khám và thuốc trong danh mục, không bao gồm toàn bộ chi phí nội soi dịch vụ.'
+            },
+            total: 890000,
             note: 'Đối soát ngân hàng đã khớp mã giao dịch.'
           },
           'TX-9285': {
@@ -1981,7 +2034,16 @@
             subtotal: 100000,
             discount: 0,
             fee: 2500,
-            total: 100000,
+            insurance: {
+              status: 'Không áp dụng BHYT',
+              cardNo: 'Không có',
+              route: 'Dịch vụ ngoài danh mục',
+              coverageRate: 0,
+              coveredAmount: 0,
+              patientPay: 102500,
+              note: 'Tư vấn AI Online Premium là dịch vụ tự nguyện, chưa thuộc danh mục BHYT.'
+            },
+            total: 102500,
             note: 'Đang chờ cổng VNPay xác nhận cuối.'
           },
           'TX-9286': {
@@ -1999,6 +2061,15 @@
             subtotal: 350000,
             discount: 0,
             fee: 0,
+            insurance: {
+              status: 'Không dùng BHYT',
+              cardNo: 'Chưa xuất trình',
+              route: 'Tự chi trả',
+              coverageRate: 0,
+              coveredAmount: 0,
+              patientPay: 350000,
+              note: 'Bệnh nhân chọn tự chi trả và giao dịch đã hoàn tiền do hủy lịch.'
+            },
             total: 350000,
             note: 'Bệnh nhân hủy lịch, hoàn tiền theo chính sách phòng khám.'
           }
@@ -2012,50 +2083,96 @@
           if (event) event.preventDefault();
           const data = revenueDetails[txId];
           if (!data) return;
+          const insurance = data.insurance || {
+            status: 'Không dùng BHYT',
+            cardNo: 'Không có',
+            route: 'Tự chi trả',
+            coverageRate: 0,
+            coveredAmount: 0,
+            patientPay: data.total,
+            note: 'Giao dịch không áp dụng BHYT.'
+          };
+          const grossDue = data.subtotal - data.discount + data.fee;
 
           document.getElementById('revenue-detail-subtitle').textContent = `${data.code} • ${data.invoice}`;
           document.getElementById('revenue-detail-body').innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px; border: 1px solid var(--gray-200); border-radius: 12px; background: #F8FAFC;">
-              <div>
-                <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">Khách hàng</div>
-                <div style="font-size: 17px; font-weight: 800; color: var(--gray-900);">${data.customer}</div>
-                <div style="font-size: 13px; color: var(--gray-500); margin-top: 3px;">${data.phone}</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+              <div style="padding:18px;border:1px solid var(--gray-200);border-radius:16px;background:#F8FAFC;">
+                <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px;">
+                  <div>
+                    <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;">Khách hàng</div>
+                    <div style="font-size:20px;font-weight:900;color:var(--gray-900);">${data.customer}</div>
+                    <div style="font-size:13px;color:var(--gray-500);margin-top:3px;">${data.phone}</div>
+                  </div>
+                  <span style="font-size:12px;background:${data.statusBg};color:${data.statusColor};padding:6px 10px;border-radius:999px;font-weight:800;white-space:nowrap;">${data.status}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+                  <div style="padding:10px 12px;background:white;border:1px solid var(--gray-200);border-radius:12px;">
+                    <div style="font-size:12px;color:var(--gray-500);">Dịch vụ</div>
+                    <strong style="display:block;margin-top:4px;color:var(--gray-900);">${data.service}</strong>
+                  </div>
+                  <div style="padding:10px 12px;background:white;border:1px solid var(--gray-200);border-radius:12px;">
+                    <div style="font-size:12px;color:var(--gray-500);">Phụ trách</div>
+                    <strong style="display:block;margin-top:4px;color:var(--gray-900);">${data.doctor}</strong>
+                  </div>
+                  <div style="padding:10px 12px;background:white;border:1px solid var(--gray-200);border-radius:12px;">
+                    <div style="font-size:12px;color:var(--gray-500);">Thời gian</div>
+                    <strong style="display:block;margin-top:4px;color:var(--gray-900);">${data.datetime}</strong>
+                  </div>
+                  <div style="padding:10px 12px;background:white;border:1px solid var(--gray-200);border-radius:12px;">
+                    <div style="font-size:12px;color:var(--gray-500);">Phương thức</div>
+                    <strong style="display:block;margin-top:4px;color:var(--gray-900);">${data.method}</strong>
+                  </div>
+                </div>
               </div>
-              <span style="font-size: 12px; background: ${data.statusBg}; color: ${data.statusColor}; padding: 6px 10px; border-radius: 999px; font-weight: 800;">${data.status}</span>
+
+              <div style="padding:18px;border-radius:16px;background:linear-gradient(135deg,#EFF6FF,#EEF2FF);border:1px solid #BFDBFE;display:flex;flex-direction:column;justify-content:center;">
+                <div style="font-size:13px;color:#1D4ED8;font-weight:800;margin-bottom:8px;">Người bệnh cần thanh toán</div>
+                <div style="font-size:28px;font-weight:900;color:#1D4ED8;line-height:1;">${formatVnd(insurance.patientPay)}</div>
+                <div style="font-size:12px;color:#475569;margin-top:10px;">= Tổng chi phí - BHYT chi trả - giảm trừ + phí thanh toán</div>
+              </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
-                <div style="font-size: 12px; color: var(--gray-500);">Thời gian</div>
-                <div style="font-weight: 700; margin-top: 4px;">${data.datetime}</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start;">
+              <div style="border:1px solid #BBF7D0;border-radius:16px;background:#F0FDF4;padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;gap:8px;font-weight:900;color:#047857;">
+                    <i data-lucide="shield-check" style="width:18px;"></i> Bảo hiểm y tế
+                  </div>
+                  <span style="font-size:11px;background:#DCFCE7;color:#047857;padding:5px 9px;border-radius:999px;font-weight:900;">${insurance.status}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
+                  <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:var(--gray-500);">Mã thẻ</span><strong style="color:var(--gray-900);text-align:right;">${insurance.cardNo}</strong></div>
+                  <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:var(--gray-500);">Tuyến khám</span><strong style="color:var(--gray-900);text-align:right;">${insurance.route}</strong></div>
+                  <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:var(--gray-500);">Mức hưởng</span><strong style="color:#047857;">${insurance.coverageRate}%</strong></div>
+                  <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:var(--gray-500);">BHYT chi trả</span><strong style="color:#047857;">${formatVnd(insurance.coveredAmount)}</strong></div>
+                </div>
+                <div style="margin-top:14px;padding:10px 12px;background:white;border:1px solid #BBF7D0;border-radius:12px;color:#166534;font-size:12.5px;line-height:1.45;">
+                  <strong>Ghi chú:</strong> ${insurance.note}
+                </div>
               </div>
-              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
-                <div style="font-size: 12px; color: var(--gray-500);">Phương thức</div>
-                <div style="font-weight: 700; margin-top: 4px;">${data.method}</div>
-              </div>
-              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
-                <div style="font-size: 12px; color: var(--gray-500);">Dịch vụ</div>
-                <div style="font-weight: 700; margin-top: 4px;">${data.service}</div>
-              </div>
-              <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px;">
-                <div style="font-size: 12px; color: var(--gray-500);">Phụ trách</div>
-                <div style="font-weight: 700; margin-top: 4px;">${data.doctor}</div>
+
+              <div style="border:1px solid var(--gray-200);border-radius:16px;background:white;padding:16px;">
+                <div style="display:flex;align-items:center;gap:8px;font-weight:900;color:var(--gray-900);margin-bottom:14px;">
+                  <i data-lucide="calculator" style="width:18px;color:var(--primary);"></i> Tổng kết thanh toán
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;">
+                  <div style="display:flex;justify-content:space-between;"><span>Tạm tính</span><strong>${formatVnd(data.subtotal)}</strong></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Giảm giá</span><strong>${formatVnd(data.discount)}</strong></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Phí cổng thanh toán</span><strong>${formatVnd(data.fee)}</strong></div>
+                  <div style="display:flex;justify-content:space-between;color:#047857;"><span>BHYT chi trả</span><strong>-${formatVnd(insurance.coveredAmount)}</strong></div>
+                  <div style="height:1px;background:var(--gray-200);margin:4px 0;"></div>
+                  <div style="display:flex;justify-content:space-between;color:var(--gray-500);"><span>Số tiền trước BHYT</span><strong>${formatVnd(grossDue)}</strong></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:12px;background:#EEF2FF;color:#1D4ED8;margin-top:2px;">
+                    <span style="font-weight:900;">Cần thu</span>
+                    <strong style="font-size:18px;">${formatVnd(insurance.patientPay)}</strong>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div style="border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden;">
-              <div style="padding: 12px 14px; background: var(--gray-50); font-weight: 800; color: var(--gray-800);">Tổng kết thanh toán</div>
-              <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-                <div style="display:flex; justify-content:space-between;"><span>Tạm tính</span><strong>${formatVnd(data.subtotal)}</strong></div>
-                <div style="display:flex; justify-content:space-between;"><span>Giảm giá</span><strong>${formatVnd(data.discount)}</strong></div>
-                <div style="display:flex; justify-content:space-between;"><span>Phí cổng thanh toán</span><strong>${formatVnd(data.fee)}</strong></div>
-                <div style="height: 1px; background: var(--gray-200); margin: 4px 0;"></div>
-                <div style="display:flex; justify-content:space-between; font-size: 16px;"><span style="font-weight:800;">Tổng thanh toán</span><strong style="color: var(--primary);">${formatVnd(data.total)}</strong></div>
-              </div>
-            </div>
-
-            <div style="padding: 12px 14px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; color: #92400E; font-size: 13px;">
-              <strong>Ghi chú:</strong> ${data.note}
+            <div style="padding:12px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;color:#92400E;font-size:13px;line-height:1.45;">
+              <strong>Ghi chú giao dịch:</strong> ${data.note}
             </div>
           `;
 
